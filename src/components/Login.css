@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=Almarai:wght@400;500;700;800&display=swap');
+
+.login-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  font-family: 'Almarai', 'Tajawal', sans-serif;
+}
+
+.login-container h1,
+.login-container h2 {
+  font-family: 'Almarai', sans-serif;
+}
+
+.login-image-section {
+  flex: 1;
+  width: 50%;
+  height: 100vh;
+  position: relative;
+}
+
+.login-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+}
+
+.login-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(18, 38, 105, 0.2);
+}
+
+.login-image-content {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 70px;
+  z-index: 2;
+  padding: 0 60px;
+  text-align: right;
+}
+
+.login-image-badge {
+  background-color: rgba(20, 51, 94, 0.75);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.login-image-text {
+  width: 100%;
+  text-align: right;
+}
+
+.login-image-title {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: #fff;
+  line-height: 1.4;
+}
+
+.login-image-desc {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.login-form-section {
+  flex: 1;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 380px;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: right;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: var(--secondary_color);
+}
+
+/* تنسيق حاوية الحقل والأيقونة */
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.login-form .input-wrapper input {
+  width: 100%;
+  padding: 10px 38px 10px 38px !important;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-size: 14px;
+  direction: ltr;
+  text-align: right;
+}
+
+/* الأيقونة الثابتة (مغلف / قفل) عالجهة اليمين لأن الصفحة RTL */
+.input-icon {
+  position: absolute;
+  right: 12px;
+  color: #9CA3AF;
+  font-size: 20px;
+  pointer-events: none;
+}
+
+/* زر إظهار/إخفاء كلمة المرور عالجهة اليسار */
+.toggle-password-btn {
+  position: absolute;
+  left: 12px;
+  background: none;
+  border: none;
+  padding: 0;
+  color: #9CA3AF;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+/* صف تذكرني ونسيت كلمة المرور */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--secondary_color);
+  cursor: pointer;
+}
+
+.remember-me input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.forgot-password a {
+  font-size: 13px;
+  color: var(--sub_color);
+}
+
+.login-submit-btn {
+  width: 100%;
+  padding: 11px;
+  background-color: var(--main_color);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 6px;
+  border: none;
+}
+
+.signup-redirect {
+  margin-top: 20px;
+  font-size: 14px;
+  color: var(--secondary_color);
+  text-align: center;
+}
+
+.signup-redirect a {
+  font-weight: 700;
+  color: var(--sub_color);
+}

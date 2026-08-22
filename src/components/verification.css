@@ -1,0 +1,34 @@
+.otp-container {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  direction: ltr;
+  margin-bottom: 6px;
+}
+
+.otp-input {
+  width: 52px;
+  height: 56px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  color: var(--text_primary);
+}
+
+.otp-input:focus {
+  border-color: var(--main_color);
+}
+
+.resend-text {
+  margin-top: 18px;
+  font-size: 13px;
+  color: var(--secondary_color);
+  text-align: center;
+}
+
+.resend-text a {
+  font-weight: 700;
+  color: var(--sub_color);
+}
