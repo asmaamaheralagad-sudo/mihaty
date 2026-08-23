@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import loginImg from '../image/login.png';
-import logoImg from '../image/logo.png';
+import loginImg from '../../../image/login.png';
+import logoImg from '../../../image/logo.png';
 import { Link } from 'react-router-dom';
 import './Login.css';
 import { MdOutlineEmail } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
-import "../index.css";
+import "../../../index.css";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="login-container">
+    <div className="login-container auth-page-container">
       
       {/* الجزء الأيمن: الصورة الجانبية */}
-      <div className="login-image-section">
+      <div className="login-image-section auth-image-section">
         <img src={loginImg} alt="صورة خريجين" className="login-bg-img" />
         <div className="login-image-overlay"></div>
 
@@ -33,7 +33,7 @@ function Login() {
       </div>
 
       {/* الجزء الأيسر: نموذج تسجيل الدخول */}
-      <div className="login-form-section">
+      <div className="login-form-section auth-form-section">
         <div className="login-box">
           
           {/* قسم الشعار والعناوين */}

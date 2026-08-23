@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import signupImg from '../image/sign_up.png';
-import logoImg from '../image/logo.png';
+import signupImg from '../../../image/sign_up.png';
+import logoImg from '../../../image/logo.png';
 import { Link } from 'react-router-dom';
 import './SignUp.css';
-import "../index.css";
+import "../../../index.css";
 import { MdOutlineEmail } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
 import { FiUser } from "react-icons/fi";
@@ -15,10 +15,10 @@ function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="signup-container">
+    <div className="signup-container auth-page-container">
 
       {/* القسم الأيمن: صورة الطائرة (مكتوب أولاً حتى يظهر يمين الشاشة بالـ RTL) */}
-      <div className="signup-image-section">
+      <div className="signup-image-section auth-image-section">
         <img src={signupImg} alt="صورة طائرة" />
         <div className="signup-image-overlay"></div>
 
@@ -42,7 +42,7 @@ function SignUp() {
       </div>
 
       {/* القسم الأيسر: نموذج إنشاء حساب */}
-      <div className="signup-form-section">
+      <div className="signup-form-section auth-form-section">
         <div className="signup-box">
           
           {/* الشعار والعنوان */}

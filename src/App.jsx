@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './components/Login';
-import SignUp from './components/SignUp';
-import ForgetPassword from './components/ForgetPassword'; 
-import Verification from './components/verification';
-import ResetPassword from './components/ResetPassword';
-import ResetSuccess from './components/ResetSuccess';
+import Login from './pages/Authentication/Login/Login';
+import SignUp from './pages/Authentication/Signup/SignUp';
+import ForgetPassword from './pages/Authentication/Forgetpassword/ForgetPassword';
+import Verification from './pages/Authentication/Verification/verification';
+import ResetPassword from './pages/Authentication/Resetpassword/ResetPassword';
+import ResetSuccess from './pages/Authentication/Resetsuccess/ResetSuccess';
 
 function App() {
   return (
@@ -14,12 +14,13 @@ function App() {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/ForgetPassword" element={<ForgetPassword />}/>
+        <Route path="/ForgetPassword" element={<ForgetPassword />} />
         <Route path="/verification" element={<Verification />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/reset-success" element={<ResetSuccess />} />
       </Routes>
     </BrowserRouter>
-  );}
+  );
+}
 
 export default App;

@@ -114,7 +114,6 @@
   color: var(--secondary_color);
 }
 
-/* تنسيق حاوية الحقل والأيقونة */
 .input-wrapper {
   position: relative;
   display: flex;
@@ -131,7 +130,6 @@
   text-align: right;
 }
 
-/* الأيقونة الثابتة (مغلف / قفل) عالجهة اليمين لأن الصفحة RTL */
 .input-icon {
   position: absolute;
   right: 12px;
@@ -140,7 +138,6 @@
   pointer-events: none;
 }
 
-/* زر إظهار/إخفاء كلمة المرور عالجهة اليسار */
 .toggle-password-btn {
   position: absolute;
   left: 12px;
@@ -154,7 +151,6 @@
   align-items: center;
 }
 
-/* صف تذكرني ونسيت كلمة المرور */
 .form-options {
   display: flex;
   justify-content: space-between;
@@ -204,4 +200,16 @@
 .signup-redirect a {
   font-weight: 700;
   color: var(--sub_color);
+}
+
+@media (max-width: 768px) {
+  .login-box {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 320px) {
+  .login-header .logo-img {
+    max-width: 90px;
+  }
 }

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import AuthCardLayout from '../components/AuthCardLayout';
+import AuthCardLayout from '../../../components/AuthCardLayout';
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import './ResetPassword.css';
-import "../index.css";
+import "../../../index.css";
 
 function ResetPassword() {
   const [password, setPassword] = useState("");

@@ -1,0 +1,28 @@
+.email-highlight {
+  font-weight: 700;
+  color: var(--text_primary);
+}
+
+.resend-text {
+  margin-top: 18px;
+  font-size: 13px;
+  color: var(--secondary_color);
+  text-align: center;
+}
+
+.resend-text a {
+  font-weight: 700;
+  color: var(--sub_color);
+}
+
+@media (max-width: 480px) {
+  .otp-container {
+    gap: 8px;
+  }
+
+  .otp-input {
+    width: 44px;
+    height: 48px;
+    font-size: 18px;
+  }
+}

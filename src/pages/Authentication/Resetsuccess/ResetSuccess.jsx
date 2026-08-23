@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthCardLayout from '../components/AuthCardLayout';
+import AuthCardLayout from '../../../components/AuthCardLayout';
 import { MdCheck } from "react-icons/md";
 import './ResetSuccess.css';
-import "../index.css";
+import "../../../index.css";
 
 function ResetSuccess() {
   const navigate = useNavigate();

@@ -3,6 +3,7 @@ import authBgImg from '../image/primary.jpg';
 import logoImg from '../image/logo.png';
 import { MdOutlineHeadsetMic, MdOutlineLock } from "react-icons/md";
 import './AuthCardLayout.css';
+import "../index.css";
 
 function AuthCardLayout({ children }) {
   return (

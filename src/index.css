@@ -175,3 +175,73 @@ input {
   text-align: center;
   font-weight: 600;
 }
+/* ==========================================================
+   Responsive: على الموبايل نخفي الصورة ونخلي الفورم ياخد الشاشة كاملة
+   ========================================================== */
+@media (max-width: 768px) {
+  .auth-page-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  /* إخفاء قسم الصورة بالكامل على الموبايل */
+  .auth-image-section {
+    display: none;
+  }
+
+  .auth-form-section {
+    width: 100%;
+    min-height: 100vh;
+    padding: 30px 20px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-form-section {
+    padding: 24px 16px;
+  }
+}
+
+/* ==========================================================
+   Responsive لصفحات AuthCardLayout (نسيت كلمة المرور، التحقق، إلخ)
+   ========================================================== */
+@media (max-width: 768px) {
+  .auth-card {
+    max-width: 90%;
+    padding: 24px 20px;
+  }
+
+  .auth-title {
+    font-size: 18px;
+  }
+
+  .auth-desc {
+    font-size: 12px;
+  }
+
+  .auth-footer {
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 12px;
+    bottom: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    max-width: 92%;
+    padding: 20px 16px;
+  }
+
+  .auth-logo {
+    width: 70px;
+  }
+
+  .auth-title {
+    font-size: 16px;
+  }
+}
+

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import AuthCardLayout from '../components/AuthCardLayout';
+import AuthCardLayout from '../../../components/AuthCardLayout';
 import { MdOutlineEmail } from "react-icons/md";
-import "../index.css";
+import "../../../index.css";
 
 function ForgetPassword() {
   const [email, setEmail] = useState("");
