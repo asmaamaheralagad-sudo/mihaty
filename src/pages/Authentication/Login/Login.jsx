@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import loginImg from '../../../image/login.png';
 import logoImg from '../../../image/logo.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 import { MdOutlineEmail } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
@@ -10,6 +10,13 @@ import "../../../index.css";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // هون لاحقاً بتحط استدعاء الـ API للتحقق من بيانات الدخول فعلياً
+    navigate("/");
+  };
 
   return (
     <div className="login-container auth-page-container">
@@ -44,7 +51,7 @@ function Login() {
           </div>
 
           {/* النموذج الرئيسي */}
-          <form onSubmit={(e) => e.preventDefault()} className="login-form">
+          <form onSubmit={handleSubmit} className="login-form">
             
             {/* حقل البريد الإلكتروني */}
             <div className="form-group">

@@ -6,12 +6,13 @@ import ForgetPassword from './pages/Authentication/Forgetpassword/ForgetPassword
 import Verification from './pages/Authentication/Verification/verification';
 import ResetPassword from './pages/Authentication/Resetpassword/ResetPassword';
 import ResetSuccess from './pages/Authentication/Resetsuccess/ResetSuccess';
+import Landing from './pages/Landing-page/Landing';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/ForgetPassword" element={<ForgetPassword />} />
