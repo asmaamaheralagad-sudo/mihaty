@@ -6,12 +6,6 @@ function AboutUs() {
   return (
     <section className="about-section">
       <div className="about-container">
-        {/* صورة الكرة الأرضية */}
-        <div className="about-image-wrapper">
-          <img src={aboutImg} alt="من نحن - منحتي" className="about-img" />
-        </div>
-
-        {/* محتوى النص */}
         <div className="about-content">
           <h2 className="about-title">من نحن؟</h2>
           <p className="about-subtitle">منحتي... نقرّبك من فرصتك الأكاديمية المثالية.</p>
@@ -25,6 +19,11 @@ function AboutUs() {
           </p>
 
           <a href="#scholarships" className="about-link">اكتشف المنح</a>
+        </div>
+
+        {/* صورة الكرة الأرضية - ثانياً لتظهر يسار */}
+        <div className="about-image-wrapper">
+          <img src={aboutImg} alt="من نحن - منحتي" className="about-img" />
         </div>
       </div>
     </section>

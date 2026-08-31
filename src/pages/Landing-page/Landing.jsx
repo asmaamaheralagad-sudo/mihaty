@@ -4,6 +4,8 @@ import Header from '../../components/Header/Header';
 import FeatureCard from '../../components/FeatureCard/FeatureCard';
 import Scholarships from '../../components/Scholarships/Scholarships';
 import AboutUs from '../../components/AboutUs/AboutUs';
+import HowItWorks from '../../components/HowItWork/HowItWork';
+
 
 import { FaArrowLeft, FaRegPlayCircle, FaGraduationCap } from 'react-icons/fa';
 import { HiOutlineMagnifyingGlass, HiOutlineAcademicCap, HiOutlineSparkles, HiOutlineClock } from 'react-icons/hi2';
@@ -14,8 +16,13 @@ import germanyFlag from '../../image/flag1.jpg';
 import ukFlag from '../../image/flag4.jpg';
 import turkeyFlag from '../../image/flag3.jpg';
 
+import robotIcon from '../../image/robot.png';
+import writingIcon from '../../image/writing.png';
+import resumeIcon from '../../image/resume.png';
+
 import './Landing.css';
 import "../../index.css";
+import HowItWork from '../../components/HowItWork/HowItWork';
 
 function Landing() {
   return (
@@ -166,7 +173,11 @@ function Landing() {
         </div>
         </section>
         <AboutUs />
-    </div>
+        <HowItWork/>
+         
+
+</div>
+    
   );
 }
 

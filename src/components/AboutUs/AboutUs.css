@@ -2,7 +2,7 @@
   width: 100%;
   padding: 80px 24px;
   direction: rtl;
-  background-color: #ffffff;
+  background-color:var(--bg_color);
 }
 
 .about-container {
@@ -16,12 +16,12 @@
 
 .about-image-wrapper {
   flex: 1;
-  max-width: 450px;
+  max-width: 380px;
 }
 
 .about-img {
   width: 100%;
-  height: 380px;
+  height: 300px;
   object-fit: cover;
   border-radius: 24px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
@@ -35,7 +35,7 @@
 .about-title {
   font-size: 32px;
   font-weight: 800;
-  color: #0b2545;
+  color:#122669;
   margin-bottom: 8px;
 }
 
@@ -55,12 +55,12 @@
 .about-highlight {
   font-size: 16px;
   font-weight: 700;
-  color: #0b2545;
+  color:#122669;
   margin-bottom: 24px;
 }
 
 .about-link {
-  color: #2563eb;
+  color: #0088FF;
   font-weight: 600;
   font-size: 15px;
   text-decoration: underline;
@@ -74,7 +74,7 @@
 /* التجاوب مع الشاشات الصغيرة */
 @media (max-width: 900px) {
   .about-container {
-    flex-direction: column-reverse;
+    flex-direction: column;
     text-align: center;
     gap: 40px;
   }
@@ -88,6 +88,6 @@
   }
 
   .about-img {
-    height: 300px;
+    height: 240px;
   }
 }

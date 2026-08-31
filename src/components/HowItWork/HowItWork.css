@@ -1,0 +1,151 @@
+.how-it-works-section {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding: 80px 24px;
+  background-color: var(--bg_color);
+  text-align: center;
+  direction: ltr;
+}
+
+.how-it-works-header {
+  position: relative;
+  z-index: 1;
+  max-width: 650px;
+  margin: 0 auto 60px auto;
+  direction: rtl;
+}
+
+.how-it-works-title {
+  font-weight: 800;
+  color: #122669;
+  margin-bottom: 12px;
+}
+
+.how-it-works-subtitle {
+  font-size: 15px;
+  color: #64748b;
+  line-height: 1.7;
+}
+
+.how-it-works-container {
+  position: relative;
+  z-index: 1;
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.timeline-steps-wrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+}
+
+.timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.step-number {
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  height: 20px;
+}
+
+.step-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.step-label {
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 14px;
+  white-space: nowrap;
+  direction: rtl;
+}
+
+/* تدرج الألوان على الدوائر والنصوص فقط */
+.step-level-1 .step-number,
+.step-level-1 .step-label {
+  color: #1a1a2e;
+}
+.step-level-1 .step-dot {
+  background-color: #1a1a2e;
+}
+
+.step-level-2 .step-number,
+.step-level-2 .step-label {
+  color: #a7a7a7;
+}
+.step-level-2 .step-dot {
+  background-color: #a7a7a7;
+}
+
+.step-level-3 .step-number,
+.step-level-3 .step-label {
+  color: #a7a7a7;
+}
+.step-level-3 .step-dot {
+  background-color: #a7a7a7;
+}
+
+.step-level-4 .step-number,
+.step-level-4 .step-label {
+  color: #a7a7a7;
+}
+.step-level-4 .step-dot {
+  background-color: #a7a7a7;
+}
+
+/* الخط الواصل - لون رمادي موحد وسماكة أكبر، بدون تدرج */
+.timeline-connector {
+  flex: 1;
+  height: 5px;
+  background-color: #a7a7a7;
+  margin-top: 37px;
+}
+
+/* السهم الطويل بعد آخر دائرة - نفس اللون الرمادي */
+.timeline-arrow {
+  position: relative;
+  flex: 1;
+  height: 5px;
+  background-color: #a7a7a7;
+  margin-top: 37px;
+  min-width: 60px;
+}
+
+.timeline-arrow::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -2px;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 14px solid #a7a7a7;
+}
+
+@media (max-width: 600px) {
+  .timeline-steps-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+
+  .timeline-connector,
+  .timeline-arrow {
+    display: none;
+  }
+}
