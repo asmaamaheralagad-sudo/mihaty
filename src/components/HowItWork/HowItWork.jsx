@@ -1,6 +1,6 @@
 import React from 'react';
 import './HowItWork.css';
-import DecorativeCircle from '../DecorativeCircle/DecorativeCircle';
+
 
 
 const steps = [
@@ -13,15 +13,6 @@ const steps = [
 function HowItWork() {
   return (
     <section className="how-it-works-section">
-    <DecorativeCircle 
-    color="blue" 
-    size="300px" 
-    opacity={0.7} 
-    bottom="-100px" 
-    left="-90px" 
-  />
-  
-    <DecorativeCircle color="blue" size="sm" top="100px" left="8%" />
       <div className="how-it-works-header">
         <h1 className="how-it-works-title">كيف تعمل منحتي؟</h1>
         <p className="how-it-works-subtitle">

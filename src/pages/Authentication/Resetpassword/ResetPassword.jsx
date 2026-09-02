@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import AuthCardLayout from '../../../components/AuthCardLayout';
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import './ResetPassword.css';
 import "../../../index.css";
+import API from '../../../api';
 
 function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -11,9 +12,15 @@ function ResetPassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token');
+  const email = searchParams.get('email');
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const hasMinLength = password.length >= 8;
@@ -38,8 +45,25 @@ function ResetPassword() {
     }
 
     setErrorMessage("");
-    // هون لاحقاً بتحط استدعاء الـ API لحفظ كلمة المرور الجديدة
-    navigate("/reset-success");
+    setLoading(true);
+
+    try {
+      await API.post('/reset-password', {
+        token,
+        email,
+        password,
+        password_confirmation: confirmPassword,
+      });
+
+      navigate("/reset-success");
+    } catch (err) {
+      setLoading(false);
+      if (err.response && err.response.data && err.response.data.message) {
+        setErrorMessage(err.response.data.message);
+      } else {
+        setErrorMessage("حدث خطأ أثناء تغيير كلمة المرور، حاولي مرة أخرى");
+      }
+    }
   };
 
   return (
@@ -60,6 +84,7 @@ function ResetPassword() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••••"
               required
+              disabled={loading}
             />
             <button
               type="button"
@@ -81,6 +106,7 @@ function ResetPassword() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="••••••••••"
               required
+              disabled={loading}
             />
             <button
               type="button"
@@ -97,8 +123,8 @@ function ResetPassword() {
           <div className="error-box">{errorMessage}</div>
         )}
 
-        <button type="submit" className="auth-submit-btn">
-          حفظ كلمة المرور الجديدة
+        <button type="submit" className="auth-submit-btn" disabled={loading}>
+          {loading ? "جاري الحفظ..." : "حفظ كلمة المرور الجديدة"}
         </button>
       </form>
 

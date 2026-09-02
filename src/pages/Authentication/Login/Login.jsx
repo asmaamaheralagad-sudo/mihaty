@@ -7,15 +7,44 @@ import { MdOutlineEmail } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import "../../../index.css";
+import API from '../../../api';
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  // 1. إضافة المتغيرات الخاصة بالربط
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // 2. تعديل دالة الإرسال للتواصل مع الـ API
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // هون لاحقاً بتحط استدعاء الـ API للتحقق من بيانات الدخول فعلياً
-    navigate("/");
+    setErrorMsg('');
+    setLoading(true);
+
+    try {
+      // إرسال طلب تسجيل الدخول للباك إند
+      const response = await API.post('/login', { email, password });
+
+      // حفظ التوكن المرتجع من الباك إند في الذاكرة
+      if (response.data && response.data.token) {
+        localStorage.setItem('token', response.data.token);
+      }
+
+      setLoading(false);
+      navigate("/"); // الانتقال للصفحة الرئيسية بعد النجاح
+    } catch (err) {
+      setLoading(false);
+      // عرض رسالة الخطأ القادمة من الباك إند إن وجدت
+      if (err.response && err.response.data && err.response.data.message) {
+        setErrorMsg(err.response.data.message);
+      } else {
+        setErrorMsg('فشل تسجيل الدخول، تأكدي من صحة البريد وكلمة المرور');
+      }
+    }
   };
 
   return (
@@ -50,6 +79,13 @@ function Login() {
             <h2>سجل الدخول للمتابعة إلى حسابك</h2>
           </div>
 
+          {/* 3. إظهار رسالة الخطأ إن وجدت */}
+          {errorMsg && (
+            <div style={{ color: 'red', textAlign: 'center', marginBottom: '15px', fontSize: '14px' }}>
+              {errorMsg}
+            </div>
+          )}
+
           {/* النموذج الرئيسي */}
           <form onSubmit={handleSubmit} className="login-form">
             
@@ -60,6 +96,9 @@ function Login() {
                 <input 
                   type="email" 
                   placeholder="name@example.com" 
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)} // 4. حفظ الإيميل أثناء الكتابة
                 />
                 <MdOutlineEmail className="input-icon" />
               </div>
@@ -72,6 +111,9 @@ function Login() {
                 <input 
                   type={showPassword ? "text" : "password"} 
                   placeholder="••••••••"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)} // 5. حفظ كلمة المرور أثناء الكتابة
                 />
                 <TbLockPassword className="input-icon" />
                 <button
@@ -96,9 +138,9 @@ function Login() {
               </div>
             </div>
 
-            {/* زر تسجيل الدخول */}
-            <button type="submit" className="login-submit-btn">
-              تسجيل الدخول
+            {/* 6. زر تسجيل الدخول مع حالة التحميل */}
+            <button type="submit" className="login-submit-btn" disabled={loading}>
+              {loading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول'}
             </button>
           </form>
 
