@@ -533,7 +533,9 @@
   margin: 0 auto 12px;
   display: block;
 }
-
+.section-heading{
+  align-items: center;
+}
 .testimonial-stars {
   color: #f5b301;
   font-size: 14px;

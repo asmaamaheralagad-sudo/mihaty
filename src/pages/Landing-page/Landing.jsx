@@ -187,7 +187,8 @@ function Landing() {
             <FeatureCard 
               icon={<HiOutlineMagnifyingGlass />} 
               title="بحث سهل ومَرِن" 
-              description="ابحث عن المنحة حسب معايير مختلفة." 
+              description="ابحث عن المنحة حسب معايير مختلفة."
+              borderColor='#FDD34D'
             />
             <FeatureCard 
               icon={<HiOutlineAcademicCap />} 
@@ -264,8 +265,8 @@ function Landing() {
         <AboutUs />
         <HowItWork/>
         <section className="ai-tools-section" id="tools">
-        <div className="section-heading">
-          <h2>أدوات ذكية تجعل التقديم أسهل</h2>
+           <div className="section-heading">
+          <h1>أدوات ذكية تجعل التقديم أسهل</h1>
           <p>
             استفد من الذكاء الاصطناعي لتجد المنح الأنسب لك، وجهّز طلبك، وزد فرصك
             في النجاح
@@ -285,7 +286,7 @@ function Landing() {
       </section>
 
       <section className="testimonials-section" id="testimonials">
-        <div className="section-heading">
+        <div className="scholarships-header">
           <h2>تجارب حقيقية، وفرص بدأت مع منحتي</h2>
           <p>
             اكتشف كيف ساعدت منحتي طلابًا وباحثين عن الفرص في الوصول إلى المنح

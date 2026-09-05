@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import AuthCardLayout from '../../../components/AuthCardLayout';
-import './Verification.css';
+import './verification.css';
 import "../../../index.css";
 
 function Verification() {
