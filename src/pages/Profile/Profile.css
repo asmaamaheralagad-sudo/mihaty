@@ -1,0 +1,641 @@
+@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap");
+
+/* Basic Setup */
+.profile-page {
+  font-family: "Tajawal", sans-serif;
+  direction: rtl;
+  width: 100%;
+}
+
+/* ========  ============ NAVBAR SECTION ==================== */
+.profile-navbar {
+  width: 100%;
+  height: 91px;
+  background-color: rgba(247, 249, 251, 0.9);
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.profile-navbar-container {
+  width: 100%;
+  max-width: 1299px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+/* User Profile Section (Right side in JSX) */
+.user-profile-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.arrow-icon {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+/* Vertical Divider Text "|" */
+.vertical-divider {
+  color: #bfc7d4;
+  font-size: 20px;
+  font-weight: 300;
+  user-select: none;
+  padding: 0 4px;
+}
+
+/* Action Icon Buttons */
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 4px;
+}
+
+.notification-dot {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 7px;
+  height: 7px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  border: 1.5px solid #ffffff;
+}
+
+/* Navigation Links (Center) */
+.profile-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.profile-nav-links .nav-link {
+  text-decoration: none;
+  color: #475569;
+  font-size: 15px;
+  font-weight: 500;
+  padding-bottom: 4px; /* نفس القيمة القديمة للمسافة */
+  position: relative; /* ضروري جداً لتموضع الخط تحته */
+  transition: color 0.2s;
+  border-bottom: none !important; /* لضمان عدم ظهور أي خط قديم مزدوج */
+}
+
+.profile-nav-links .nav-link:hover {
+  color: #1e3a8a;
+}
+
+
+
+.profile-nav-links .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px; /* سماكة الخط كما كانت */
+  background-color: #1e3a8a;
+  transition: all 0.3s ease-in-out;
+  transform: translateX(-50%);
+}
+
+.profile-nav-links .nav-link:hover::after
+ {
+  width: 100%;
+}
+.profile-logo a {
+  display: flex;
+  align-items: center;
+}
+
+.profile-logo .logo-img {
+  height: 84px !important;
+  max-height: 84px !important;
+  width: 76px !important;
+  object-fit: contain;
+  display: block;
+}
+
+/* ==================== HERO SECTION ==================== */
+.profile-page .hero-section {
+  position: relative;
+  width: 100%;
+  min-height: 600px;
+  margin: 0 auto;
+  background-image: url("../../image/hero-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column; /* مهم جداً عشان العناصر تترتب عمودياً */
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  padding: 60px 20px 40px 20px;
+  box-sizing: border-box;
+}
+
+.profile-page .hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(173, 161, 161, 0.45) 100%
+  );
+  z-index: 1;
+}
+
+/* Container المحتوى الداخلي اللي بالنص */
+.profile-page .hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-right: 48px;
+  padding-left: 48px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-page .hero-title {
+  font-family: "Tajawal", sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 64px;
+  text-align: center;
+  color: #122669;
+  margin-top: 20px;
+  margin-bottom: 24px;
+}
+
+ .profile-page .hero-subtitle {
+  font-family: "Tajawal", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  color: #404752;
+  padding-right: 82px;
+  padding-left: 82px;
+  padding-bottom: 30px;
+}
+
+/* الأزرار */
+ .profile-page .hero-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 30px;
+}
+.btn-primary {
+  font-family: "Tajawal", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 100%;
+  color: #ffffff;
+  background-color: #122669;
+
+  /* المقاسات الجديدة المستخرجة من الفيجما */
+  padding: 12px 17px; /* Top/Bottom: 12px, Right/Left: 17px */
+  border-radius: 8px; /* انحناء الحواف من الفيجما */
+
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* المسافة لو أضفتِ أيقونة مستقبلاً */
+}
+
+.btn-secondary {
+  font-family: "Tajawal", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 100%;
+  color: #122669;
+  height: 47px;
+  padding: 12px 17px;
+  border-radius: 9999px;
+  box-sizing: border-box;
+  background-color: #f7f9fb;
+  border: 2px solid rgba(0, 97, 164, 0.2);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+ .profile-page .hero-stats {
+  position: relative;
+  z-index: 2; /* لتكون فوق الـ overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 1024px;
+  margin: 20px auto 0 auto; /* صلحنا خطأ الـ margin-top */
+  box-sizing: border-box;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 134px;
+  height: 132px;
+  padding: 24px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+}
+
+.stat-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-value {
+  font-family: "Tajawal", sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-family: "Tajawal", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #404752;
+  line-height: 1;
+}
+/* ==================== PROMO CTA SECTION ==================== */
+.promo-cta-section {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 20px;
+  box-sizing: border-box;
+}
+
+.promo-cta-content {
+  max-width: 879px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.promo-cta-title {
+  font-family: "Tajawal", sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #2A2A2A;
+  margin: 0 0 12px 0;
+  line-height: 100%;
+font-style: Bold;
+
+text-align: center;
+vertical-align: middle;
+
+}
+
+.promo-cta-subtitle {
+  font-family: "Tajawal", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #404752;
+  max-width: 478px;
+  width: 100%;
+  margin: 0 auto;
+  line-height: 100%;
+  text-align: center;
+font-style: Regular;
+vertical-align: middle;
+
+}
+
+.scholarships-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+    justify-content: center; 
+}
+
+@media (max-width: 900px) {
+  .scholarships-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .scholarships-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.promo-text-wrapper{
+  padding-bottom: 54px;
+}
+/* ==================== PREP SECTION ==================== */
+.prep-section {
+  width: 100%;
+  max-width: 1280px;
+  margin: 60px auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  direction: rtl;
+}
+
+.prep-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px; /* مسافات منتظمة بين العنوان، الوصف، والزر */
+  margin-bottom: 40px;
+  max-width: 800px;
+  padding-bottom: 30px;
+}
+
+.prep-title {
+  font-family: "Tajawal", sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: #122669;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.prep-subtitle {
+  font-family: "Tajawal", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #404752;
+  margin: 0;
+  line-height: 1.5;
+}
+
+
+/* شبكة البطاقات أفقية ومتناسقة */
+.prep-cards-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 64px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.prep-card {
+  background-color: #122669;
+  width: 250px;
+  height: 250px;
+  border-radius: 38px;
+  padding: 40px 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 10px 30px rgba(18, 38, 105, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.prep-card:hover {
+  transform: translateY(-5px);
+}
+
+.prep-card-icon {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prep-card-icon img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.prep-card-title {
+  font-family: "Tajawal", sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: #fdd34d;
+  margin-bottom: 12px;
+  line-height: 100%;
+  text-align: center;
+}
+
+.prep-card-desc {
+  font-family: "Tajawal", sans-serif;
+  font-size: 20px;
+  font-weight: 200;
+  color: #ffffff;
+  margin: 0;
+  line-height: 100%;
+  text-align: center;
+}
+.upcoming-deadlines-section .upcoming-deadlines-header{
+  display: flex;
+  justify-content: space-between; /* التفاصيل يسار، التاريخ يمين */
+  align-items: center;
+  width: 100%;
+  padding-bottom: 82px;
+}
+.upcoming-deadlines-title{
+  font-family: Tajawal;
+font-weight: 700;
+font-style: Bold;
+font-size: 32px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: center;
+vertical-align: middle;
+color: #122669;
+}
+.view-all-link{
+font-family: Tajawal;
+font-weight: 400;
+font-style: Regular;
+font-size: 24px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: center;
+vertical-align: middle;
+text-decoration: underline;
+text-decoration-style: solid;
+text-decoration-thickness: 0%;
+text-decoration-skip-ink: auto;
+color:#2A2A2A;
+
+}
+/* --- Final CTA Section --- */
+.final-cta-section {
+  background-color: #122669; /* primary color/900 المأخوذة من الفيجما */
+  padding: 96px 256px;
+  text-align: center;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta-content {
+  max-width: 800px;
+}
+
+.cta-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.cta-subtitle {
+  font-size: 18px;
+  color: #d1d1d1;
+  margin-bottom: 16px;
+}
+
+.cta-btn {
+  background-color: #FDD34D; /* لون الزر الأصفر في الفيجما */
+  color: #2A2A2A;
+  font-weight: 700;
+  padding: 16px 40px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease;
+  margin-top: 24px;
+}
+
+.cta-btn:hover {
+  background-color: #d6b141;
+}
+
+/* --- Footer Section --- */
+.footer-section {
+  background-color:#BFC7D4;
+  color: #516e97;
+  padding: 32px 48px;
+  direction: rtl;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+}
+
+.footer-links a {
+  color: #F7F9FB;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color:#a2a6ad;;
+}
+
+.footer-brand {
+  text-align: right;
+}
+
+.footer-logo-text {
+  font-weight: 700;
+  font-size: 16px;
+  color: #F7F9FB;
+  margin-bottom: 4px;
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: #F7F9FB;
+  margin: 0;
+}
+

@@ -1,12 +1,13 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/Authentication/Login/Login';
-import SignUp from './pages/Authentication/Signup/SignUp';
-import ForgetPassword from './pages/Authentication/Forgetpassword/ForgetPassword';
-import Verification from './pages/Authentication/Verification/verification';
-import ResetPassword from './pages/Authentication/Resetpassword/ResetPassword';
-import ResetSuccess from './pages/Authentication/Resetsuccess/ResetSuccess';
-import Landing from './pages/Landing-page/Landing';
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/Authentication/Login/Login";
+import SignUp from "./pages/Authentication/Signup/SignUp";
+import ForgetPassword from "./pages/Authentication/Forgetpassword/ForgetPassword";
+import Verification from "./pages/Authentication/Verification/verification";
+import ResetPassword from "./pages/Authentication/Resetpassword/ResetPassword";
+import ResetSuccess from "./pages/Authentication/Resetsuccess/ResetSuccess";
+import Landing from "./pages/Landing-page/Landing";
+import Profile from "./pages/Profile/Profile";
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
         <Route path="/verification" element={<Verification />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/reset-success" element={<ResetSuccess />} />
-        
+        <Route path="/Profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );

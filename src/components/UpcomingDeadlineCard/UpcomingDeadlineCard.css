@@ -1,0 +1,165 @@
+/* 1. إضافة الانتقال السلس للبطاقة الأساسية */
+.deadline-card {
+  position: relative;
+  width: 100%;
+  height: 277px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1),
+              0px 2px 4px -2px rgba(0, 0, 0, 0.1);
+  
+  /* خصائص الحركة */
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  cursor: pointer;
+}
+
+/* 2. إضافة تأثير تكبير الصورة بسلاسة داخل البطاقة */
+.deadline-card-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      
+  z-index: 1;
+  
+  /* انتقال سلس لتكبير الصورة */
+  transition: transform 0.5s ease;
+}
+
+/* 3. تأثير الـ Hover (عند تمرير الماوس) */
+.deadline-card:hover {
+  transform: translateY(-8px); /* رفع البطاقة للأعلى */
+  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.2); /* زيادة وضوح الظل */
+}
+
+.deadline-card:hover .deadline-card-img {
+  transform: scale(1.05); /* تكبير خفيف للصورة بنسبة 5% */
+}
+
+/* 4. تأثير الـ Active (عند النقر بالماوس) */
+.deadline-card:active {
+  transform: translateY(-2px) scale(0.98); /* انضغاط خفيف للداخل عند النقر */
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.deadline-overlay {
+  position: absolute;  
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(
+    89.84deg,
+    rgba(18, 38, 105, 0.3) 9.79%,
+    rgba(18, 38, 105, 0.8) 94.8%
+  );
+  z-index: 2;   /* <-- لازم تكون فوق الصورة */
+}
+
+.upcoming-deadlines-section {
+  padding: 40px 96px;
+}
+
+.upcoming-deadlines-list {
+  display: flex;
+  flex-direction: column;
+  gap: 57px;
+}
+
+.upcoming-deadlines-list .deadline-card:nth-child(1) .deadline-card-img {
+  object-position:  50% 20% ;
+}
+
+.upcoming-deadlines-list .deadline-card:nth-child(2) .deadline-card-img {
+  object-position: center top;
+}
+
+.upcoming-deadlines-list .deadline-card:nth-child(3) .deadline-card-img {
+  object-position: 50% 20%;
+}
+.deadline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+}
+
+.days-left-badge {
+  background-color: #FF2600;
+    opacity: 0.8;
+
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  width: fit-content;
+   /* الظل (Drop shadow) */
+box-shadow: 0px 1px 2px 0px #0000000D;
+
+backdrop-filter: blur(8px)
+
+
+
+}
+
+.deadline-title {
+  color: #fff;
+  font-family: "Tajawal", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  
+}
+.deadline-meta {
+  color: rgba(255, 255, 255, 0.85);
+  font-family: "Tajawal", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: right;
+
+  
+}
+.deadline-footer {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  width: 100%;
+}
+
+.deadline-link {
+  color: #fff;
+  text-decoration: underline;
+  font-family: Tajawal;
+font-weight: 400;
+font-style: Regular;
+font-size: 24px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: right;
+vertical-align: middle;
+text-decoration: underline;
+text-decoration-style: solid;
+
+}
+
+.deadline-date {
+  color: #fff;
+  
+font-family: Tajawal;
+font-weight: 700;
+font-style: Bold;
+font-size: 20px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: right;
+vertical-align: middle;
+
+}
