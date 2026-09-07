@@ -1,102 +1,133 @@
-.scholarship-card {
-  position: relative;
-  height: 340px;
-  border-radius: var(--radius-md, 16px);
-  background-size: cover;
-  background-position: center;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 16px;
-  box-shadow: var(--shadow-sm, 0 4px 12px rgba(0, 0, 0, 0.08));
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  direction: rtl;
+.scholarship-card{
+  position:relative;
+  height:330px;
+  border-radius:24px;
+  overflow:hidden;
+  background-size:cover;
+  background-position:center;
+  cursor:pointer;
+  transition:.35s;
 }
 
-.scholarship-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-md, 0 8px 20px rgba(0, 0, 0, 0.15));
+
+.scholarship-card:hover{
+  transform:translateY(-8px);
 }
 
-.card-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    180deg, 
-    rgba(0, 0, 0, 0.1) 0%, 
-    rgba(12, 35, 64, 0.85) 60%, 
-    rgba(12, 35, 64, 0.95) 100%
+.card-overlay{
+  position:absolute;
+  inset:0;
+
+  background:
+  linear-gradient(
+    to top,
+    rgba(0,0,0,.85),
+    rgba(0,0,0,.2),
+    rgba(0,0,0,.05)
   );
-  z-index: 1;
 }
 
-.status-badge {
-  position: relative;
-  z-index: 2;
-  align-self: flex-start;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
-  color: #ffffff;
+.status-badge{
+  position:absolute;
+  top:15px;
+  right:15px;
+  z-index:3;
+  border-radius:30px;
+  padding:6px 14px;
+  font-size:12px;
+  font-weight:700;
 }
 
-.status-badge.success { background-color: #2e7d32; }
-.status-badge.warning { background-color: #d9a441; }
-.status-badge.danger { background-color: #d32f2f; }
-
-.card-content {
-  position: relative;
-  z-index: 2;
-  color: #ffffff;
-  text-align: center;
+.success{
+  background:#E8F7EA;
+  color:#1E8E3E;
 }
 
-.card-title {
-  font-size: 18px;
-  font-weight: 800;
-  margin-bottom: 6px;
+.warning{
+  background:#FFF5D7;
+  color:#D89A00;
 }
 
-.card-degrees {
-  font-size: 12px;
-  opacity: 0.9;
-  margin-bottom: 12px;
+.danger{
+  background:#FFE4E4;
+  color:#D93C3C;
 }
 
-.card-footer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
+.card-content{
+  position:absolute;
+  bottom:20px;
+  right:20px;
+  left:20px;
+  z-index:2;
+  color:white;
 }
 
-.deadline-label {
-  font-size: 11px;
-  opacity: 0.8;
+.card-title{
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:10px;
 }
 
-.deadline-date {
-  font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 8px;
+.card-degrees{
+  font-size:14px;
+  margin-bottom:15px;
 }
 
-.details-btn {
-  background: transparent;
-  border: none;
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  text-decoration: underline;
-  transition: opacity 0.2s ease;
+.details-btn{
+  border:none;
+  background:none;
+  color:white;
+  text-decoration:underline;
+  cursor:pointer;
 }
 
-.details-btn:hover {
-  opacity: 0.8;
+/* ===== Slider الجديد ===== */
+
+.slider-wrapper{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.slider-track{
+  display:flex;
+  gap:24px;
+  overflow-x:auto;
+  scroll-behavior:smooth;
+  scroll-snap-type:x mandatory;
+  padding:8px 4px;
+  direction:rtl;
+}
+
+.slider-track::-webkit-scrollbar{
+  display:none;
+}
+
+.slider-item{
+  flex:0 0 300px;
+  scroll-snap-align:start;
+}
+
+.slider-arrow{
+  flex-shrink:0;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:1px solid #ddd;
+  background:#fff;
+  font-size:22px;
+  color:#1c3f5f;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  transition:.2s;
+  z-index:5;
+}
+
+.slider-arrow:hover{
+  background:#1c3f5f;
+  color:#fff;
 }

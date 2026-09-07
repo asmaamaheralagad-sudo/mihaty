@@ -1,151 +1,124 @@
 .how-it-works-section {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  padding: 80px 24px;
-  background-color: var(--bg_color);
+  width: min(1100px, 90%);
+  margin: 0 auto;
+  padding: 60px 0;
   text-align: center;
-  direction: ltr;
 }
 
 .how-it-works-header {
-  position: relative;
-  z-index: 1;
-  max-width: 650px;
-  margin: 0 auto 60px auto;
-  direction: rtl;
+  margin-bottom: 60px;
 }
 
 .how-it-works-title {
+  font-size: 32px;
   font-weight: 800;
-  color: #122669;
+  color: var(--main_color);
   margin-bottom: 12px;
 }
 
 .how-it-works-subtitle {
-  font-size: 15px;
+  font-size: 16px;
   color: #64748b;
   line-height: 1.7;
+  max-width: 650px;
+  margin: 0 auto;
 }
 
 .how-it-works-container {
-  position: relative;
-  z-index: 1;
-  max-width: 750px;
-  margin: 0 auto;
+  width: 100%;
+  overflow-x: auto;
 }
 
 .timeline-steps-wrapper {
   display: flex;
-  align-items: flex-start;
   justify-content: center;
-  position: relative;
+  align-items: flex-start;
+  direction: rtl;
+  padding: 0 10px;
 }
 
 .timeline-step {
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex-shrink: 0;
   position: relative;
-  z-index: 2;
+  min-width: 80px;
 }
 
 .step-number {
-  font-size: 16px;
-  font-weight: 800;
-  margin-bottom: 10px;
-  height: 20px;
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #64748b;
+  line-height: 1;
 }
 
 .step-dot {
-  width: 16px;
-  height: 16px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  flex-shrink: 0;
+  background-color: #7D7D7D;
+  border: none;
+  box-sizing: border-box;
+  margin-bottom: 14px;
 }
 
 .step-label {
   font-size: 14px;
-  font-weight: 700;
-  margin-top: 14px;
+  font-weight: 600;
+  color: var(--main_color);
   white-space: nowrap;
-  direction: rtl;
 }
 
-/* تدرج الألوان على الدوائر والنصوص فقط */
-.step-level-1 .step-number,
-.step-level-1 .step-label {
-  color: #1a1a2e;
-}
+/* المرحلة الأولى (رقم 1) هي البداية الفعلية، نخليها غامقة */
 .step-level-1 .step-dot {
-  background-color: #1a1a2e;
+  background-color: #122669;
 }
 
-.step-level-2 .step-number,
-.step-level-2 .step-label {
-  color: #a7a7a7;
-}
-.step-level-2 .step-dot {
-  background-color: #a7a7a7;
+.step-level-1 .step-number {
+  color: var(--main_color);
+  font-weight: 800;
 }
 
-.step-level-3 .step-number,
-.step-level-3 .step-label {
-  color: #a7a7a7;
-}
-.step-level-3 .step-dot {
-  background-color: #a7a7a7;
-}
-
-.step-level-4 .step-number,
-.step-level-4 .step-label {
-  color: #a7a7a7;
-}
-.step-level-4 .step-dot {
-  background-color: #a7a7a7;
-}
-
-/* الخط الواصل - لون رمادي موحد وسماكة أكبر، بدون تدرج */
 .timeline-connector {
-  flex: 1;
+  width: 110px;
   height: 5px;
-  background-color: #a7a7a7;
-  margin-top: 37px;
+  background: #A7A7A7;
+  margin-top: 40px; /* تحاذي منتصف الدائرة بالضبط */
+  flex-shrink: 0;
 }
 
-/* السهم الطويل بعد آخر دائرة - نفس اللون الرمادي */
+/* الخط الواصل بعد المرحلة الأولى مباشرة، يكون غامق كمان */
+.connector-level-1 {
+  background: #122669;
+}
+
 .timeline-arrow {
-  position: relative;
-  flex: 1;
+  width: 70px;
   height: 5px;
-  background-color: #a7a7a7;
-  margin-top: 37px;
-  min-width: 60px;
+  background: #A7A7A7;
+  margin-top: 30px;
+  position: relative;
 }
 
 .timeline-arrow::after {
-  content: "";
+  content: '';
   position: absolute;
+  right: -4px;
   top: 50%;
-  right: -2px;
   transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-left: 14px solid #a7a7a7;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 15px solid #A7A7A7;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .timeline-steps-wrapper {
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
+    flex-wrap: wrap;
+    gap: 20px 0;
   }
 
-  .timeline-connector,
-  .timeline-arrow {
-    display: none;
+  .timeline-connector {
+    width: 40px;
   }
 }

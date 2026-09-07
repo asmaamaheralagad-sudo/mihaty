@@ -1,31 +1,65 @@
 .feature-card-wrapper {
+  box-sizing: border-box;
+  width: 242px;
+  height: 241px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* الخلفية الملونة تحت الكرت الأبيض */
+.feature-card-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   border-radius: 16px;
-  padding: 8px;
-  transition: var(--transition-base);
+  z-index: 1;
 }
 
-.feature-card-wrapper.border-yellow {
-  background-color: var(--accent_color);
-}
-
-.feature-card-wrapper.border-blue {
-  background-color: var(--main_color);
-}
-
-.feature-card-wrapper:hover {
-  transform: translateY(-4px);
-}
-
+/* الكرت الأبيض الداخلي */
 .feature-card {
-  background-color: var(--surface_color);
-  border-radius: 16px;
-  padding: 28px 20px;
+  box-sizing: border-box;
+  background-color: var(--surface_color, #ffffff);
+  border-radius: 12px;
+  padding: 20px 16px;
   text-align: center;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.08));
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  width: 100%;
   height: 100%;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.2s ease-in-out;
+}
+
+/* إزاحة الكرت للأعلى واليسار (للعمود الأيسر) */
+.feature-card-wrapper.left .feature-card {
+  transform: translate(-2px, -2px);
+  
+}
+.feature-card-wrapper.left{
+ padding: 7px 15px 7px 0px;}
+
+/* إزاحة الكرت للأعلى واليمين (للعمود الأيمن) */
+.feature-card-wrapper.right .feature-card {
+  transform: translate(8px, -2px);
+}
+.feature-card-wrapper.right { 
+  padding: 7px  7px 7px;}
+
+/* تفاعل الهوفر عند مرور الماوس */
+.feature-card-wrapper.left:hover .feature-card {
+  transform: translate(-12px, -12px);
+}
+
+.feature-card-wrapper.right:hover .feature-card {
+  transform: translate(12px, -12px);
 }
 
 .icon-wrapper {
@@ -35,22 +69,30 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   color: var(--main_color);
-  font-size: 40px;
+  font-size: 32px;
   background-color: #fafbfc;
 }
 
 .feature-card h3 {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--main_color);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .feature-card p {
-  font-size: 12.5px;
+  font-size: 18px;
   color: var(--secondary_color);
-  line-height: 1.6;
+  line-height: 1.5;
   margin: 0;
+}
+
+@media (max-width: 600px) {
+  .feature-card-wrapper {
+    width: 100%;
+    height: auto;
+    min-height: 200px;
+  }
 }
