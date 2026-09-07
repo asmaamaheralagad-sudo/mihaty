@@ -7,6 +7,7 @@ import Verification from './pages/Authentication/Verification/verification';
 import ResetPassword from './pages/Authentication/Resetpassword/ResetPassword';
 import ResetSuccess from './pages/Authentication/Resetsuccess/ResetSuccess';
 import Landing from './pages/Landing-page/Landing';
+import GrantDetails from './components/GrantDetails/GrantDetails';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/verification" element={<Verification />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/reset-success" element={<ResetSuccess />} />
+        <Route path="/GrantDetails" element={<GrantDetails />} />
         
       </Routes>
     </BrowserRouter>

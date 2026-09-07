@@ -1,0 +1,530 @@
+html {
+  scroll-behavior: smooth;
+}
+
+.grant-details-page {
+  direction: rtl;
+  background: linear-gradient(0deg, #F7F9FB, #F7F9FB), #FFFFFF;
+  padding: 32px 48px;
+  font-family: 'Almarai', 'Tajawal', sans-serif;
+  min-height: 100vh;
+}
+
+/* ===== Topbar ===== */
+.grant-details-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.grant-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #6B7280;
+}
+
+.grant-breadcrumb-icon {
+  font-size: 14px;
+  color: #9CA3AF;
+}
+
+.grant-breadcrumb-current {
+  color: var(--main_color, #122669);
+  font-weight: 600;
+}
+
+.grant-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.grant-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #E5E7EB;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: #374151;
+  transition: all 0.2s ease;
+}
+
+.grant-icon-btn:hover {
+  background-color: #F9FAFB;
+}
+
+.grant-save-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: 1px solid #E5E7EB;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  transition: all 0.2s ease;
+}
+
+.grant-save-btn:hover {
+  background-color: #F9FAFB;
+}
+
+/* ===== Layout ===== */
+.grant-details-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.grant-details-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.grant-details-sidebar {
+  width: 320px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 24px;
+}
+
+/* ===== Header Card ===== */
+.grant-header-card {
+  background: #ffffff;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 28px 32px;
+  position: relative;
+  border-right: 6px solid var(--main_color, #122669);
+  box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.05);
+}
+
+.grant-header-tags {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.grant-tag {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.grant-tag-ai {
+  background-color: #FEF3D6;
+  color: #92720F;
+}
+
+.grant-tag-funded {
+  background-color: var(--main_color, #122669);
+  color: #fff;
+}
+
+.grant-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.grant-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.grant-university-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background-color: var(--bg_color, #F5F6F8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: var(--main_color, #122669);
+  flex-shrink: 0;
+}
+
+.grant-meta-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #F1F2F4;
+}
+
+.grant-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  padding-right: 32px;
+  min-width: 120px;
+}
+
+.grant-meta-label {
+  font-size: 12px;
+  color: #9CA3AF;
+}
+
+.grant-meta-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.grant-meta-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 18px;
+  color: var(--main_color, #122669);
+}
+
+.grant-meta-icon-gold {
+  color: #D9A83B;
+}
+
+/* ===== Section Cards ===== */
+.grant-section-card {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 28px 32px;
+  scroll-margin-top: 24px;
+  box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.05);
+}
+
+.grant-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 20px 0;
+}
+
+.grant-section-number {
+  color: var(--main_color, #122669);
+}
+
+.grant-section-icon {
+  margin-right: auto;
+  color: #9CA3AF;
+  font-size: 18px;
+}
+
+.grant-about-text {
+  font-size: 15px;
+  line-height: 2;
+  color: #4B5563;
+  margin: 0;
+}
+
+/* ===== Eligibility ===== */
+.grant-eligibility-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.grant-eligibility-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 15px;
+  color: #374151;
+}
+
+.grant-eligibility-check {
+  color: var(--main_color);
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ===== Majors ===== */
+.grant-majors-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.grant-major-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg_color, #F5F6F8);
+  border-radius: 14px;
+  padding: 18px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1F2937;
+}
+
+.grant-major-icon {
+  color: var(--main_color, #122669);
+  font-size: 18px;
+}
+
+/* ===== Documents ===== */
+.grant-documents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.grant-document-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg_color, #F5F6F8);
+  border-radius: 14px;
+  padding: 16px 20px;
+}
+
+.grant-document-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1F2937;
+}
+
+.grant-document-icon {
+  color: var(--main_color, #122669);
+  font-size: 18px;
+}
+
+.grant-document-tag {
+  background-color: #E5E7EB;
+  color: #4B5563;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+
+/* ===== Benefits ===== */
+.grant-benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.grant-benefit-card {
+  background-color: var(--bg_color, #F5F6F8);
+  border-radius: 16px;
+  padding: 24px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.grant-benefit-icon {
+  font-size: 26px;
+  color: var(--main_color, #122669);
+  margin-bottom: 4px;
+}
+
+.grant-benefit-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.grant-benefit-desc {
+  font-size: 13px;
+  color: #6B7280;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ===== Sidebar ===== */
+.grant-deadline-card {
+  background-color: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 18px;
+  padding: 20px;
+}
+
+.grant-deadline-info {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.grant-deadline-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.grant-deadline-label {
+  font-size: 12px;
+  color: #92720F;
+}
+
+.grant-deadline-date {
+  font-size: 17px;
+  font-weight: 700;
+  color: #78350F;
+}
+
+.grant-deadline-days {
+  font-size: 13px;
+  color: #92720F;
+}
+
+.grant-deadline-icon {
+  font-size: 22px;
+  color: #D9A83B;
+}
+
+.grant-progress-track {
+  width: 100%;
+  height: 6px;
+  background-color: #FDE68A;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.grant-progress-fill {
+  height: 100%;
+  background-color: #D9A83B;
+  border-radius: 999px;
+}
+
+.grant-apply-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--main_color, #122669);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: opacity 0.2s ease;
+}
+
+.grant-apply-btn:hover {
+  opacity: 0.95;
+}
+
+.grant-ai-review-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #F3F4F6;
+  color: #374151;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.grant-ai-review-btn:hover {
+  background-color: #E5E7EB;
+}
+
+.grant-contents-card {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.05);
+}
+
+.grant-contents-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 14px 0;
+}
+
+.grant-contents-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.grant-contents-link {
+  font-size: 14px;
+  color: #4B5563;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.grant-contents-link:hover {
+  color: var(--main_color, #122669);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .grant-details-page {
+    padding: 20px;
+  }
+  .grant-details-container {
+    flex-direction: column-reverse;
+  }
+  .grant-details-sidebar {
+    width: 100%;
+    position: static;
+  }
+  .grant-header-top {
+    flex-direction: column-reverse;
+  }
+  .grant-majors-grid,
+  .grant-benefits-grid {
+    grid-template-columns: 1fr;
+  }
+}
