@@ -14,26 +14,33 @@ import API from '../../../api';
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg('');
+
+    if (password !== confirmPassword) {
+      setErrorMsg('كلمة المرور وتأكيدها غير متطابقين');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      // نرسل password_confirmation مطابقة لـ password لتجاوز شرط السيرفر
       const response = await API.post('/register', { 
         name, 
         email, 
         password,
-        password_confirmation: password 
+        password_confirmation: confirmPassword 
       });
 
       if (response.data && response.data.token) {
@@ -46,7 +53,6 @@ function SignUp() {
     } catch (err) {
       setLoading(false);
       
-      // استخراج رسائل الأخطاء القادمة من الباك إند وعرضها بأسلوب واضح
       const serverErrors = err.response?.data?.errors;
       if (serverErrors) {
         const firstErrorKey = Object.keys(serverErrors)[0];
@@ -148,6 +154,28 @@ function SignUp() {
                   aria-label="إظهار/إخفاء كلمة المرور"
                 >
                   {showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
+                </button>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>تأكيد كلمة المرور</label>
+              <div className="input-wrapper">
+                <input 
+                  type={showConfirmPassword ? "text" : "password"} 
+                  placeholder="••••••••" 
+                  required
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                <TbLockPassword className="input-icon" />
+                <button
+                  type="button"
+                  className="toggle-password-btn"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-label="إظهار/إخفاء تأكيد كلمة المرور"
+                >
+                  {showConfirmPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
                 </button>
               </div>
             </div>

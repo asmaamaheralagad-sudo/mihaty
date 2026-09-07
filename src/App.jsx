@@ -8,6 +8,8 @@ import ResetPassword from './pages/Authentication/Resetpassword/ResetPassword';
 import ResetSuccess from './pages/Authentication/Resetsuccess/ResetSuccess';
 import Landing from './pages/Landing-page/Landing';
 import GrantDetails from './components/GrantDetails/GrantDetails';
+import Profile from "./pages/Profile/Profile";
+
 
 function App() {
   return (
@@ -21,7 +23,8 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/reset-success" element={<ResetSuccess />} />
         <Route path="/GrantDetails" element={<GrantDetails />} />
-        
+        <Route path="/Profile" element={<Profile />} />
+
       </Routes>
     </BrowserRouter>
   );

@@ -85,6 +85,22 @@ const scholarshipsData = [
     statusType: "success",
     bgImage: saudiFlag,
   },
+   {
+    title: "DAAD",
+    degrees: "بكالوريوس • ماجستير • دكتوراة",
+    deadline: "20 فبراير 2027",
+    status: "مغلقة",
+    statusType: "danger",
+    bgImage: germanyFlag,
+  },
+   {
+    title: "المنحة السعودية",
+    degrees: "بكالوريوس • ماجستير",
+    deadline: "20 فبراير 2027",
+    status: "مفتوحة للتقديم",
+    statusType: "success",
+    bgImage: saudiFlag,
+  },
 ];
 
 function Landing() {
