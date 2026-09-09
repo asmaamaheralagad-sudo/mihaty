@@ -285,6 +285,11 @@ function GrantDetails({ grant = defaultGrant }) {
           </div>
         </aside>
       </div>
+
+      {/* الفوتر الآن خارج حاوية الـ flex الأفقية ويأتي بأسفل الصفحة */}
+      <footer className="grant-details-footer">
+        <p>© 2024 منحتي. جميع الحقوق محفوظة.</p>
+      </footer>
     </div>
   );
 }

@@ -9,6 +9,8 @@ import ResetSuccess from './pages/Authentication/Resetsuccess/ResetSuccess';
 import Landing from './pages/Landing-page/Landing';
 import GrantDetails from './components/GrantDetails/GrantDetails';
 import Profile from "./pages/Profile/Profile";
+import DiscoverScholarships from './pages/DiscoverScholarships/DiscoverScholarships';
+
 
 
 function App() {
@@ -24,6 +26,7 @@ function App() {
         <Route path="/reset-success" element={<ResetSuccess />} />
         <Route path="/GrantDetails" element={<GrantDetails />} />
         <Route path="/Profile" element={<Profile />} />
+        <Route path="/scholarships" element={<DiscoverScholarships />} />
 
       </Routes>
     </BrowserRouter>
