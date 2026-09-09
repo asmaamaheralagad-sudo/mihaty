@@ -1,18 +1,17 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/Authentication/Login/Login';
-import SignUp from './pages/Authentication/Signup/SignUp';
-import ForgetPassword from './pages/Authentication/Forgetpassword/ForgetPassword';
-import Verification from './pages/Authentication/Verification/verification';
-import ResetPassword from './pages/Authentication/Resetpassword/ResetPassword';
-import ResetSuccess from './pages/Authentication/Resetsuccess/ResetSuccess';
-import Landing from './pages/Landing-page/Landing';
-import GrantDetails from './components/GrantDetails/GrantDetails';
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/Authentication/Login/Login";
+import SignUp from "./pages/Authentication/Signup/SignUp";
+import ForgetPassword from "./pages/Authentication/Forgetpassword/ForgetPassword";
+import Verification from "./pages/Authentication/Verification/verification";
+import ResetPassword from "./pages/Authentication/Resetpassword/ResetPassword";
+import ResetSuccess from "./pages/Authentication/Resetsuccess/ResetSuccess";
+import Landing from "./pages/Landing-page/Landing";
+import GrantDetails from "./components/GrantDetails/GrantDetails";
 import Profile from "./pages/Profile/Profile";
-import DiscoverScholarships from './pages/DiscoverScholarships/DiscoverScholarships';
+import DiscoverScholarships from "./pages/DiscoverScholarships/DiscoverScholarships";
 
-
-
+import AcademicProfile from "./components/Academicprofile/AcademicProfile";
 function App() {
   return (
     <BrowserRouter>
@@ -28,6 +27,7 @@ function App() {
         <Route path="/Profile" element={<Profile />} />
         <Route path="/scholarships" element={<DiscoverScholarships />} />
 
+        <Route path="/AcademicProfile" element={<AcademicProfile />} />
       </Routes>
     </BrowserRouter>
   );
