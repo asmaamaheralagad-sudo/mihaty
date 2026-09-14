@@ -6,44 +6,68 @@ import './Login.css';
 import { MdOutlineEmail } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
+import { FcGoogle } from "react-icons/fc";
+import { FaApple } from "react-icons/fa";
 import "../../../index.css";
-import API from '../../../api';
+
+// 1. استيراد Firebase SDK ودالة ترجمة الأخطاء
+import { 
+  signInWithEmailAndPassword, 
+  signInWithPopup, 
+  GoogleAuthProvider 
+} from "firebase/auth";
+import { auth, getFirebaseAuthErrorMessage } from '../../../firebase'; 
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  // 1. إضافة المتغيرات الخاصة بالربط
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // 2. تعديل دالة الإرسال للتواصل مع الـ API
+  // دالة التسجيل العادي بالبريد والباسورد
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg('');
     setLoading(true);
 
     try {
-      // إرسال طلب تسجيل الدخول للباك إند
-      const response = await API.post('/login', { email, password });
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-      // حفظ التوكن المرتجع من الباك إند في الذاكرة
-      if (response.data && response.data.token) {
-        localStorage.setItem('token', response.data.token);
+      if (!user.emailVerified) {
+        setLoading(false);
+        setErrorMsg('يرجى تأكيد بريدك الإلكتروني أولاً عبر الرابط المرسل لبريدك.');
+        return;
       }
 
       setLoading(false);
-      navigate("/"); // الانتقال للصفحة الرئيسية بعد النجاح
+      // ✅ تم التصحيح: التوجيه للبروفايل بدل الصفحة الرئيسية
+      navigate("/Profile");
     } catch (err) {
       setLoading(false);
-      // عرض رسالة الخطأ القادمة من الباك إند إن وجدت
-      if (err.response && err.response.data && err.response.data.message) {
-        setErrorMsg(err.response.data.message);
-      } else {
-        setErrorMsg('فشل تسجيل الدخول، تأكدي من صحة البريد وكلمة المرور');
-      }
+      const customErrorMessage = getFirebaseAuthErrorMessage(err.code);
+      setErrorMsg(customErrorMessage);
+    }
+  };
+
+  // 2. دالة تسجيل الدخول عبر Google
+  const handleGoogleSignIn = async () => {
+    setErrorMsg('');
+    setLoading(true);
+    const provider = new GoogleAuthProvider();
+
+    try {
+      await signInWithPopup(auth, provider);
+      setLoading(false);
+      // ✅ تم التصحيح: التوجيه للبروفايل بدل الصفحة الرئيسية
+      navigate("/Profile");
+    } catch (err) {
+      setLoading(false);
+      const customErrorMessage = getFirebaseAuthErrorMessage(err.code);
+      setErrorMsg(customErrorMessage);
     }
   };
 
@@ -79,7 +103,7 @@ function Login() {
             <h2>سجل الدخول للمتابعة إلى حسابك</h2>
           </div>
 
-          {/* 3. إظهار رسالة الخطأ إن وجدت */}
+          {/* إظهار رسالة الخطأ إن وجدت */}
           {errorMsg && (
             <div style={{ color: 'red', textAlign: 'center', marginBottom: '15px', fontSize: '14px' }}>
               {errorMsg}
@@ -98,7 +122,7 @@ function Login() {
                   placeholder="name@example.com" 
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)} // 4. حفظ الإيميل أثناء الكتابة
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 <MdOutlineEmail className="input-icon" />
               </div>
@@ -113,7 +137,7 @@ function Login() {
                   placeholder="••••••••"
                   required
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)} // 5. حفظ كلمة المرور أثناء الكتابة
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <TbLockPassword className="input-icon" />
                 <button
@@ -138,11 +162,23 @@ function Login() {
               </div>
             </div>
 
-            {/* 6. زر تسجيل الدخول مع حالة التحميل */}
+            {/* زر تسجيل الدخول مع حالة التحميل */}
             <button type="submit" className="login-submit-btn" disabled={loading}>
               {loading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول'}
             </button>
           </form>
+
+          {/* خيارات تسجيل الدخول بـ Google و Apple */}
+          <div className="social-section" style={{ marginTop: '20px' }}>
+            <div className="social-buttons">
+              <button type="button" disabled={loading}>
+                <FaApple size={18} />
+              </button>
+              <button type="button" onClick={handleGoogleSignIn} disabled={loading}>
+                <FcGoogle size={18} />
+              </button>
+            </div>
+          </div>
 
           {/* رابط إنشاء حساب */}
           <p className="signup-redirect">

@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import AuthCardLayout from '../../../components/AuthCardLayout';
 import { MdOutlineEmail } from "react-icons/md";
 import "../../../index.css";
-import API from '../../../api';
+
+// 1. استيراد وظائف Firebase والدالة المساعدة للأخطاء
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth, getFirebaseAuthErrorMessage } from '../../../firebase';
 
 function ForgetPassword() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,22 +21,14 @@ function ForgetPassword() {
     setLoading(true);
 
     try {
-      // إرسال طلب استعادة كلمة المرور للباك إند
-      const response = await API.post('/forgot-password', { email });
+      // 2. إرسال رابط إعادة تعيين كلمة المرور عبر Firebase
+      await sendPasswordResetEmail(auth, email);
       
-      setSuccessMsg(response.data.message || "تم إرسال رابط الاستعادة إلى بريدك الإلكتروني بنجاح");
-      
-      // توجيه المستخدم لصفحة التحقق بعد ثانيتين من النجاح
-      setTimeout(() => {
-        navigate("/verification", { state: { email } });
-      }, 2000);
-
+      setSuccessMsg("تم إرسال رابط استعادة كلمة المرور إلى بريدك الإلكتروني بنجاح، يرجى مراجعة صندوق الوارد.");
     } catch (err) {
-      if (err.response && err.response.data) {
-        setErrorMsg(err.response.data.message || "حدث خطأ أثناء إرسال الطلب");
-      } else {
-        setErrorMsg("تعذر الاتصال بالسيرفر، تأكدي من الاتصال بالإنترنت");
-      }
+      // 3. ترجمة وعرض كود الخطأ القادم من Firebase
+      const customErrorMessage = getFirebaseAuthErrorMessage(err.code);
+      setErrorMsg(customErrorMessage);
     } finally {
       setLoading(false);
     }
@@ -44,7 +38,7 @@ function ForgetPassword() {
     <AuthCardLayout>
       <h1 className="auth-title">استعادة كلمة المرور</h1>
       <p className="auth-desc">
-        أدخل بريدك الإلكتروني وسنرسل لك رابط آمن لإعادة تعيين كلمة المرور
+        أدخل بريدك الإلكتروني وسنرسل لك رابطاً آمناً لإعادة تعيين كلمة المرور
       </p>
 
       {/* عرض رسائل الخطأ أو النجاح */}

@@ -3,11 +3,13 @@ import './GrantDetails.css';
 import { FiShare2, FiBookmark, FiExternalLink, FiCheckCircle, FiFileText, FiInfo, FiChevronLeft } from 'react-icons/fi';
 import { HiSparkles } from 'react-icons/hi2';
 import { MdChecklist, MdOutlineAccessTime, MdCardGiftcard, MdVerified } from 'react-icons/md';
-import { FaGraduationCap, FaUniversity, FaGlobeAmericas, FaAward, FaPiggyBank, FaPlane, FaWallet } from 'react-icons/fa';
+import { FaGraduationCap, FaGlobeAmericas, FaAward, FaPiggyBank, FaPlane, FaWallet } from 'react-icons/fa';
+import universityLogo from '../../image/universityLogo.jpg';
 
 const defaultGrant = {
   title: 'منحة الرئيس لبرامج الدراسات العليا في جامعة هارفارد',
   university: 'جامعة هارفارد',
+  universityLogo: universityLogo,
   country: 'الولايات المتحدة',
   degreeLevel: 'ماجستير / دكتوراه',
   fileMatchPercent: 98,
@@ -128,10 +130,11 @@ function GrantDetails({ grant = defaultGrant }) {
             </div>
 
             <div className="grant-header-top">
-              <h1 className="grant-title">{grant.title}</h1>
-              <div className="grant-university-logo">
-                <FaUniversity />
+             
+              <div className="grant-university-logo"> 
+               <img src={grant.universityLogo} alt={grant.university} />
               </div>
+              <h1 className="grant-title">{grant.title}</h1>
             </div>
 
             <div className="grant-meta-row">
@@ -268,19 +271,16 @@ function GrantDetails({ grant = defaultGrant }) {
           <div className="grant-contents-card">
             <h3 className="grant-contents-title">محتويات الصفحة</h3>
             <nav className="grant-contents-nav">
-              {contents.map((item, i) => (
-                <a
-                  key={item.id}
-                  href={`#${item.id}`}
-                  className="grant-contents-link"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                >
+                {contents.map((item, i) => (
+                  <a
+                   key={item.id}
+                   href={`#${item.id}`}
+                   className="grant-contents-link"
+                onClick={(e) => {
+                e.preventDefault();
+                document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });}}>
                   {i + 1}. {item.label}
-                </a>
-              ))}
+                  </a>))}
             </nav>
           </div>
         </aside>

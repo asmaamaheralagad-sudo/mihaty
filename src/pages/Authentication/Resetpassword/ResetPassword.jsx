@@ -4,7 +4,10 @@ import AuthCardLayout from '../../../components/AuthCardLayout';
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import './ResetPassword.css';
 import "../../../index.css";
-import API from '../../../api';
+
+// 1. استيراد وظائف Firebase والدالة المساعدة للأخطاء
+import { confirmPasswordReset } from "firebase/auth";
+import { auth, getFirebaseAuthErrorMessage } from '../../../firebase';
 
 function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -15,10 +18,9 @@ function ResetPassword() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  
+  // 2. قراءة oobCode من رابط Firebase المنسوخ من الإيميل
   const [searchParams] = useSearchParams();
-  const token = searchParams.get('token');
-  const email = searchParams.get('email');
+  const oobCode = searchParams.get('oobCode');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,25 +46,25 @@ function ResetPassword() {
       return;
     }
 
+    if (!oobCode) {
+      setErrorMessage("رابط إعادة التعيين غير صالح أو منتهي الصلاحية");
+      return;
+    }
+
     setErrorMessage("");
     setLoading(true);
 
     try {
-      await API.post('/reset-password', {
-        token,
-        email,
-        password,
-        password_confirmation: confirmPassword,
-      });
+      // 3. تأكيد وتغيير كلمة المرور عبر Firebase
+      await confirmPasswordReset(auth, oobCode, password);
 
+      setLoading(false);
       navigate("/reset-success");
     } catch (err) {
       setLoading(false);
-      if (err.response && err.response.data && err.response.data.message) {
-        setErrorMessage(err.response.data.message);
-      } else {
-        setErrorMessage("حدث خطأ أثناء تغيير كلمة المرور، حاولي مرة أخرى");
-      }
+      // ترجمة خطأ Firebase (مثل انتهاء صلاحية الرابط)
+      const customErrorMessage = getFirebaseAuthErrorMessage(err.code);
+      setErrorMessage(customErrorMessage);
     }
   };
 

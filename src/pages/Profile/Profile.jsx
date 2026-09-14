@@ -1,6 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { FiBell, FiBookmark, FiChevronDown } from "react-icons/fi";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FiBell, FiBookmark, FiChevronDown, FiLogOut } from "react-icons/fi";
 import {
   FaGraduationCap,
   FaWallet,
@@ -8,18 +8,26 @@ import {
   FaUniversity,
   FaCheckCircle,
 } from "react-icons/fa";
+
+// استيراد الصور المكونات حسب هيكلية المجلدات في محرر الكود
 import logoImg from "../../image/logo.png";
 import avatarImg from "../../image/avatarImg.jpg";
 import japanImg from "../../image/japanImg.jpg";
 import ukImg from "../../image/ukImg.jpg";
 import usaImg from "../../image/usaImg.jpg";
 import ph2Img from "../../image/ph2.png";
-import "./Profile.css";
-import ProfileScholarshipCard from '../../components/ProfileScholarshipCard/ProfileScholarshipCard';
 import turkeyGovImg from "../../image/turkeyGovImg.jpg";
 import spainImg from "../../image/spainImg.jpg";
 import usaGovImg from "../../image/usaGovImg.jpg";
-import UpcomingDeadlineCard from '../../components/UpcomingDeadlineCard/UpcomingDeadlineCard';
+
+import "./Profile.css";
+import ProfileScholarshipCard from "../../components/ProfileScholarshipCard/ProfileScholarshipCard";
+import UpcomingDeadlineCard from "../../components/UpcomingDeadlineCard/UpcomingDeadlineCard";
+
+// استيراد Firebase من المكان الصحيح (src/firebase.js)
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../../firebase";
+
 const upcomingDeadlines = [
   {
     id: 1,
@@ -49,6 +57,7 @@ const upcomingDeadlines = [
     deadlineDate: "17 سبتمبر 2026",
   },
 ];
+
 const recommendedScholarships = [
   {
     id: 3,
@@ -65,7 +74,7 @@ const recommendedScholarships = [
       </>
     ),
     matchPercentage: "88%",
-    bgImage: usaImg, // تم تصحيح اسم الصورة لتطابق الولايات المتحدة
+    bgImage: usaImg,
   },
   {
     id: 2,
@@ -82,7 +91,7 @@ const recommendedScholarships = [
       </>
     ),
     matchPercentage: "94%",
-    bgImage: ukImg, // تم تصحيح اسم الصورة لتطابق المملكة المتحدة
+    bgImage: ukImg,
   },
   {
     id: 1,
@@ -102,7 +111,40 @@ const recommendedScholarships = [
     bgImage: japanImg,
   },
 ];
+
 function Profile() {
+  const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  useEffect(() => {
+    // متابعة حالة تسجيل الدخول
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user);
+      } else {
+        // توجيه إلى صفحة تسجيل الدخول إذا لم يسبق له الدخول
+        navigate("/login"); 
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
+
+  // دالة تسجيل الخروج
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      
+      navigate("/");
+    } catch (error) {
+      console.error("خطأ في تسجيل الخروج:", error);
+    }
+  };
+
+  // استخراج اسم وصورة المستخدم
+  const userName = currentUser?.displayName || currentUser?.email?.split('@')[0] || "المستخدم";
+  const userPhoto = currentUser?.photoURL || avatarImg;
 
   return (
     <div className="profile-page">
@@ -110,13 +152,15 @@ function Profile() {
       <header className="profile-navbar">
         <div className="profile-navbar-container">
           <div className="profile-logo">
-            <Link to="/">
+            {/* ✅ تم التصحيح: الشعار كمان يوديها لصفحتها بدل اللاندنج */}
+            <Link to="/Profile">
               <img src={logoImg} alt="منحتي" className="logo-img" />
             </Link>
           </div>
 
           <nav className="profile-nav-links">
-            <Link to="/" className="nav-link ">
+            {/* ✅ تم التصحيح: بعد تسجيل الدخول "الرئيسية" تفضل داخل البروفايل مش ترجعها للاندنج */}
+            <Link to="/Profile" className="nav-link">
               الرئيسية
             </Link>
             <Link to="/scholarships" className="nav-link">
@@ -141,11 +185,53 @@ function Profile() {
 
             <div className="vertical-divider">|</div>
 
-            <div className="user-info">
-              <img src={avatarImg} alt="المستخدم" className="user-avatar" />
-              <span className="user-name">المستخدم</span>
-              <FiChevronDown className="arrow-icon" />
+            {/* Profile Menu Dropdown */}
+            <div className="user-info-container" style={{ position: 'relative' }}>
+              <div 
+                className="user-info" 
+                onClick={() => setShowDropdown(!showDropdown)}
+                style={{ cursor: 'pointer' }}
+              >
+                <img src={userPhoto} alt={userName} className="user-avatar" />
+                <span className="user-name">{userName}</span>
+                <FiChevronDown className="arrow-icon" />
+              </div>
+
+              {showDropdown && (
+                <div className="profile-dropdown-menu" style={{
+                  position: 'absolute',
+                  top: '100%',
+                  left: 0,
+                  backgroundColor: '#ffffff',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                  borderRadius: '8px',
+                  padding: '8px',
+                  zIndex: 100,
+                  marginTop: '8px',
+                  minWidth: '150px'
+                }}>
+                  <button 
+                    onClick={handleLogout}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      background: 'none',
+                      border: 'none',
+                      color: '#d9534f',
+                      cursor: 'pointer',
+                      fontSize: '14px',
+                      width: '100%',
+                      padding: '8px 12px',
+                      borderRadius: '4px'
+                    }}
+                  >
+                    <FiLogOut /> تسجيل الخروج
+                  </button>
+                </div>
+              )}
             </div>
+
           </div>
         </div>
       </header>
@@ -155,18 +241,17 @@ function Profile() {
         <div className="hero-overlay"></div>
 
         <div className="hero-content">
-          <h1 className="hero-title">أهلا بك مجددا محمد</h1>
+          <h1 className="hero-title">أهلاً بك مجدداً {userName}</h1>
           <p className="hero-subtitle">
-            بناء على ملفك الأكاديمي واهتماماتك، قمنا بتصفية الفرص لتسريع رحلة
-            قبولك
+            بناءً على ملفك الأكاديمي واهتماماتك، قمنا بتصفية الفرص لتسريع رحلة قبولك
           </p>
 
           <div className="hero-buttons">
-            <button className="btn-primary">اكتشف منح </button>
+            <button className="btn-primary">اكتشف المنح</button>
           </div>
         </div>
 
-        {/* Hero Stats Section (Inside Hero Section) */}
+        {/* Hero Stats Section */}
         <div className="hero-stats">
           <div className="stat-card">
             <div className="stat-icon">
@@ -200,109 +285,97 @@ function Profile() {
       </section>
 
       <section className="promo-cta-section">
-  <div className="promo-cta-content">
-    
-    {/* العنوان والنص الفرعي */}
-    <div className="promo-text-wrapper">
-      <h2 className="promo-cta-title">منح مناسبة لك</h2>
-      <p className="promo-cta-subtitle">
-        منح اخترناها بناءً على تخصصك ومستواك الأكاديمي وبيانات ملفك.
-      </p>
-    </div>
-<div className="scholarships-grid">
-  {recommendedScholarships.map((scholarship) => (
-    <ProfileScholarshipCard 
-      key={scholarship.id}
-      title={scholarship.title}
-      country={scholarship.country}
-      degrees={scholarship.degrees}
-      bgImage={scholarship.bgImage}
-      matchPercentage={scholarship.matchPercentage}
-    />
-  ))}
-</div>
+        <div className="promo-cta-content">
+          <div className="promo-text-wrapper">
+            <h2 className="promo-cta-title">منح مناسبة لك</h2>
+            <p className="promo-cta-subtitle">
+              منح اخترناها بناءً على تخصصك ومستواك الأكاديمي وبيانات ملفك.
+            </p>
+          </div>
+          <div className="scholarships-grid">
+            {recommendedScholarships.map((scholarship) => (
+              <ProfileScholarshipCard 
+                key={scholarship.id}
+                title={scholarship.title}
+                country={scholarship.country}
+                degrees={scholarship.degrees}
+                bgImage={scholarship.bgImage}
+                matchPercentage={scholarship.matchPercentage}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
 
-  </div>
-</section>
-   
-      {/* Language & Documents Prep Section */}
+      {/* Preparation Tools Section */}
       <section className="prep-section">
         <div className="prep-header">
-          <h2 className="prep-title"> جهّز طلبك للتقديم</h2>
+          <h2 className="prep-title">جهّز طلبك للتقديم</h2>
           <p className="prep-subtitle">
-استخدم أدوات منحتي لمساعدتك في تجهيز مستنداتك قبل موعد التقديم.
+            استخدم أدوات منحتي لمساعدتك في تجهيز مستنداتك قبل موعد التقديم.
           </p>
         </div>
         <div className="prep-cards-grid">
-          {/* البطاقة الأولى: مركز اللغات */}
           <div className="prep-card">
             <div className="prep-card-icon">
-              <img src={ph2Img} alt="مركز اللغات" width="80" height="80" />
+              <img src={ph2Img} alt="السيرة الذاتية" width="80" height="80" />
             </div>
-            <h3 className="prep-card-title">السيرة الذاتية </h3>
+            <h3 className="prep-card-title">السيرة الذاتية</h3>
             <p className="prep-card-desc">
-              أنشئ سيرتك الذاتية أو حسّنها
-              لتكون جاهزًا للتقديم.
-            </p>{" "}
+              أنشئ سيرتك الذاتية أو حسّنها لتكون جاهزًا للتقديم.
+            </p>
           </div>
 
-          {/* البطاقة الثانية: بنك المستندات */}
           <div className="prep-card">
             <div className="prep-card-icon">
-              <img
-                src={ph2Img}
-                alt="مركز رسالة الدافع"
-                width="80"
-                height="80"
-              />
+              <img src={ph2Img} alt="مركز رسالة الدافع" width="80" height="80" />
             </div>
             <h3 className="prep-card-title">مركز رسالة الدافع</h3>
             <p className="prep-card-desc">
               أنشئ رسالة دافع مخصصة للمنحة وحسّن محتواها.
             </p>
           </div>
+
           <div className="prep-card">
             <div className="prep-card-icon">
               <img src={ph2Img} alt="بنك المستندات" width="80" height="80" />
             </div>
             <h3 className="prep-card-title">بنك المستندات</h3>
             <p className="prep-card-desc">
-              {" "}
               احفظ مستنداتك المهمة ونظّمها للوصول إليها عند الحاجة.
             </p>
           </div>
         </div>
       </section>
-      {/* Upcoming Deadlines Section */}
-<section className="upcoming-deadlines-section">
-  <div className="upcoming-deadlines-header">
-        <h2 className="upcoming-deadlines-title">تذكر مواعيدك القادمة</h2>
 
-    <a href="#" className="view-all-link">عرض الكل</a>
-  </div>
+      {/* Deadlines Section */}
+      <section className="upcoming-deadlines-section">
+        <div className="upcoming-deadlines-header">
+          <h2 className="upcoming-deadlines-title">تذكر مواعيدك القادمة</h2>
+          <a href="#" className="view-all-link">عرض الكل</a>
+        </div>
 
-  <div className="upcoming-deadlines-list">
-    {upcomingDeadlines.map((item) => (
-      <UpcomingDeadlineCard
-        key={item.id}
-        bgImage={item.bgImage}
-        daysLeft={item.daysLeft}
-        title={item.title}
-        category={item.category}
-        region={item.region}
-        deadlineDate={item.deadlineDate}
-      />
-    ))}
-  </div>
-</section>
-      
+        <div className="upcoming-deadlines-list">
+          {upcomingDeadlines.map((item) => (
+            <UpcomingDeadlineCard
+              key={item.id}
+              bgImage={item.bgImage}
+              daysLeft={item.daysLeft}
+              title={item.title}
+              category={item.category}
+              region={item.region}
+              deadlineDate={item.deadlineDate}
+            />
+          ))}
+        </div>
+      </section>
+
       {/* Final CTA Section */}
       <section className="final-cta-section">
         <div className="cta-content">
           <h2 className="cta-title">جاهزة لاكتشاف فرصتك القادمة؟</h2>
           <p className="cta-subtitle">
-            ابدأ رحلتك نحو التميز الأكاديمي اليوم مع آلاف الفرص المصممة خصيصاً
-            لك.
+            ابدأ رحلتك نحو التميز الأكاديمي اليوم مع آلاف الفرص المصممة خصيصاً لك.
           </p>
           <button className="cta-btn">اكتشف المنح</button>
         </div>

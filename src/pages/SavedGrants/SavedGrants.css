@@ -1,0 +1,230 @@
+/* الصفحة الكلية بافتراض اتجاه RTL */
+.saved-grants-page {
+  display: flex;
+  flex-direction: row; /* لجعل القائمة الجانبية على اليمين والمحتوى على اليسار */
+  width: 100%;
+  min-height: 1024px;
+  background: linear-gradient(0deg, #F7F9FB, #F7F9FB), #FFFFFF;
+  font-family: 'Tajawal', sans-serif;
+  direction: rtl;
+}
+
+/* المحتوى الرئيسي */
+.saved-grants-main {
+  flex: 1;
+  padding: 40px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* الترويسة */
+.saved-grants-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.saved-grants-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1A202C;
+  margin: 0;
+}
+
+.saved-grants-subtitle {
+  font-size: 15px;
+  color: #718096;
+  max-width: 650px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* شبكة البطاقات */
+.saved-grants-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* تصميم البطاقة الفردية */
+.saved-grant-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.saved-grant-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* رأس البطاقة */
+.grant-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.grant-card-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.grant-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1A202C;
+  margin: 0;
+}
+
+.grant-card-degree {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #718096;
+}
+
+.grant-bookmark-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.grant-bookmark-icon.active {
+  color: #1E2B58;
+  font-size: 20px;
+  fill: #1E2B58;
+}
+
+/* التفاصيل */
+.grant-card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.grant-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #4A5568;
+}
+
+.grant-card-icon {
+  color: #A0AEC0;
+  font-size: 16px;
+}
+
+/* الموعد النهائي */
+.grant-deadline-badge {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  width: fit-content;
+  align-self: flex-start;
+}
+
+.grant-deadline-badge.urgent {
+  background-color: #FFF5F5;
+  color: #E53E3E;
+}
+
+.grant-deadline-badge.warning {
+  background-color: #FEFCBF;
+  color: #D69E2E;
+}
+
+.grant-deadline-badge.default {
+  background-color: #EDF2F7;
+  color: #4A5568;
+}
+
+.grant-deadline-icon {
+  font-size: 14px;
+}
+
+/* الأزرار */
+.grant-card-actions {
+  margin-top: 8px;
+}
+
+.grant-action-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s ease;
+}
+
+.grant-action-btn:hover {
+  opacity: 0.9;
+}
+
+.btn-primary {
+  background-color: #1E2B58;
+  color: #FFFFFF;
+}
+
+.btn-warning {
+  background-color: #F5C842;
+  color: #1A202C;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid #1E2B58;
+  color: #1E2B58;
+}
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.empty-state h2 {
+  font-size: 22px;
+  color: #1a202c;
+  margin-bottom: 8px;
+}
+
+.empty-state p {
+  color: #718096;
+  margin-bottom: 20px;
+}
+
+.browse-btn {
+  background-color: #fdd34d; /* اللون الأصفر */
+  border: none;
+  padding: 10px 32px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #1a202c;
+}
+
+.empty-state-illustration img {
+  max-width: 320px;
+  margin-top: 30px;
+}

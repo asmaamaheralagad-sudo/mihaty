@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import landingImg from '../../image/landing.jpg';
 import Header from '../../components/Header/Header';
 import FeatureCard from '../../components/FeatureCard/FeatureCard';
@@ -16,7 +17,8 @@ import germanyFlag from '../../image/flag1.jpg';
 import ukFlag from '../../image/flag4.jpg';
 import turkeyFlag from '../../image/flag3.jpg';
 
-
+// ✅ تم الإضافة: هنحتاج نعرف حالة تسجيل الدخول عشان نعيد توجيه المستخدم المسجل
+import { useAuth } from '../../context/AuthContext';
 
 import './Landing.css';
 import "../../index.css";
@@ -104,6 +106,24 @@ const scholarshipsData = [
 ];
 
 function Landing() {
+  const navigate = useNavigate();
+
+  // ✅ تم الإضافة: لو فيه مستخدم مسجل دخول بالفعل، منعرضلوش صفحة اللاندنج الإعلانية
+  // ونوديه على طول لصفحته الشخصية (البروفايل)
+  const { currentUser, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading && currentUser) {
+      navigate('/Profile', { replace: true });
+    }
+  }, [currentUser, loading, navigate]);
+
+  // لحد ما نتأكد من حالة تسجيل الدخول، منعرضش أي حاجة عشان نتجنب "ومضة" اللاندنج
+  // قبل التحويل للبروفايل
+  if (loading || currentUser) {
+    return null;
+  }
+
   return (
     <div className="landing-page">
       <Header />
@@ -130,7 +150,7 @@ function Landing() {
             </p>
 
             <div className="hero-buttons">
-              <button className="hero-btn-primary">
+              <button className="hero-btn-primary" onClick={() => navigate('/scholarships')}>
                 <span>اكتشف المنح الآن</span>
                 <FaArrowLeft className="btn-icon" />
               </button>
@@ -211,8 +231,11 @@ function Landing() {
           </div>
         </div>
       </section>
+
+      {/* id="ai-tools" عشان رابط "أدوات الذكاء الاصطناعي" في النافبار ينزل هنا */}
+      <section id="ai-tools">
         <AITools />
-     
+      </section>
 
       {/* Scholarships Section */}
       <section className="Scholarships-Section">
@@ -224,12 +247,14 @@ function Landing() {
           </p>
         </div>
         <div className="Scholarships-container">
-          {/* ✅ صار سلايدر بدل التكرار اليدوي */}
           <ScholarshipsSlider items={scholarshipsData} />
         </div>
       </section>
 
-      <AboutUs />
+      {/* id="about-us" عشان رابط "من نحن" في النافبار ينزل هنا */}
+      <section id="about-us">
+        <AboutUs />
+      </section>
       <HowItWork/>
 
     

@@ -10,7 +10,16 @@ import { FiUser } from "react-icons/fi";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
-import API from '../../../api';
+
+// 1. استيراد وظائف Firebase المطلوبة
+import { 
+  createUserWithEmailAndPassword, 
+  sendEmailVerification, 
+  updateProfile,
+  signInWithPopup,
+  GoogleAuthProvider
+} from "firebase/auth";
+import { auth, getFirebaseAuthErrorMessage } from '../../../firebase';
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -24,6 +33,7 @@ function SignUp() {
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // دالة التسجيل ببريد إلكتروني وكلمة مرور
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg('');
@@ -36,32 +46,39 @@ function SignUp() {
     setLoading(true);
 
     try {
-      const response = await API.post('/register', { 
-        name, 
-        email, 
-        password,
-        password_confirmation: confirmPassword 
-      });
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-      if (response.data && response.data.token) {
-        localStorage.setItem('token', response.data.token);
+      if (name) {
+        await updateProfile(user, { displayName: name });
       }
 
+      await sendEmailVerification(user);
+
       setLoading(false);
-      alert('تم إنشاء الحساب بنجاح!');
+      alert('تم إنشاء الحساب بنجاح! تم إرسال رابط تأكيد إلى بريدك الإلكتروني.');
       navigate('/login');
     } catch (err) {
       setLoading(false);
-      
-      const serverErrors = err.response?.data?.errors;
-      if (serverErrors) {
-        const firstErrorKey = Object.keys(serverErrors)[0];
-        setErrorMsg(serverErrors[firstErrorKey][0]);
-      } else if (err.response?.data?.message) {
-        setErrorMsg(err.response.data.message);
-      } else {
-        setErrorMsg('حدث خطأ أثناء إنشاء الحساب، حاول مرة أخرى');
-      }
+      const customErrorMessage = getFirebaseAuthErrorMessage(err.code);
+      setErrorMsg(customErrorMessage);
+    }
+  };
+
+  // 2. دالة تسجيل الدخول/إنشاء الحساب عبر Google
+  const handleGoogleSignIn = async () => {
+    setErrorMsg('');
+    setLoading(true);
+    const provider = new GoogleAuthProvider();
+
+    try {
+      await signInWithPopup(auth, provider);
+      setLoading(false);
+      navigate('/');
+    } catch (err) {
+      setLoading(false);
+      const customErrorMessage = getFirebaseAuthErrorMessage(err.code);
+      setErrorMsg(customErrorMessage);
     }
   };
 
@@ -198,10 +215,11 @@ function SignUp() {
             </span>
             
             <div className="social-buttons">
-              <button type="button">
+              <button type="button" disabled={loading}>
                 <FaApple size={18} /> 
               </button>
-              <button type="button">
+              {/* ربط زر جوجل بالدالة */}
+              <button type="button" onClick={handleGoogleSignIn} disabled={loading}>
                 <FcGoogle size={18} /> 
               </button>
             </div>
