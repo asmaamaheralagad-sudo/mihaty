@@ -16,7 +16,7 @@ import {
   FaUniversity,
   FaSchool,
 } from "react-icons/fa";
-import "./AcademicProfile.css";
+import "./Academicprofile.css";
 import TopAppBar from "../TopAppBar/TopAppBar";
 
 /* ============ بيانات مبدئية ============ */

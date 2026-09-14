@@ -15,7 +15,7 @@ import GrantDetails from "./components/GrantDetails/GrantDetails";
 import Profile from "./pages/Profile/Profile";
 import DiscoverScholarships from "./pages/DiscoverScholarships/DiscoverScholarships";
 import SideNavBar from "./components/SideNavBar/SideNavBar";
-import AcademicProfile from "./components/Academicprofile/AcademicProfile";
+import AcademicProfile from "./components/Academicprofile/Academicprofile";
 import SavedGrants from "./pages/SavedGrants/SavedGrants";
 
 // 2. مكون حماية المسارات الخاصة (Protected Routes)
