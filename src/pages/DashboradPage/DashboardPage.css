@@ -1,0 +1,739 @@
+@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap");
+
+:root {
+  --navy: #122669;
+  --navy-dark: #0d1c52;
+  --accent: #fdd34d;
+  --success: #1ca653;
+  --warning: #d69e00;
+  --danger: #e14a4a;
+  --border: #bfc7d4;
+  --bg: #f2f4f6;
+  --text: #191c1e;
+  --text-muted: #404752;
+}
+
+/* يضمن إن الصفحة تاخذ ارتفاع الشاشة بالضبط بدون أي سكرول */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+.dashboard-page,
+.dashboard-page *,
+.dashboard-page *::before,
+.dashboard-page *::after {
+  box-sizing: border-box;
+}
+
+.dashboard-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg);
+  font-family: "Tajawal", sans-serif;
+  color: var(--text);
+}
+
+/* ===== Top bar ===== */
+
+.dashboard-topbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  padding: 0 20px;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+}
+
+.university-logo {
+  width: 34px;
+  height: 34px;
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dashboard-topbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  font-size: 19px;
+}
+
+.dashboard-topbar-nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.dashboard-topbar-nav a.active {
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.dashboard-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topbar-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--text-muted);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* ===== Layout ===== */
+/* dashboard-layout = المحتوى (main) + السايدبار، ياخذوا باقي الارتفاع بعد التوب بار */
+
+.dashboard-layout {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: stretch;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.dashboard-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 20px 14px;
+}
+
+/* أقسام الصفحة الأربعة (ترحيب / صف1 / صف2 / صف3) كلها <section> مباشرة تحت dashboard-main
+   نستخدم ترتيبها لتوزيع الارتفاع المتاح بدون تغيير الـ JSX */
+
+.dashboard-main > section {
+  min-height: 0;
+}
+
+.dashboard-welcome {
+  flex: 0 0 auto;
+}
+
+.dashboard-main > section:nth-of-type(2) {
+  flex: 1.3 1 0;
+}
+
+.dashboard-main > section:nth-of-type(3) {
+  flex: 1.25 1 0;
+}
+
+.dashboard-main > section:nth-of-type(4) {
+  flex: 0.85 1 0;
+}
+
+.dashboard-welcome h1 {
+  margin: 0 0 2px;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.dashboard-welcome p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 18px;
+}
+
+.dashboard-top-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.5fr);
+  gap: 12px;
+  min-height: 0;
+}
+
+.dashboard-mid-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 6px;
+  min-height: 0;
+}
+
+.dashboard-top-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  min-height: 0;
+}
+
+.dashboard-top-grid > *,
+.dashboard-mid-grid > * {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ===== Suggested grants ===== */
+
+.suggested-grants-card {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.suggested-grants-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.suggested-grants-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.see-all-link {
+  border: 0;
+  background: none;
+  color: var(--navy);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.suggested-grants-list {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 6px;
+  min-height: 0;
+}
+
+.grant-suggestion-card {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  border: 1px solid #eceff2;
+  border-radius: 8px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.grant-suggestion-logo {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.grant-suggestion-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.grant-suggestion-title {
+  margin: 0 0 1px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.grant-suggestion-meta {
+  margin: 0 0 2px;
+  color: var(--text-muted);
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.grant-suggestion-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.grant-suggestion-funding {
+  color: var(--success);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.grant-suggestion-match {
+  padding: 0 2px;
+  border-radius: 10px;
+  background: #fff3d0;
+  color: #8a6a00;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ===== Profile completion ===== */
+
+.completion-card {
+  display: flex;
+  flex-direction: column;
+  padding: 14px 16px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.completion-card-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.completion-card-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.completion-percent {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.completion-subtitle {
+  flex: 0 0 auto;
+  margin: 4px 0 10px;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+.completion-progress-track {
+  flex: 0 0 auto;
+  height: 7px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  background: #eceff2;
+  overflow: hidden;
+}
+
+.completion-progress-fill {
+  height: 100%;
+  border-radius: 6px;
+  background: var(--navy);
+}
+
+.completion-checklist {
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  gap: 8px 16px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.completion-checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 16px;
+  color: var(--text-muted);
+}
+
+.check-icon {
+  font-size: 17px;
+  color: #c7cdd5;
+}
+
+.check-icon--done {
+  color: var(--success);
+}
+
+.complete-profile-btn {
+  flex: 0 0 auto;
+  width: 40%;
+  min-width: 130px;
+  padding: 10px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--navy);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.complete-profile-btn:hover {
+  background: var(--navy-dark);
+}
+
+/* ===== Info cards (personal / academic) ===== */
+
+.info-card,
+.list-card {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.info-card-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.info-card-header h3,
+.list-card h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.info-card-header h3 {
+  margin-bottom: 0;
+}
+
+.info-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff3d0;
+  color: #8a6a00;
+  font-size: 15px;
+}
+
+.info-card-list {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 6px;
+  margin: 0;
+}
+
+.info-card-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 15px;
+}
+
+.info-card-row dt {
+  color: var(--text-muted);
+}
+
+.info-card-row dd {
+  margin: 0;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gpa-badge {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 8px;
+  padding: 6px;
+  border-radius: 8px;
+  background: #eef3ff;
+}
+
+.gpa-value {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.gpa-label {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* ===== Deadlines / Documents lists (بطاقة list-card فيها القسمين) ===== */
+
+.list-card hr {
+  flex: 0 0 auto;
+  width: 100%;
+  margin: 6px 0;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+.deadline-list,
+.document-list {
+  flex: 0 1 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 4px;
+  margin: 4px;
+  list-style: none;
+  min-height: 0;
+}
+
+.deadline-item,
+.document-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.deadline-dot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.deadline-dot--high {
+  background: var(--danger);
+}
+
+.deadline-dot--medium {
+  background: var(--warning);
+}
+
+.deadline-dot--low {
+  background: #c7cdd5;
+}
+
+.deadline-item-text,
+.document-item-text {
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
+  min-width: 0;
+}
+
+.deadline-item-title,
+.document-item-name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deadline-item-date,
+.document-item-updated {
+  color: var(--text-muted);
+  font-size: 10.5px;
+}
+
+.document-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  background: #eef3ff;
+  color: var(--navy);
+  font-size: 15x;
+}
+
+/* ===== Skills ===== */
+
+.skills-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.skills-card-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.skills-card-header h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.skills-card-icon {
+  color: #8a6a00;
+}
+
+.skills-tags {
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 6px;
+}
+
+.skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: #f7f8fa;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.skill-tag--add {
+  cursor: pointer;
+  background: none;
+  border-style: dashed;
+  color: var(--navy);
+}
+
+/* ===== AI tools banner ===== */
+
+.ai-tools-banner {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  height: 100%;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--navy), var(--navy-dark));
+  color: #fff;
+}
+
+.ai-tools-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  font-size: 19px;
+}
+
+.ai-tools-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.ai-tools-text h3 {
+  margin: 0 0 2px;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-tools-text p {
+  margin: 0;
+  color: #d4dcf0;
+  font-size: 15px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.ai-tools-actions {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ai-tool-btn {
+  padding: 6px 12px;
+  border: 1px solid #fff;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--navy);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ai-tool-btn--ghost {
+  background: transparent;
+  color: #fff;
+}
+
+/* ===== Responsive (لو الشاشة صغيرة، منسمح بسكرول عمودي بسيط بدل ما ينكسر التصميم) ===== */
+
+@media (max-width: 900px) {
+  .dashboard-page {
+    height: auto;
+    min-height: 100vh;
+    overflow: auto;
+  }
+
+  .dashboard-layout {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .dashboard-main {
+    overflow: visible;
+  }
+
+  .dashboard-main > section:nth-of-type(2),
+  .dashboard-main > section:nth-of-type(3),
+  .dashboard-main > section:nth-of-type(4) {
+    flex: none;
+  }
+
+  .dashboard-top-grid,
+  .dashboard-mid-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-top-grid > *,
+  .dashboard-mid-grid > * {
+    height: auto;
+  }
+}

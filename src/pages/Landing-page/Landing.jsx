@@ -1,26 +1,37 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import landingImg from '../../image/landing.jpg';
-import Header from '../../components/Header/Header';
-import FeatureCard from '../../components/FeatureCard/FeatureCard';
-import Scholarships from '../../components/Scholarships/Scholarships';
-import ScholarshipsSlider from '../../components/Scholarships/ScholarshipsSlider';
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import landingImg from "../../image/landing.jpg";
+import Header from "../../components/Header/Header";
+import FeatureCard from "../../components/FeatureCard/FeatureCard";
+import Scholarships from "../../components/Scholarships/Scholarships";
+import ScholarshipsSlider from "../../components/Scholarships/ScholarshipsSlider";
 import AITools from "../../components/aitool/AiTool";
-import AboutUs from '../../components/AboutUs/AboutUs';
-import HowItWork from '../../components/HowItWork/HowItWork';
+import AboutUs from "../../components/AboutUs/AboutUs";
+import HowItWork from "../../components/HowItWork/HowItWork";
+import Footer from "../../components/Footerlanding/Footer";
+// import { FaGraduationCap } from 'react-icons/fa';
+// import {
+//   HiOutlineMagnifyingGlass,
+//   HiOutlineSparkles,
+//   HiOutlineClock,
+// } from "react-icons/hi2";
+import { FaArrowLeft, FaRegPlayCircle, FaGraduationCap } from "react-icons/fa";
+import {
+  HiOutlineMagnifyingGlass,
+  HiOutlineAcademicCap,
+  HiOutlineSparkles,
+  HiOutlineClock,
+} from "react-icons/hi2";
 
-import { FaArrowLeft, FaRegPlayCircle, FaGraduationCap } from 'react-icons/fa';
-import { HiOutlineMagnifyingGlass, HiOutlineAcademicCap, HiOutlineSparkles, HiOutlineClock } from 'react-icons/hi2';
-
-import saudiFlag from '../../image/flag2.jpg';
-import germanyFlag from '../../image/flag1.jpg';
-import ukFlag from '../../image/flag4.jpg';
-import turkeyFlag from '../../image/flag3.jpg';
+import saudiFlag from "../../image/flag2.jpg";
+import germanyFlag from "../../image/flag1.jpg";
+import ukFlag from "../../image/flag4.jpg";
+import turkeyFlag from "../../image/flag3.jpg";
 
 // ✅ تم الإضافة: هنحتاج نعرف حالة تسجيل الدخول عشان نعيد توجيه المستخدم المسجل
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from "../../context/AuthContext";
 
-import './Landing.css';
+import "./Landing.css";
 import "../../index.css";
 
 const plans = [
@@ -87,7 +98,7 @@ const scholarshipsData = [
     statusType: "success",
     bgImage: saudiFlag,
   },
-   {
+  {
     title: "DAAD",
     degrees: "بكالوريوس • ماجستير • دكتوراة",
     deadline: "20 فبراير 2027",
@@ -95,13 +106,44 @@ const scholarshipsData = [
     statusType: "danger",
     bgImage: germanyFlag,
   },
-   {
+  {
     title: "المنحة السعودية",
     degrees: "بكالوريوس • ماجستير",
     deadline: "20 فبراير 2027",
     status: "مفتوحة للتقديم",
     statusType: "success",
     bgImage: saudiFlag,
+  },
+];
+
+const features = [
+  {
+    Icon: FaGraduationCap,
+    tone: "gold",
+    title: "منح تناسبك بدقة",
+    description:
+      "محرك توافق ذكي يربط مؤهلاتك الحالية، درجاتك، ومجالك الأكاديمي مباشرة بالمنح العالمية التي تلبي معاييرك وطموحك المستقبلي.",
+  },
+  {
+    Icon: HiOutlineMagnifyingGlass,
+    tone: "navy",
+    title: "بحث سهل ومرن",
+    description:
+      "فلاتر بحثية مخصصة بحسب الدولة، التغطية المالية (تمويل كامل أو جزئي)، متطلبات اللغة، والمرحلة الجامعية دون تشتيت.",
+  },
+  {
+    Icon: HiOutlineClock,
+    tone: "navy",
+    title: "لا تفوّت المواعيد",
+    description:
+      "تقويم تفاعلي وإشعارات استباقية لمواعيد فتح بوابات القبول والمواعيد النهائية لتسليم الوثائق والتوصيات.",
+  },
+  {
+    Icon: HiOutlineSparkles,
+    tone: "gold",
+    title: "أدوات ذكية مساندة",
+    description:
+      "حلول متقدمة مدعومة بالذكاء الاصطناعي لفحص السيرة الذاتية، تدقيق خطابات الدافع، وفهم متطلبات اللجان.",
   },
 ];
 
@@ -114,7 +156,7 @@ function Landing() {
 
   useEffect(() => {
     if (!loading && currentUser) {
-      navigate('/Profile', { replace: true });
+      navigate("/Profile", { replace: true });
     }
   }, [currentUser, loading, navigate]);
 
@@ -146,11 +188,16 @@ function Landing() {
             </h1>
 
             <p className="hero-desc">
-              منصة "منحتي" تجمع لك أحدث الفرص الدراسية المتاحة حول العالم. استخدم أدوات الذكاء الاصطناعي لمطابقة ملفك الأكاديمي مع المنح المناسبة وتجهيز أوراق التقديم بكل سهولة.
+              منصة "منحتي" تجمع لك أحدث الفرص الدراسية المتاحة حول العالم.
+              استخدم أدوات الذكاء الاصطناعي لمطابقة ملفك الأكاديمي مع المنح
+              المناسبة وتجهيز أوراق التقديم بكل سهولة.
             </p>
 
             <div className="hero-buttons">
-              <button className="hero-btn-primary" onClick={() => navigate('/scholarships')}>
+              <button
+                className="hero-btn-primary"
+                onClick={() => navigate("/scholarships")}
+              >
                 <span>اكتشف المنح الآن</span>
                 <FaArrowLeft className="btn-icon" />
               </button>
@@ -191,7 +238,32 @@ function Landing() {
       </section>
 
       {/* Features Section */}
-      <section className="features-section">
+      <section className="pf-section" aria-labelledby="pf-title">
+        <span className="pf-badge">مزايا المنصة</span>
+
+        <header className="pf-header">
+          <h2 id="pf-title" className="pf-title">
+            كل ما تحتاجه لتصل إلى فرصتك القادمة
+          </h2>
+          <p className="pf-subtitle">
+            اكتشف المنح المناسبة لك، تابع مواعيد التقديم، واستفد من أدواتنا
+            الذكية لتجهيز ملفك الأكاديمي بأعلى معايير التميز والقبول.
+          </p>
+        </header>
+
+        <div className="pf-grid">
+          {features.map(({ Icon, tone, title, description }) => (
+            <article className="pf-card" key={title}>
+              <span className={`pf-icon pf-icon--${tone}`} aria-hidden="true">
+                <Icon />
+              </span>
+              <h3 className="pf-card-title">{title}</h3>
+              <p className="pf-card-desc">{description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+      {/* <section className="features-section">
         <div className="features-container">
           <div className="features-grid">
             <FeatureCard 
@@ -230,7 +302,7 @@ function Landing() {
             </p>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* id="ai-tools" عشان رابط "أدوات الذكاء الاصطناعي" في النافبار ينزل هنا */}
       <section id="ai-tools">
@@ -255,9 +327,8 @@ function Landing() {
       <section id="about-us">
         <AboutUs />
       </section>
-      <HowItWork/>
-
-    
+      <HowItWork />
+      <Footer />
     </div>
   );
 }

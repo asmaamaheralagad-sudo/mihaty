@@ -14,17 +14,20 @@ import Landing from "./pages/Landing-page/Landing";
 import GrantDetails from "./components/GrantDetails/GrantDetails";
 import Profile from "./pages/Profile/Profile";
 import DiscoverScholarships from "./pages/DiscoverScholarships/DiscoverScholarships";
-import SideNavBar from "./components/SideNavBar/SideNavBar";
+import DashboardPage from "./pages/DashboradPage/DashboardPage";
 import AcademicProfile from "./components/Academicprofile/Academicprofile";
 import SavedGrants from "./pages/SavedGrants/SavedGrants";
 
 // 2. مكون حماية المسارات الخاصة (Protected Routes)
 const PrivateRoute = ({ children }) => {
   const { currentUser, loading } = useAuth();
-
   // الانتظار لحين انتهاء التأكد من حالة Firebase
   if (loading) {
-    return <div style={{ textAlign: "center", marginTop: "50px" }}>جاري التحميل...</div>;
+    return (
+      <div style={{ textAlign: "center", marginTop: "50px" }}>
+        جاري التحميل...
+      </div>
+    );
   }
 
   // إذا لم يكن المستخدم مسجلاً، يتم توجيهه لصفحة تسجيل الدخول
@@ -51,7 +54,6 @@ function App() {
           <Route path="/reset-success" element={<ResetSuccess />} />
           <Route path="/GrantDetails" element={<GrantDetails />} />
           <Route path="/scholarships" element={<DiscoverScholarships />} />
-          <Route path="/SideNavBar" element={<SideNavBar />} />
 
           {/* مسارات محمية (Protected Routes) - تتطلب تسجيل دخول للوصول إليها */}
           <Route
