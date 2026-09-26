@@ -29,7 +29,7 @@
   max-width: 928px;
   margin: 0 auto;
 
-  padding: 32px ; 
+  padding: 32px;
   font-family: "Tajawal", sans-serif;
   direction: rtl;
   overflow-y: auto;
@@ -94,7 +94,7 @@
   flex-direction: row-reverse;
   align-items: center;
   justify-content: space-between;
-  
+
   gap: 12px;
 }
 
@@ -147,7 +147,7 @@
   gap: 8px;
 }
 .academic__hint-icon {
-  color: #735C00; /* أو أي لون ذهبي/زيتي يعجبك يقارب الصورة */
+  color: #735c00; /* أو أي لون ذهبي/زيتي يعجبك يقارب الصورة */
   flex-shrink: 0;
 }
 /* ===== Shared card ===== */
@@ -181,7 +181,6 @@
   color: #191c1e;
 }
 
-
 /* ===== Personal information ===== */
 
 .academic__personal-row {
@@ -201,7 +200,7 @@
 .academic__field {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 4px;
 }
 
@@ -235,17 +234,19 @@
   gap: 16px;
   width: 128px;
 }
-
 .academic__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-sizing: border-box;
-  width: 120px;
-  height: 120px;
+  width: 128px;
+  height: 128px;
   border: 4px solid #f2f4f6;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   border-radius: 9999px;
   background: #e6e8ea;
+  overflow: hidden;
 }
-
 .academic__btn-outline {
   display: inline-flex;
   align-items: center;
@@ -335,7 +336,7 @@
   flex-wrap: wrap;
   gap: 16px;
   width: 100%;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .academic__link-chip {
@@ -397,7 +398,7 @@
 .academic__education-card {
   box-sizing: border-box;
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
@@ -451,7 +452,7 @@
 
 .academic__education-info {
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
   align-items: center;
   gap: 12px;
 }
@@ -532,7 +533,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .academic__tag {
@@ -562,8 +563,8 @@
 
 .academic__ai-box {
   display: flex;
-  flex-direction: row-reverse;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
   gap: 12px;
   padding: 16px;
   background: #fff8e1;
@@ -574,11 +575,11 @@
 .academic__ai-icon {
   flex: none;
   color: #735c00;
-  margin-top: 2px;
+  margin-top: 0px;
 }
 
 .academic__ai-box h4 {
-  margin: 0 0 8px;
+  margin: 0 ;
   font-weight: 700;
   font-size: 14px;
   line-height: 20px;
@@ -598,7 +599,7 @@
   min-width: 200px;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 4px;
   padding: 12px;
   background: #f7f9fb;
@@ -723,7 +724,7 @@
   border-radius: 8px;
   font-family: "Tajawal", sans-serif;
   font-size: 14px;
-  text-align: right;
+  text-align: left;
   color: #191c1e;
 }
 
@@ -774,4 +775,84 @@
 
 .modal-tag--removable button:hover {
   color: #191c1e;
+}
+
+.academic__field-value--placeholder {
+  color: #a7a6a6;
+  font-style: italic;
+}
+
+.modal-form__error {
+  color: #d32f2f;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.input-error {
+  border-color: #d32f2f !important;
+}
+
+.phone-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #e0e3e5;
+  border-radius: 8px;
+  padding: 6px 10px;
+  direction: ltr;
+}
+
+.phone-input-wrapper .PhoneInputCountry {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.phone-input-wrapper .PhoneInputInput {
+  border: none;
+  outline: none;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .academic-sidebar-container {
+    width: 72px;
+  }
+}@media (max-width: 600px) {
+  .academic-body-wrapper {
+    padding: 16px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .academic__header {
+    height: auto;
+  }
+
+  .academic__header h1 {
+    height: auto;
+    font-size: 22px;
+    line-height: 28px;
+    white-space: normal;
+  }
+
+  .academic__header p {
+    height: auto;
+  }
+
+  .academic__personal-row {
+    flex-direction: column-reverse;
+  }
+
+  .academic__personal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .academic__avatar-block {
+    align-self: center;
+  }
 }

@@ -485,7 +485,7 @@ function GrantCard({ grant, isSaved, onToggleSave }) {
 
       {/* Footer */}
       <div className="grant-card-footer">
-        <Link to={`/GrantDetails/${grant.id}`} className="details-btn">
+        <Link to={`/GrantDetails`} className="details-btn">
           عرض التفاصيل
         </Link>
 

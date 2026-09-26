@@ -15,13 +15,15 @@ import GrantDetails from "./components/GrantDetails/GrantDetails";
 import Profile from "./pages/Profile/Profile";
 import DiscoverScholarships from "./pages/DiscoverScholarships/DiscoverScholarships";
 import DashboardPage from "./pages/DashboradPage/DashboardPage";
-import AcademicProfile from "./components/Academicprofile/Academicprofile";
+import AcademicProfile from "./components/Academicprofile/AcademicProfile";
 import SavedGrants from "./pages/SavedGrants/SavedGrants";
-
+import DocumentsPage from "./pages/DocumentsPage/DocumentsPage";
+import SettingsPage from "./pages/Settingspage/Settingspage";
+import Notifications from "./pages/Notifications/Notifications";
 // 2. مكون حماية المسارات الخاصة (Protected Routes)
 const PrivateRoute = ({ children }) => {
   const { currentUser, loading } = useAuth();
-  // الانتظار لحين انتهاء التأكد من حالة Firebase
+
   if (loading) {
     return (
       <div style={{ textAlign: "center", marginTop: "50px" }}>
@@ -30,7 +32,6 @@ const PrivateRoute = ({ children }) => {
     );
   }
 
-  // إذا لم يكن المستخدم مسجلاً، يتم توجيهه لصفحة تسجيل الدخول
   if (!currentUser) {
     return <Navigate to="/" replace />;
   }
@@ -41,10 +42,9 @@ const PrivateRoute = ({ children }) => {
 function App() {
   return (
     <BrowserRouter>
-      {/* تغليف جميع المسارات بـ AuthProvider */}
       <AuthProvider>
         <Routes>
-          {/* مسارات عامة (تفتح طبيعي عند الضغط عليها) */}
+          {/* مسارات عامة */}
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
@@ -55,7 +55,7 @@ function App() {
           <Route path="/GrantDetails" element={<GrantDetails />} />
           <Route path="/scholarships" element={<DiscoverScholarships />} />
 
-          {/* مسارات محمية (Protected Routes) - تتطلب تسجيل دخول للوصول إليها */}
+          {/* مسارات محمية */}
           <Route
             path="/Profile"
             element={
@@ -80,8 +80,30 @@ function App() {
               </PrivateRoute>
             }
           />
-
-          {/* إعادة التوجيه لأي مسار غير معروف */}
+          <Route
+            path="/DocumentsPage"
+            element={
+              <PrivateRoute>
+                <DocumentsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <PrivateRoute>
+                <SettingsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/notifications"
+            element={
+              <PrivateRoute>
+                <Notifications />
+              </PrivateRoute>
+            }
+          />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>
