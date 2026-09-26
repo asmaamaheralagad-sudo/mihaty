@@ -13,7 +13,7 @@ import ResetSuccess from "./pages/Authentication/Resetsuccess/ResetSuccess";
 import Landing from "./pages/Landing-page/Landing";
 import GrantDetails from "./components/GrantDetails/GrantDetails";
 import Profile from "./pages/Profile/Profile";
-import DiscoverScholarships from "./pages/DiscoverScholarships/DiscoverScholarships";
+// import DiscoverScholarships from "./pages/DiscoverScholarships/DiscoverScholarships";
 import DashboardPage from "./pages/DashboradPage/DashboardPage";
 import AcademicProfile from "./components/Academicprofile/Academicprofile";
 import SavedGrants from "./pages/SavedGrants/SavedGrants";
@@ -53,8 +53,7 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/reset-success" element={<ResetSuccess />} />
           <Route path="/GrantDetails" element={<GrantDetails />} />
-          <Route path="/scholarships" element={<DiscoverScholarships />} />
-
+          <Route path="/dashboard" element={<DashboardPage />} />
           {/* مسارات محمية (Protected Routes) - تتطلب تسجيل دخول للوصول إليها */}
           <Route
             path="/Profile"

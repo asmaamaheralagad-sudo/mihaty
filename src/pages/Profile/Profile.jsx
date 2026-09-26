@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FiBell, FiBookmark, FiChevronDown, FiLogOut } from "react-icons/fi";
+
+import {
+  FiBell,
+  FiBookmark,
+  FiChevronDown,
+  FiLogOut,
+  FiUser,
+  FiHome,
+  FiSettings,
+} from "react-icons/fi";
+
+import AcademicProfile from "../../components/Academicprofile/Academicprofile";
+import DashboardPage from "../DashboradPage/DashboardPage";
+import DiscoverScholarships from "../DiscoverScholarships/DiscoverScholarships";
 import {
   FaGraduationCap,
   FaWallet,
@@ -124,7 +137,7 @@ function Profile() {
         setCurrentUser(user);
       } else {
         // توجيه إلى صفحة تسجيل الدخول إذا لم يسبق له الدخول
-        navigate("/login"); 
+        navigate("/login");
       }
     });
 
@@ -135,7 +148,7 @@ function Profile() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      
+
       navigate("/");
     } catch (error) {
       console.error("خطأ في تسجيل الخروج:", error);
@@ -143,7 +156,8 @@ function Profile() {
   };
 
   // استخراج اسم وصورة المستخدم
-  const userName = currentUser?.displayName || currentUser?.email?.split('@')[0] || "المستخدم";
+  const userName =
+    currentUser?.displayName || currentUser?.email?.split("@")[0] || "المستخدم";
   const userPhoto = currentUser?.photoURL || avatarImg;
 
   return (
@@ -163,7 +177,7 @@ function Profile() {
             <Link to="/Profile" className="nav-link">
               الرئيسية
             </Link>
-            <Link to="/scholarships" className="nav-link">
+            <Link to="/DiscoverScholarships" className="nav-link">
               اكتشف المنح
             </Link>
             <Link to="/ai-tools" className="nav-link">
@@ -186,52 +200,92 @@ function Profile() {
             <div className="vertical-divider">|</div>
 
             {/* Profile Menu Dropdown */}
-            <div className="user-info-container" style={{ position: 'relative' }}>
-              <div 
-                className="user-info" 
+            <div
+              className="user-info-container"
+              style={{ position: "relative" }}
+            >
+              <div
+                className="user-info"
                 onClick={() => setShowDropdown(!showDropdown)}
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: "pointer" }}
               >
                 <img src={userPhoto} alt={userName} className="user-avatar" />
                 <span className="user-name">{userName}</span>
                 <FiChevronDown className="arrow-icon" />
               </div>
-
               {showDropdown && (
-                <div className="profile-dropdown-menu" style={{
-                  position: 'absolute',
-                  top: '100%',
-                  left: 0,
-                  backgroundColor: '#ffffff',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                  borderRadius: '8px',
-                  padding: '8px',
-                  zIndex: 100,
-                  marginTop: '8px',
-                  minWidth: '150px'
-                }}>
-                  <button 
-                    onClick={handleLogout}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      background: 'none',
-                      border: 'none',
-                      color: '#d9534f',
-                      cursor: 'pointer',
-                      fontSize: '14px',
-                      width: '100%',
-                      padding: '8px 12px',
-                      borderRadius: '4px'
+                <div className="profile-dropdown-menu">
+                  {/* معلومات المستخدم */}
+                  <div className="dropdown-user-info">
+                    <img
+                      src={userPhoto}
+                      alt={userName}
+                      className="dropdown-avatar"
+                    />
+
+                    <div>
+                      <h4>{userName}</h4>
+                      <span>حسابي في منحتي</span>
+                    </div>
+                  </div>
+
+                  <div className="dropdown-divider"></div>
+
+                  {/* الرئيسية */}
+                  <Link
+                    to="/dashboard"
+                    className="dropdown-item"
+                    onClick={() => setShowDropdown(false)}
+                  >
+                    <span className="dropdown-icon">
+                      <FiHome />
+                    </span>
+                    <span>الرئيسية</span>
+                  </Link>
+
+                  {/* الملف الأكاديمي */}
+
+                  <Link
+                    to="/AcademicProfile"
+                    className="dropdown-item"
+                    onClick={() => setShowDropdown(false)}
+                  >
+                    <span className="dropdown-icon">
+                      <FiUser />
+                    </span>
+                    <span>الملف الأكاديمي</span>
+                  </Link>
+
+                  {/* الإعدادات */}
+                  <Link
+                    to="/settings"
+                    className="dropdown-item"
+                    onClick={() => setShowDropdown(false)}
+                  >
+                    <span className="dropdown-icon">
+                      <FiSettings />
+                    </span>
+                    <span>الإعدادات</span>
+                  </Link>
+
+                  <div className="dropdown-divider"></div>
+
+                  {/* تسجيل الخروج */}
+                  <button
+                    className="dropdown-item logout-item"
+                    onClick={() => {
+                      setShowDropdown(false);
+                      handleLogout();
                     }}
                   >
-                    <FiLogOut /> تسجيل الخروج
+                    <span className="dropdown-icon">
+                      <FiLogOut />
+                    </span>
+                    <span>تسجيل الخروج</span>
                   </button>
                 </div>
               )}
             </div>
-
           </div>
         </div>
       </header>
@@ -243,7 +297,8 @@ function Profile() {
         <div className="hero-content">
           <h1 className="hero-title">أهلاً بك مجدداً {userName}</h1>
           <p className="hero-subtitle">
-            بناءً على ملفك الأكاديمي واهتماماتك، قمنا بتصفية الفرص لتسريع رحلة قبولك
+            بناءً على ملفك الأكاديمي واهتماماتك، قمنا بتصفية الفرص لتسريع رحلة
+            قبولك
           </p>
 
           <div className="hero-buttons">
@@ -294,7 +349,7 @@ function Profile() {
           </div>
           <div className="scholarships-grid">
             {recommendedScholarships.map((scholarship) => (
-              <ProfileScholarshipCard 
+              <ProfileScholarshipCard
                 key={scholarship.id}
                 title={scholarship.title}
                 country={scholarship.country}
@@ -328,7 +383,12 @@ function Profile() {
 
           <div className="prep-card">
             <div className="prep-card-icon">
-              <img src={ph2Img} alt="مركز رسالة الدافع" width="80" height="80" />
+              <img
+                src={ph2Img}
+                alt="مركز رسالة الدافع"
+                width="80"
+                height="80"
+              />
             </div>
             <h3 className="prep-card-title">مركز رسالة الدافع</h3>
             <p className="prep-card-desc">
@@ -352,7 +412,9 @@ function Profile() {
       <section className="upcoming-deadlines-section">
         <div className="upcoming-deadlines-header">
           <h2 className="upcoming-deadlines-title">تذكر مواعيدك القادمة</h2>
-          <a href="#" className="view-all-link">عرض الكل</a>
+          <a href="#" className="view-all-link">
+            عرض الكل
+          </a>
         </div>
 
         <div className="upcoming-deadlines-list">
@@ -375,7 +437,8 @@ function Profile() {
         <div className="cta-content">
           <h2 className="cta-title">جاهزة لاكتشاف فرصتك القادمة؟</h2>
           <p className="cta-subtitle">
-            ابدأ رحلتك نحو التميز الأكاديمي اليوم مع آلاف الفرص المصممة خصيصاً لك.
+            ابدأ رحلتك نحو التميز الأكاديمي اليوم مع آلاف الفرص المصممة خصيصاً
+            لك.
           </p>
           <button className="cta-btn">اكتشف المنح</button>
         </div>
