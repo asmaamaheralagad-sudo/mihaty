@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-// 1. استيراد AuthProvider و useAuth
+// استيراد AuthProvider و useAuth
 import { AuthProvider, useAuth } from "./context/AuthContext";
 
 import Login from "./pages/Authentication/Login/Login";
@@ -10,14 +10,14 @@ import ForgetPassword from "./pages/Authentication/Forgetpassword/ForgetPassword
 import Verification from "./pages/Authentication/Verification/verification";
 import ResetPassword from "./pages/Authentication/Resetpassword/ResetPassword";
 import ResetSuccess from "./pages/Authentication/Resetsuccess/ResetSuccess";
-import Landing from "./pages/Landing-page/Landing";
+import Landing from "./pages/Landing-page/LandingPage";
 import GrantDetails from "./components/GrantDetails/GrantDetails";
 import Profile from "./pages/Profile/Profile";
-// import DiscoverScholarships from "./pages/DiscoverScholarships/DiscoverScholarships";
+import DiscoverScholarships from "./pages/DiscoverScholarships/DiscoverScholarships";
 import DashboardPage from "./pages/DashboradPage/DashboardPage";
 import AcademicProfile from "./components/Academicprofile/Academicprofile";
 import SavedGrants from "./pages/SavedGrants/SavedGrants";
-
+import CvBuilderStep1 from "./pages/CvBuilderStep/CvBuilderStep1";
 // 2. مكون حماية المسارات الخاصة (Protected Routes)
 const PrivateRoute = ({ children }) => {
   const { currentUser, loading } = useAuth();
@@ -53,7 +53,9 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/reset-success" element={<ResetSuccess />} />
           <Route path="/GrantDetails" element={<GrantDetails />} />
+          <Route path="/scholarships" element={<DiscoverScholarships />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/Personal" element={<CvBuilderStep1 />} />
           {/* مسارات محمية (Protected Routes) - تتطلب تسجيل دخول للوصول إليها */}
           <Route
             path="/Profile"

@@ -1,26 +1,43 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { FaFacebookF, FaInstagram, FaLinkedinIn, FaXTwitter } from 'react-icons/fa6';
-import { HiOutlineEnvelope } from 'react-icons/hi2';
-import './Footer.css';
+import React from "react";
+import { Link } from "react-router-dom";
+import loges from "../../image/logos.jpeg";
+import { IoLocationOutline } from "react-icons/io5";
+
+import {
+  FaPhone,
+  FaEnvelope,
+  FaGraduationCap,
+  FaFacebookF,
+  FaInstagram,
+  // FaArrowLeft,
+  // FaSearch,
+  // FaClock,
+  // FaUserGraduate,
+  // FaLinkedinIn,
+  // FaMagic,
+  FaTwitter,
+  // FaRegBookmark,
+} from "react-icons/fa";
+
+import { HiOutlineEnvelope } from "react-icons/hi2";
+import "./Footer.css";
 
 // عدّل الروابط دي حسب الراوتس والحسابات الفعلية عندكم
 const exploreLinks = [
-  { label: 'تصفح المنح', to: '/scholarships' },
-  { label: 'أدوات الذكاء الاصطناعي', href: '/#ai-tools' },
-  { label: 'من نحن', href: '/#about-us' },
+  { label: "تصفح المنح", to: "/scholarships" },
+  { label: "أدوات الذكاء الاصطناعي", href: "/#ai-tools" },
+  { label: "من نحن", href: "/#about-us" },
 ];
 
 const legalLinks = [
-  { label: 'سياسة الخصوصية', to: '/privacy' },
-  { label: 'الشروط والأحكام', to: '/terms' },
+  { label: "سياسة الخصوصية", to: "/privacy" },
+  { label: "الشروط والأحكام", to: "/terms" },
 ];
 
 const socials = [
-  { label: 'فيسبوك', href: '#', Icon: FaFacebookF },
-  { label: 'إنستغرام', href: '#', Icon: FaInstagram },
-  { label: 'لينكدإن', href: '#', Icon: FaLinkedinIn },
-  { label: 'إكس', href: '#', Icon: FaXTwitter },
+  { label: "فيسبوك", href: "#", Icon: FaFacebookF },
+  { label: "إنستغرام", href: "#", Icon: FaInstagram },
+  { label: "إكس", href: "#", Icon: FaTwitter },
 ];
 
 function FooterLink({ link }) {
@@ -35,59 +52,75 @@ function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="site-footer">
+    <footer className="bawsala-footer">
       <div className="footer-container">
-        <div className="footer-brand">
-          <h2 className="footer-logo">منحتي</h2>
-          <p className="footer-about">
-            منصة تجمع لك المنح الدراسية حول العالم، وتساعدك على تجهيز طلب التقديم
-            ومتابعة المواعيد في مكان واحد.
+        <div className="footer-col brand-col">
+          <div className="brand-logo">
+            <img src={loges} alt="بوصلة" />
+
+            <h3>بوصلة</h3>
+          </div>
+
+          <p className="brand-desc">
+            نرشدك نحو الفرص التعليمية والمنح الدراسية المتاحة حول العالم بذكاء
           </p>
 
-          <ul className="footer-socials">
-            {socials.map(({ label, href, Icon }) => (
-              <li key={label}>
-                <a href={href} aria-label={label} target="_blank" rel="noopener noreferrer">
-                  <Icon />
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="social-icons">
+            <FaFacebookF />
+            <FaTwitter />
+            <FaInstagram />
+          </div>
         </div>
-
-        <nav className="footer-col" aria-label="روابط المنصة">
-          <h3 className="footer-heading">المنصة</h3>
-          <ul>
-            {exploreLinks.map((link) => (
-              <li key={link.label}>
-                <FooterLink link={link} />
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <nav className="footer-col" aria-label="روابط قانونية">
-          <h3 className="footer-heading">معلومات قانونية</h3>
-          <ul>
-            {legalLinks.map((link) => (
-              <li key={link.label}>
-                <FooterLink link={link} />
-              </li>
-            ))}
-          </ul>
-        </nav>
 
         <div className="footer-col">
-          <h3 className="footer-heading">تواصل معنا</h3>
-          <a className="footer-contact" href="mailto:info@minhiti.com">
-            <HiOutlineEnvelope aria-hidden="true" />
-            <span dir="ltr">info@minhiti.com</span>
-          </a>
-        </div>
-      </div>
+          <h4>خدماتنا</h4>
 
-      <div className="footer-bottom">
-        <p>© {year} منحتي. جميع الحقوق محفوظة.</p>
+          <ul>
+            <li>المنح الدراسية</li>
+            <li>الاستشارة والتوجيه الأكاديمي</li>
+            <li>كتابة السيرة الذاتية</li>
+            <li>التقديم على المنح</li>
+            <li>الكتابة ومراجعة الخطاب التحفيزي</li>
+          </ul>
+        </div>
+
+        <div className="footer-col">
+          <h4>روابط سريعة</h4>
+
+          <ul>
+            <li>الرئيسية</li>
+            <li>المنح الدراسية</li>
+            <li>من نحن</li>
+            <li>كيف نعمل</li>
+            <li>اتصل بنا</li>
+          </ul>
+        </div>
+
+        <div className="footer-col">
+          <h4>تواصل معنا</h4>
+          <ul>
+            <li>
+              <IoLocationOutline />
+              مستقبل - قطاع غزة
+            </li>
+
+            <li>
+              <FaEnvelope />
+              contact@bawsala.com
+            </li>
+
+            <li>
+              <FaPhone />
+              0599929966
+            </li>
+          </ul>
+        </div>
+
+        <div className="footer-bottom">
+          <p>
+            © 2026 منصة بوصلة - جميع الحقوق محفوظة. تصميم وتطوير الفريق التقني.
+          </p>
+        </div>
       </div>
     </footer>
   );
