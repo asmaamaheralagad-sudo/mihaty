@@ -21,7 +21,7 @@ const navLinks = [
     icon: FiUser,
     path: "/AcademicProfile",
   },
-  { key: "saved", label: "المحفوظات", icon: FiBookmark, path: "/saved" },
+  { key: "saved", label: "المحفوظات", icon: FiBookmark, path: "/SavedGrants" },
   {
     key: "documents",
     label: "المستندات",

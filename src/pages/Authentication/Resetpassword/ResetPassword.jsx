@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import AuthCardLayout from '../../../components/AuthCardLayout';
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import './ResetPassword.css';
 import "../../../index.css";
 
-// 1. استيراد وظائف Firebase والدالة المساعدة للأخطاء
-import { confirmPasswordReset } from "firebase/auth";
-import { auth, getFirebaseAuthErrorMessage } from '../../../firebase';
+// استيراد دالة الـ API من خدمة resetPasswordService
+import { confirmPasswordResetApi } from './resetPasswordService';
 
 function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -16,11 +15,19 @@ function ResetPassword() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  
   const navigate = useNavigate();
-
-  // 2. قراءة oobCode من رابط Firebase المنسوخ من الإيميل
   const [searchParams] = useSearchParams();
+
+  // قراءة oobCode و mode من رابط Firebase (أياً كان شكل الرابط)
   const oobCode = searchParams.get('oobCode');
+
+  useEffect(() => {
+    // إذا فتح المستخدم الرابط بدون وجود كود التحقق oobCode
+    if (!oobCode) {
+      setErrorMessage("رابط إعادة التعيين غير صالح أو مفقود. يرجى طلب رابط جديد.");
+    }
+  }, [oobCode]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,16 +62,19 @@ function ResetPassword() {
     setLoading(true);
 
     try {
-      // 3. تأكيد وتغيير كلمة المرور عبر Firebase
-      await confirmPasswordReset(auth, oobCode, password);
+      const result = await confirmPasswordResetApi(oobCode, password);
 
       setLoading(false);
-      navigate("/reset-success");
+
+      if (result.success) {
+        // التحويل المباشر لصفحة النجاح
+        navigate("/reset-success", { replace: true });
+      } else {
+        setErrorMessage(result.error);
+      }
     } catch (err) {
       setLoading(false);
-      // ترجمة خطأ Firebase (مثل انتهاء صلاحية الرابط)
-      const customErrorMessage = getFirebaseAuthErrorMessage(err.code);
-      setErrorMessage(customErrorMessage);
+      setErrorMessage("حدث خطأ غير متوقع، يرجى المحاولة لاحقاً");
     }
   };
 
@@ -125,7 +135,7 @@ function ResetPassword() {
           <div className="error-box">{errorMessage}</div>
         )}
 
-        <button type="submit" className="auth-submit-btn" disabled={loading}>
+        <button type="submit" className="auth-submit-btn" disabled={loading || !oobCode}>
           {loading ? "جاري الحفظ..." : "حفظ كلمة المرور الجديدة"}
         </button>
       </form>

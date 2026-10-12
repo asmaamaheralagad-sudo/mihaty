@@ -1,5 +1,5 @@
 import React from "react";
-import SideNavBar from "../../components/Sidenavbar/Sidenavbar";
+import SideNavBar from "../../components/SideNavBar/SideNavBar";
 import logo from "../../image/logo.png";
 import {
   FiSearch,
@@ -296,16 +296,6 @@ export default function DashboardPage() {
             </div>
           </section>
 
-          {/* <section className="dashboard-mid-grid">
-            <div className="list-card">
-              <h3>المستندات</h3>
-              <ul className="document-list">
-                {documents.map((doc) => (
-                  <DocumentItem doc={doc} key={doc.id} />
-                ))}
-              </ul>
-            </div>
-          </section> */}
           <section className="dashboard-top-card">
             <section className="skills-card">
               <div className="skills-card-header">

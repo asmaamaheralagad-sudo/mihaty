@@ -16,7 +16,7 @@ function ResetSuccess() {
         <MdCheck />
       </div>
 
-      <p className="auth-desc">
+      <p className="success-desc">
         يمكنك الآن تسجيل الدخول باستخدام كلمة المرور الجديدة
       </p>
 

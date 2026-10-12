@@ -1,11 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Almarai:wght@400;500;700;800&display=swap');
+
 .signup-container {
   display: flex;
   flex-direction: row;
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  font-family: 'Almarai', 'Tajawal', sans-serif;
 }
+
+.signup-container h1,
+.signup-container h2 {
+  font-family: 'Almarai', sans-serif;
+}
+
+/* ===== قسم اللوغو (الخلفية الكحلية) ===== */
+.signup-image-section {
+  flex: 1;
+  width: 50%;
+  height: 100vh;
+  background-color: var(--main_color, #14335E);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 80px;
+  padding: 80px 60px;
+}
+
+.signup-side-logo {
+  width: 140px;
+  height: auto;
+}
+
+.signup-image-badge {
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight:500;
  
+}
+
+.signup-image-text {
+  width: 100%;
+  text-align: right;
+}
+
+.signup-image-title {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 14px;
+  color: #fff;
+  line-height: 1.5;
+}
+
+.signup-image-desc {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.9;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ===== قسم نموذج إنشاء الحساب ===== */
 .signup-form-section {
   flex: 1;
   width: 50%;
@@ -13,50 +72,66 @@
   justify-content: center;
   align-items: center;
   padding: 20px;
+  background-color: #fff;
   box-sizing: border-box;
 }
- 
+
 .signup-box {
   width: 100%;
-  max-width: 380px;
+  max-width: 400px;
 }
- 
+
 .signup-header {
   text-align: center;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
- 
+
 .logo-img {
   width: 70px;
+  height: auto;
+  margin-bottom: 14px;
 }
- 
-.signup-header h1,
-.signup-header h2 {
+
+.signup-header h1 {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--main_color, #14335E);
+  margin-bottom: 6px;
   text-align: center;
-  margin: 4px 0;
+  width: 100%;
 }
- 
+
+.signup-header h2 {
+  font-size: 13px;
+  font-weight: 400;
+  color: #6B7280;
+  text-align: center;
+  width: 100%;
+}
+
 .signup-form {
   display: flex;
   flex-direction: column;
   gap: 10px;
   text-align: right;
 }
- 
+
 .form-group label {
   display: block;
   margin-bottom: 4px;
   font-size: 13px;
-  color: var(--secondary_color);
+  color: var(--secondary_color, #374151);
 }
- 
-/* حاوية الحقل والأيقونة */
+
 .input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
- 
+
 .input-wrapper input {
   width: 100%;
   padding: 8px 38px 8px 38px;
@@ -67,7 +142,12 @@
   text-align: right;
   box-sizing: border-box;
 }
- 
+
+.input-wrapper input:focus {
+  outline: none;
+  border-color: var(--main_color, #14335E);
+}
+
 .input-icon {
   position: absolute;
   right: 12px;
@@ -75,7 +155,7 @@
   font-size: 16px;
   pointer-events: none;
 }
- 
+
 .toggle-password-btn {
   position: absolute;
   left: 12px;
@@ -88,154 +168,156 @@
   display: flex;
   align-items: center;
 }
- 
+
+/* ===== قائمة شروط كلمة المرور ===== */
+.password-requirements {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.password-requirements li {
+  font-size: 12px;
+  color: #9CA3AF;
+  position: relative;
+  padding-right: 14px;
+}
+
+.password-requirements li::before {
+  content: '•';
+  position: absolute;
+  right: 0;
+}
+
+.password-requirements li.valid {
+  color: #16A34A;
+}
+
+/* ===== شروط الاستخدام ===== */
 .terms-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   margin-top: 2px;
 }
- 
+
 .terms-container input {
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
   cursor: pointer;
 }
- 
+
 .terms-container label {
-  font-size: 11px;
-  color: var(--secondary_color);
+  font-size: 12px;
+  color: var(--secondary_color, #374151);
   cursor: pointer;
+  line-height: 1.6;
 }
- 
+
+.terms-container a {
+  font-weight: 700;
+  color: var(--sub_color, #2563EB);
+}
+
 .submit-btn {
   width: 100%;
-  padding: 10px;
-  background-color: var(--main_color);
+  padding: 11px;
+  background-color: var(--main_color, #14335E);
   color: #fff;
   border-radius: 8px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  margin-top: 4px;
+  margin-top: 6px;
   border: none;
 }
- 
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ===== قسم التسجيل السريع ===== */
 .social-section {
-  margin-top: 10px;
-  text-align: center;
+  margin-top: 20px;
 }
- 
-.social-prompt {
-  font-size: 12px;
-  color: #888;
+
+.social-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  color: #9CA3AF;
+  font-size: 13px;
 }
- 
-.social-prompt a {
-  font-weight: bold;
+
+.social-divider::before,
+.social-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: #E5E7EB;
 }
- 
+
 .social-buttons {
   display: flex;
-  gap: 12px;
-  margin-top: 8px;
+  justify-content: center;
+  gap: 14px;
 }
- 
+
 .social-buttons button {
-  flex: 1;
-  padding: 6px;
-  border: 1px solid #D1D5DB;
-  border-radius: 8px;
-  background: #fff;
-  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid #E5E7EB;
+  background-color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.social-buttons button:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.signup-redirect {
+  margin-top: 20px;
   font-size: 14px;
+  color: var(--secondary_color, #374151);
+  text-align: center;
 }
- 
-/* قسم الصورة */
-.signup-image-section {
-  flex: 1;
-  width: 50%;
-  position: relative;
-}
- 
-.signup-image-section img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
- 
- 
-.signup-image-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(18, 38, 105, 0.2);
-}
- 
-.signup-image-content {
-  position: absolute;
-  top: 40px;
-  left: 0;
-  right: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 40px;
-  z-index: 2;
-  padding: 0 60px;
-  text-align: right;
-}
- 
-.signup-image-badge {
-  background-color: rgba(20, 51, 94, 0.75);
-  color: #fff;
-  padding: 8px 20px;
-  border-radius: 20px;
-  font-size: 14px;
+
+.signup-redirect a {
   font-weight: 700;
-  white-space: nowrap;
+  color: var(--sub_color, #2563EB);
 }
- 
-.signup-image-text {
-  width: 100%;
-  text-align: right;
-}
- 
-.signup-image-title {
-  font-size: 24px;
-  font-weight: 800;
-  margin-bottom: 10px;
-  color: #fff;
-  line-height: 1.4;
-}
- 
-.signup-image-desc {
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1.8;
-  color: rgba(255, 255, 255, 0.9);
-}
- 
-.signup-image-caption {
-  position: absolute;
-  bottom: 24px;
-  right: 60px;
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 13px;
-  z-index: 2;
-}
-@media (max-width: 768px) {
-  .signup-box {
-    max-width: 100%;
+
+@media (max-width: 900px) {
+  .signup-container {
+    flex-direction: column;
+    height: auto;
+    overflow: auto;
+  }
+
+  .signup-image-section,
+  .signup-form-section {
+    width: 100%;
+    height: auto;
+  }
+
+  .signup-image-section {
+    padding: 40px 30px;
   }
 }
- 
-@media (max-width: 480px) {
-  .social-buttons {
-    flex-direction: column;
+
+@media (max-width: 320px) {
+  .logo-img {
+    max-width: 90px;
   }
 }

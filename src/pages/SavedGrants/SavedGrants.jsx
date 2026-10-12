@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SideNavBar from "../../components/SideNavBar/SideNavBar";
 import "./SavedGrants.css";
+import save from "../../image/save.png";
 
 export default function SavedGrants() {
   const [savedGrants, setSavedGrants] = useState([]);
@@ -31,15 +32,14 @@ export default function SavedGrants() {
             <button
               type="button"
               className="browse-btn"
-              onClick={() => navigate("/DiscoverScholarships")}
+              onClick={() => navigate("/scholarships")}
             >
               تصفح المنح
             </button>
 
             <div className="empty-state-illustration">
               <img
-                src="https://cdni.iconscout.com/illustration/premium/thumb/no-data-found-illustration-download-in-svg-png-gif-file-formats--search-error-state-empty-page-user-interface-pack-design-development-illustrations-6402808.png?f=webp&h=700"
-                alt="لا يوجد منح محفوظة"
+                src={save} alt="المنح المحفوظة"
               />
             </div>
           </div>

@@ -1,37 +1,31 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import AuthCardLayout from '../../../components/AuthCardLayout';
 import { MdOutlineEmail } from "react-icons/md";
 import "../../../index.css";
-
-// 1. استيراد وظائف Firebase والدالة المساعدة للأخطاء
-import { sendPasswordResetEmail } from "firebase/auth";
-import { auth, getFirebaseAuthErrorMessage } from '../../../firebase';
+import { sendResetLink } from './forgetPasswordService';
 
 function ForgetPassword() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
-    setSuccessMsg("");
     setLoading(true);
 
-    try {
-      // 2. إرسال رابط إعادة تعيين كلمة المرور عبر Firebase
-      await sendPasswordResetEmail(auth, email);
-      
-      setSuccessMsg("تم إرسال رابط استعادة كلمة المرور إلى بريدك الإلكتروني بنجاح، يرجى مراجعة صندوق الوارد.");
-    } catch (err) {
-      // 3. ترجمة وعرض كود الخطأ القادم من Firebase
-      const customErrorMessage = getFirebaseAuthErrorMessage(err.code);
-      setErrorMsg(customErrorMessage);
-    } finally {
-      setLoading(false);
+    const result = await sendResetLink(email);
+    setLoading(false);
+
+    if (!result.success) {
+      setErrorMsg(result.error);
+      return;
     }
+
+    // نجح الإرسال → ننتقل لصفحة التحقق ونمرر الإيميل معها
+    navigate('/verification', { state: { email } });
   };
 
   return (
@@ -41,9 +35,7 @@ function ForgetPassword() {
         أدخل بريدك الإلكتروني وسنرسل لك رابطاً آمناً لإعادة تعيين كلمة المرور
       </p>
 
-      {/* عرض رسائل الخطأ أو النجاح */}
-      {errorMsg && <div className="error-message" style={{ color: 'red', marginBottom: '10px' }}>{errorMsg}</div>}
-      {successMsg && <div className="success-message" style={{ color: 'green', marginBottom: '10px' }}>{successMsg}</div>}
+      {errorMsg && <div className="error-message">{errorMsg}</div>}
 
       <form onSubmit={handleSubmit} className="auth-form">
         <div className="form-group">

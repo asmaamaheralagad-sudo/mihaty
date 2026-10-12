@@ -1,6 +1,9 @@
 .email-highlight {
+  display: inline-block;
+  margin-top: 4px;
   font-weight: 700;
-  color: var(--text_primary);
+  font-size: 15px;
+  color: var(--main_color, #14335E);
 }
 
 .resend-text {
@@ -13,6 +16,43 @@
 .resend-text a {
   font-weight: 700;
   color: var(--sub_color);
+}
+
+.success-message {
+  background-color: #F0FDF4;
+  color: #16A34A;
+  border: 1px solid #86EFAC;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.error-message {
+  background-color: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FCA5A5;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.resend-link-btn {
+  background: none;
+  border: none;
+  color: var(--sub_color, #2563EB);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  font-size: inherit;
+}
+
+.resend-link-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 @media (max-width: 480px) {
