@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-// 1. استيراد AuthProvider و useAuth
+// استيراد AuthProvider و useAuth
 import { AuthProvider, useAuth } from "./context/AuthContext";
 
 import Login from "./pages/Authentication/Login/Login";
@@ -10,18 +10,21 @@ import ForgetPassword from "./pages/Authentication/Forgetpassword/ForgetPassword
 import Verification from "./pages/Authentication/Verification/verification";
 import ResetPassword from "./pages/Authentication/Resetpassword/ResetPassword";
 import ResetSuccess from "./pages/Authentication/Resetsuccess/ResetSuccess";
-import Landing from "./pages/Landing-page/Landing";
+import Landing from "./pages/Landing-page/LandingPage";
 import GrantDetails from "./components/GrantDetails/GrantDetails";
 import Profile from "./pages/Profile/Profile";
 import DiscoverScholarships from "./pages/DiscoverScholarships/DiscoverScholarships";
 import DashboardPage from "./pages/DashboradPage/DashboardPage";
-import AcademicProfile from "./components/Academicprofile/Academicprofile";
+import AcademicProfile from "./components/Academicprofile/AcademicProfile";
 import SavedGrants from "./pages/SavedGrants/SavedGrants";
-
+import DocumentsPage from "./pages/DocumentsPage/DocumentsPage";
+import SettingsPage from "./pages/Settingspage/Settingspage";
+import Notifications from "./pages/Notifications/Notifications";
+import CvBuilderStep1 from "./pages/CvBuilderStep/CvBuilderStep1";
 // 2. مكون حماية المسارات الخاصة (Protected Routes)
 const PrivateRoute = ({ children }) => {
   const { currentUser, loading } = useAuth();
-  // الانتظار لحين انتهاء التأكد من حالة Firebase
+
   if (loading) {
     return (
       <div style={{ textAlign: "center", marginTop: "50px" }}>
@@ -30,7 +33,6 @@ const PrivateRoute = ({ children }) => {
     );
   }
 
-  // إذا لم يكن المستخدم مسجلاً، يتم توجيهه لصفحة تسجيل الدخول
   if (!currentUser) {
     return <Navigate to="/" replace />;
   }
@@ -41,10 +43,9 @@ const PrivateRoute = ({ children }) => {
 function App() {
   return (
     <BrowserRouter>
-      {/* تغليف جميع المسارات بـ AuthProvider */}
       <AuthProvider>
         <Routes>
-          {/* مسارات عامة (تفتح طبيعي عند الضغط عليها) */}
+          {/* مسارات عامة */}
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
@@ -54,7 +55,8 @@ function App() {
           <Route path="/reset-success" element={<ResetSuccess />} />
           <Route path="/GrantDetails" element={<GrantDetails />} />
           <Route path="/scholarships" element={<DiscoverScholarships />} />
-
+          <Route path="/DashboardPage" element={<DashboardPage />} />
+          <Route path="/Personal" element={<CvBuilderStep1 />} />
           {/* مسارات محمية (Protected Routes) - تتطلب تسجيل دخول للوصول إليها */}
           <Route
             path="/Profile"
@@ -80,8 +82,30 @@ function App() {
               </PrivateRoute>
             }
           />
-
-          {/* إعادة التوجيه لأي مسار غير معروف */}
+          <Route
+            path="/DocumentsPage"
+            element={
+              <PrivateRoute>
+                <DocumentsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <PrivateRoute>
+                <SettingsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/notifications"
+            element={
+              <PrivateRoute>
+                <Notifications />
+              </PrivateRoute>
+            }
+          />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>

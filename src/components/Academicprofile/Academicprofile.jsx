@@ -1,78 +1,83 @@
-import { useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+
 import SideNavBar from "../SideNavBar/SideNavBar";
+import TopAppBar from "../TopAppBar/TopAppBar";
+
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 
 import {
-  FaCamera, // الكاميرا
-  FaPencilAlt, // أيقونة القلم
-  FaTrash, // سلة المهملات
-  FaPlus, // علامة +
+  FaCamera,
+  FaPencilAlt,
+  FaTrash,
+  FaPlus,
   FaStar,
   FaLinkedin,
   FaGithub,
-  FaGraduationCap,
+  FaGlobe,
   FaBookOpen,
   FaLightbulb,
   FaTimes,
   FaUniversity,
   FaSchool,
+  FaCertificate,
+  FaGraduationCap,
+  FaUser,
+  FaCheckCircle,
 } from "react-icons/fa";
 import "./Academicprofile.css";
-import TopAppBar from "../TopAppBar/TopAppBar";
 
-/* ============ بيانات مبدئية ============ */
+/* =========================================================
+   ثوابت وبيانات مبدئية
+========================================================= */
+
+const PROFILE_STORAGE_KEY = "userProfile";
+
+const todayISO = () => new Date().toISOString().split("T")[0];
+const currentYear = new Date().getFullYear();
 
 const initialPersonal = {
-  fullName: "أحمد محمد عبدالله",
-  email: "ahmed.m@example.com",
-  phone: "+966 50 123 4567",
-  birthDate: "15 مارس 1999",
-  nationality: "سعودي",
-  city: "الرياض",
+  fullName: "",
+  email: "",
+  phone: "",
+  birthDate: "",
+  nationality: "",
+  city: "",
 };
 
 const personalFieldsMeta = [
-  { key: "fullName", label: "الاسم الكامل" },
-  { key: "email", label: "البريد الإلكتروني" },
-  { key: "phone", label: "رقم الهاتف" },
-  { key: "birthDate", label: "تاريخ الميلاد" },
-  { key: "nationality", label: "الجنسية" },
-  { key: "city", label: "المدينة" },
+  { key: "fullName", label: "الاسم الكامل", placeholder: "مثال: أحمد محمد عبدالله" },
+  { key: "email", label: "البريد الإلكتروني", placeholder: "example@email.com" },
+  { key: "phone", label: "رقم الهاتف", placeholder: "+972 592 772 935" },
+  { key: "birthDate", label: "تاريخ الميلاد", placeholder: "مثال: 15 مارس 1999" },
+  { key: "nationality", label: "الجنسية", placeholder: "مثال: فلسطيني" },
+  { key: "city", label: "المدينة", placeholder: "مثال: نابلس" },
 ];
 
-const professionalLinks = [
-  { icon: FaLinkedin, label: "linkedin.com/in/ahmed-abdullah" },
-  { icon: FaGithub, label: "Github" },
-];
-
-const initialEducation = [
-  {
-    id: 1,
-    type: "university",
-    degree: "بكالوريوس",
-    year: "2024",
-    grade: "4.8 / 5.0",
-    title: "هندسة البرمجيات",
-    subtitle: "جامعة الملك سعود",
-    iconBg: "#D1E4FF",
-  },
-  {
-    id: 2,
-    type: "school",
-    degree: "ثانوية",
-    year: "2020",
-    grade: "99%",
-    title: "الثانوية العامة",
-    subtitle: "مدرسة الرياض النموذجية",
-    iconBg: "#E6E8EA",
-  },
-];
-
-const educationIcons = {
-  university: FaUniversity,
-  school: FaSchool,
+const emptyEducationDraft = {
+  id: null,
+  type: "university",
+  degree: "",
+  year: "",
+  grade: "",
+  title: "",
+  subtitle: "",
 };
 
-const initialSkills = [];
+const educationTypesMeta = {
+  university: { label: "جامعة", icon: FaUniversity, color: "#D1E4FF" },
+  school: { label: "مدرسة", icon: FaSchool, color: "#FFE9C7" },
+  diploma: { label: "دبلوم", icon: FaGraduationCap, color: "#D9F2D9" },
+  course: { label: "دورة تدريبية / شهادة", icon: FaCertificate, color: "#F3D9FA" },
+};
+
 const suggestedSkills = [
   "Python",
   "التواصل",
@@ -80,9 +85,14 @@ const suggestedSkills = [
   "JavaScript",
   "Node.js",
 ];
-const initialLanguages = [];
 
-/* 🆕 قائمة اللغات المقترحة للإضافة السريعة */
+const LANGUAGE_LEVELS = [
+  "اللغة الأم",
+  "مستوى متقدم",
+  "مستوى متوسط",
+  "مستوى مبتدئ",
+];
+
 const availableLanguages = [
   { label: "العربية", meta: "اللغة الأم" },
   { label: "الإنجليزية", meta: "مستوى متقدم" },
@@ -91,89 +101,468 @@ const availableLanguages = [
   { label: "الإسبانية", meta: "مستوى متوسط" },
 ];
 
-/* ============ مكوّن Modal عام ============ */
+const LINK_TYPES = [
+  { value: "LinkedIn", label: "LinkedIn" },
+  { value: "GitHub", label: "GitHub" },
+  { value: "Portfolio", label: "Portfolio" },
+  { value: "Behance", label: "Behance" },
+  { value: "Other", label: "رابط آخر" },
+];
+
+/* =========================================================
+   دوال مساعدة
+========================================================= */
+
+const newId = () =>
+  typeof crypto !== "undefined" && crypto.randomUUID
+    ? crypto.randomUUID()
+    : `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
+// يمنع روابط خطيرة مثل javascript:
+const isSafeUrl = (url) => {
+  try {
+    const u = new URL(url);
+    return u.protocol === "http:" || u.protocol === "https:";
+  } catch {
+    return false;
+  }
+};
+
+const formatDate = (dateStr) => {
+  if (!dateStr) return "";
+  const date = new Date(dateStr);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toLocaleDateString("ar-EG", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+};
+
+// قراءة البيانات المحفوظة (يقرأها كمان الـ Dashboard)
+const loadSavedProfile = () => {
+  try {
+    const saved = localStorage.getItem(PROFILE_STORAGE_KEY);
+    return saved ? JSON.parse(saved) : null;
+  } catch (error) {
+    console.error("Unable to read saved profile", error);
+    return null;
+  }
+};
+
+const LinkIcon = ({ type }) => {
+  if (type === "LinkedIn") return <FaLinkedin size={18} aria-hidden="true" />;
+  if (type === "GitHub") return <FaGithub size={18} aria-hidden="true" />;
+  return <FaGlobe size={18} aria-hidden="true" />;
+};
+
+/* =========================================================
+   Modal عام (Escape + قفل السكرول + Accessibility)
+========================================================= */
 
 function AcademicprofileModal({ title, onClose, children }) {
+  const titleId = useId();
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "Escape") onCloseRef.current();
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, []);
+
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="modal-box"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="modal-box__header">
-          <h3>{title}</h3>
-          <button type="button" className="modal-box__close" onClick={onClose}>
+          <h3 id={titleId}>{title}</h3>
+          <button
+            type="button"
+            className="modal-box__close"
+            aria-label="إغلاق"
+            onClick={onClose}
+          >
             <FaTimes size={18} />
           </button>
         </div>
+
         <div className="modal-box__body">{children}</div>
       </div>
     </div>
   );
 }
 
-export default function AcademicProfile() {
-  const completion = 85;
+function ModalFooter({ onCancel, onSave, saveLabel = "حفظ", saveClass = "academic__btn-primary" }) {
+  return (
+    <div className="modal-box__footer">
+      <button type="button" className="academic__btn-outline" onClick={onCancel}>
+        إلغاء
+      </button>
+      <button type="button" className={saveClass} onClick={onSave}>
+        {saveLabel}
+      </button>
+    </div>
+  );
+}
 
-  const [personal, setPersonal] = useState(initialPersonal);
-  const [education, setEducation] = useState(initialEducation);
-  const [skills, setSkills] = useState(initialSkills);
-  const [languages, setLanguages] = useState(initialLanguages);
+/* صف لغة واحد داخل المودال (كل صف يحتفظ بمستواه بنفسه) */
+function LanguageOption({ lang, isAdded, onAdd }) {
+  const [level, setLevel] = useState(lang.meta);
+
+  return (
+    <div className={`lang-option ${isAdded ? "lang-option--added" : ""}`}>
+      <span className="lang-option__name">{lang.label}</span>
+
+      <div className="lang-option__controls">
+        <select
+          disabled={isAdded}
+          value={level}
+          aria-label={`مستوى ${lang.label}`}
+          onChange={(e) => setLevel(e.target.value)}
+        >
+          {LANGUAGE_LEVELS.map((l) => (
+            <option key={l} value={l}>
+              {l}
+            </option>
+          ))}
+        </select>
+
+        <button
+          type="button"
+          className="academic__btn-primary academic__btn-sm"
+          disabled={isAdded}
+          onClick={() => onAdd(lang.label, level)}
+        >
+          {isAdded ? "تمت الإضافة" : "إضافة"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* =========================================================
+   Academic Profile
+========================================================= */
+
+export default function AcademicProfile() {
+  // نقرأ البيانات المحفوظة مرة وحدة بس عند أول تحميل
+  const [savedProfile] = useState(loadSavedProfile);
+
+  /* ---------- المعلومات الشخصية ---------- */
+  const [personal, setPersonal] = useState(savedProfile?.personal || initialPersonal);
+  const [personalDraft, setPersonalDraft] = useState(initialPersonal);
+  const [personalErrors, setPersonalErrors] = useState({});
+
+  /* ---------- التعليم ---------- */
+  const [education, setEducation] = useState(savedProfile?.education || []);
+  const [educationDraft, setEducationDraft] = useState(emptyEducationDraft);
+  const [educationErrors, setEducationErrors] = useState({});
+  const [deleteTarget, setDeleteTarget] = useState(null);
+
+  /* ---------- المهارات ---------- */
+  const [skills, setSkills] = useState(savedProfile?.skills || []);
+  const [skillsDraft, setSkillsDraft] = useState([]);
+  const [newSkill, setNewSkill] = useState("");
+
+  /* ---------- اللغات ---------- */
+  const [languages, setLanguages] = useState(savedProfile?.languages || []);
+  const [languagesDraft, setLanguagesDraft] = useState([]);
+  const [customLanguage, setCustomLanguage] = useState("");
+  const [customLevel, setCustomLevel] = useState("مستوى متوسط");
+
+  /* ---------- الروابط ---------- */
+  const [professionalLinks, setProfessionalLinks] = useState(
+    savedProfile?.professionalLinks || []
+  );
+  const [linksDraft, setLinksDraft] = useState([]);
+  const [linksErrors, setLinksErrors] = useState({});
+
+  /* ---------- أخرى ---------- */
   const [modal, setModal] = useState(null);
   const [avatarImage, setAvatarImage] = useState(null);
-  /* ---------- تعديل المعلومات الشخصية ---------- */
-  const [personalDraft, setPersonalDraft] = useState(initialPersonal);
+  const [toast, setToast] = useState("");
+  const avatarInputRef = useRef(null);
+
+  const closeModal = useCallback(() => setModal(null), []);
+
+  /* ---------- نسبة الاكتمال (محسوبة فعلياً) ---------- */
+  const completion = useMemo(() => {
+    const checks = [
+      personal.fullName,
+      personal.email,
+      personal.phone,
+      personal.birthDate,
+      personal.nationality,
+      personal.city,
+      avatarImage,
+      professionalLinks.length > 0,
+      education.length > 0,
+      skills.length > 0,
+      languages.length > 0,
+    ];
+    return Math.round((checks.filter(Boolean).length / checks.length) * 100);
+  }, [personal, avatarImage, professionalLinks, education, skills, languages]);
+
+  /* ---------- حفظ البيانات في localStorage (عشان الـ Dashboard يقرأها) ---------- */
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        PROFILE_STORAGE_KEY,
+        JSON.stringify({
+          personal,
+          education,
+          skills,
+          languages,
+          professionalLinks,
+        })
+      );
+    } catch (error) {
+      console.error("Unable to save profile", error);
+    }
+  }, [personal, education, skills, languages, professionalLinks]);
+
+  /* ---------- تنظيف رابط الصورة (منع تسريب الذاكرة) ---------- */
+  useEffect(() => {
+    return () => {
+      if (avatarImage) URL.revokeObjectURL(avatarImage);
+    };
+  }, [avatarImage]);
+
+  /* ---------- Toast ---------- */
+  useEffect(() => {
+    if (!toast) return undefined;
+    const t = setTimeout(() => setToast(""), 2500);
+    return () => clearTimeout(t);
+  }, [toast]);
+
+  /* =======================================================
+     المعلومات الشخصية
+  ======================================================= */
 
   const openPersonalModal = () => {
     setPersonalDraft(personal);
+    setPersonalErrors({});
     setModal("personal");
   };
 
-  const savePersonal = () => {
-    setPersonal(personalDraft);
-    setModal(null);
+  const validatePersonal = (data) => {
+    const errors = {};
+
+    if (!data.fullName.trim()) errors.fullName = "الاسم الكامل مطلوب";
+
+    if (!data.email.trim()) {
+      errors.email = "البريد الإلكتروني مطلوب";
+    } else if (!/^\S+@\S+\.\S+$/.test(data.email.trim())) {
+      errors.email = "صيغة البريد الإلكتروني غير صحيحة";
+    }
+
+    if (!data.phone || !isValidPhoneNumber(data.phone)) {
+      errors.phone = "رقم الهاتف مطلوب وغير صحيح";
+    }
+
+    if (!data.birthDate) {
+      errors.birthDate = "تاريخ الميلاد مطلوب";
+    } else if (data.birthDate > todayISO()) {
+      errors.birthDate = "تاريخ الميلاد لا يمكن أن يكون في المستقبل";
+    }
+
+    if (!data.nationality.trim()) errors.nationality = "الجنسية مطلوبة";
+    if (!data.city.trim()) errors.city = "المدينة مطلوبة";
+
+    return errors;
   };
 
-  /* ---------- إضافة / تعديل مؤهل تعليمي ---------- */
-  const emptyEducationDraft = {
-    id: null,
-    type: "university",
-    degree: "",
-    year: "",
-    grade: "",
-    title: "",
-    subtitle: "",
-    iconBg: "#D1E4FF",
+  const handlePersonalChange = (key, value) => {
+    setPersonalDraft((prev) => ({ ...prev, [key]: value }));
+
+    if (personalErrors[key]) {
+      setPersonalErrors((prev) => {
+        const updated = { ...prev };
+        delete updated[key];
+        return updated;
+      });
+    }
   };
-  const [educationDraft, setEducationDraft] = useState(emptyEducationDraft);
+
+  const savePersonal = () => {
+    const errors = validatePersonal(personalDraft);
+
+    if (Object.keys(errors).length > 0) {
+      setPersonalErrors(errors);
+      return;
+    }
+
+    setPersonal({
+      ...personalDraft,
+      fullName: personalDraft.fullName.trim(),
+      email: personalDraft.email.trim(),
+      nationality: personalDraft.nationality.trim(),
+      city: personalDraft.city.trim(),
+    });
+    setPersonalErrors({});
+    setModal(null);
+    setToast("تم حفظ المعلومات الشخصية");
+  };
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setToast("الرجاء اختيار ملف صورة");
+      return;
+    }
+
+    setAvatarImage(URL.createObjectURL(file));
+    e.target.value = "";
+  };
+
+  /* =======================================================
+     الروابط المهنية
+  ======================================================= */
+
+  const openLinksModal = () => {
+    setLinksDraft(professionalLinks);
+    setLinksErrors({});
+    setModal("links");
+  };
+
+  const addProfessionalLink = () => {
+    setLinksDraft((prev) => [...prev, { id: newId(), type: "LinkedIn", url: "" }]);
+  };
+
+  const handleLinkChange = (id, key, value) => {
+    setLinksDraft((prev) =>
+      prev.map((link) => (link.id === id ? { ...link, [key]: value } : link))
+    );
+
+    if (linksErrors[id]) {
+      setLinksErrors((prev) => {
+        const updated = { ...prev };
+        delete updated[id];
+        return updated;
+      });
+    }
+  };
+
+  const removeProfessionalLink = (id) => {
+    setLinksDraft((prev) => prev.filter((link) => link.id !== id));
+  };
+
+  const saveProfessionalLinks = () => {
+    const errors = {};
+
+    linksDraft.forEach((link) => {
+      const url = link.url.trim();
+      if (!url) errors[link.id] = "الرابط مطلوب";
+      else if (!isSafeUrl(url)) errors[link.id] = "أدخل رابطاً صحيحاً يبدأ بـ https://";
+    });
+
+    if (Object.keys(errors).length > 0) {
+      setLinksErrors(errors);
+      return;
+    }
+
+    setProfessionalLinks(linksDraft.map((l) => ({ ...l, url: l.url.trim() })));
+    setModal(null);
+    setToast("تم حفظ الروابط المهنية");
+  };
+
+  /* =======================================================
+     التعليم
+  ======================================================= */
 
   const openAddEducation = () => {
-    setEducationDraft(emptyEducationDraft);
+    setEducationDraft({ ...emptyEducationDraft });
+    setEducationErrors({});
     setModal("education");
   };
 
   const openEditEducation = (item) => {
     setEducationDraft(item);
+    setEducationErrors({});
     setModal("education");
   };
 
-  const saveEducation = () => {
-    if (!educationDraft.title.trim()) return;
-    setEducation((prev) => {
-      if (educationDraft.id) {
-        return prev.map((e) =>
-          e.id === educationDraft.id ? educationDraft : e,
-        );
+  const handleEducationChange = (key, value) => {
+    setEducationDraft((prev) => ({ ...prev, [key]: value }));
+
+    if (educationErrors[key]) {
+      setEducationErrors((prev) => {
+        const updated = { ...prev };
+        delete updated[key];
+        return updated;
+      });
+    }
+  };
+
+  const validateEducation = (data) => {
+    const errors = {};
+
+    if (!data.title.trim()) errors.title = "التخصص / العنوان مطلوب";
+    if (!data.subtitle.trim()) errors.subtitle = "اسم المؤسسة مطلوب";
+
+    if (data.year) {
+      if (!/^\d{4}$/.test(String(data.year))) {
+        errors.year = "أدخل سنة صحيحة مكوّنة من 4 أرقام";
+      } else if (Number(data.year) < 1950 || Number(data.year) > currentYear + 10) {
+        errors.year = "سنة غير منطقية";
       }
-      return [...prev, { ...educationDraft, id: Date.now() }];
-    });
+    }
+
+    return errors;
+  };
+
+  const saveEducation = () => {
+    const errors = validateEducation(educationDraft);
+
+    if (Object.keys(errors).length > 0) {
+      setEducationErrors(errors);
+      return;
+    }
+
+    const isEdit = Boolean(educationDraft.id);
+
+    setEducation((prev) =>
+      isEdit
+        ? prev.map((e) => (e.id === educationDraft.id ? educationDraft : e))
+        : [...prev, { ...educationDraft, id: newId() }]
+    );
+
+    setEducationErrors({});
     setModal(null);
+    setToast(isEdit ? "تم تحديث المؤهل" : "تمت إضافة المؤهل");
   };
 
-  const deleteEducation = (id) => {
-    setEducation((prev) => prev.filter((e) => e.id !== id));
+  const confirmDeleteEducation = () => {
+    setEducation((prev) => prev.filter((e) => e.id !== deleteTarget.id));
+    setDeleteTarget(null);
+    setModal(null);
+    setToast("تم حذف المؤهل");
   };
 
-  /* ---------- المهارات ---------- */
-  const [skillsDraft, setSkillsDraft] = useState(skills);
-  const [newSkill, setNewSkill] = useState("");
+  const sortedEducation = useMemo(
+    () => [...education].sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0)),
+    [education]
+  );
+
+  /* =======================================================
+     المهارات
+  ======================================================= */
 
   const openSkillsModal = () => {
     setSkillsDraft(skills);
@@ -183,7 +572,14 @@ export default function AcademicProfile() {
 
   const addDraftSkill = () => {
     const value = newSkill.trim();
-    if (!value || skillsDraft.includes(value)) return;
+    if (!value) return;
+
+    const exists = skillsDraft.some((s) => s.toLowerCase() === value.toLowerCase());
+    if (exists) {
+      setNewSkill("");
+      return;
+    }
+
     setSkillsDraft((prev) => [...prev, value]);
     setNewSkill("");
   };
@@ -195,19 +591,16 @@ export default function AcademicProfile() {
   const saveSkills = () => {
     setSkills(skillsDraft);
     setModal(null);
+    setToast("تم حفظ المهارات");
   };
 
   const addSuggestedSkill = (skill) => {
-    if (skills.includes(skill)) return;
-    setSkills((prev) => [...prev, skill]);
+    setSkills((prev) => (prev.includes(skill) ? prev : [...prev, skill]));
   };
 
-  /* ---------- اللغات (مُحدّث) ---------- */
-  const [languagesDraft, setLanguagesDraft] = useState(languages);
-
-  // 🆕 حقل إضافة لغة غير موجودة بالقائمة الجاهزة
-  const [customLanguage, setCustomLanguage] = useState("");
-  const [customLevel, setCustomLevel] = useState("مستوى متوسط");
+  /* =======================================================
+     اللغات
+  ======================================================= */
 
   const openLanguagesModal = () => {
     setLanguagesDraft(languages);
@@ -220,21 +613,18 @@ export default function AcademicProfile() {
     setLanguagesDraft((prev) => prev.filter((l) => l.id !== id));
   };
 
-  // 🆕 إضافة لغة مخصّصة كتبها المستخدم يدويًا
+  const addLanguageToDraft = (label, meta) => {
+    setLanguagesDraft((prev) => {
+      if (prev.some((l) => l.label.toLowerCase() === label.toLowerCase())) return prev;
+      return [...prev, { id: newId(), label, meta }];
+    });
+  };
+
   const addCustomLanguage = () => {
     const value = customLanguage.trim();
     if (!value) return;
 
-    const alreadyExists = languagesDraft.some(
-      (l) => l.label.toLowerCase() === value.toLowerCase(),
-    );
-    if (alreadyExists) return;
-
-    setLanguagesDraft((prev) => [
-      ...prev,
-      { id: Date.now(), label: value, meta: customLevel },
-    ]);
-
+    addLanguageToDraft(value, customLevel);
     setCustomLanguage("");
     setCustomLevel("مستوى متوسط");
   };
@@ -242,54 +632,74 @@ export default function AcademicProfile() {
   const saveLanguages = () => {
     setLanguages(languagesDraft);
     setModal(null);
+    setToast("تم حفظ اللغات");
   };
+
+  /* =======================================================
+     JSX
+  ======================================================= */
 
   return (
     <div className="academic-layout">
-      {/* المحتوى الرئيسي */}
       <div className="academic-main-content">
         <TopAppBar />
 
-        <div className="academic-body-wrapper">
+        <main className="academic-body-wrapper">
+          {/* ---------- Header ---------- */}
           <section className="academic__header">
             <h1>الملف الأكاديمي</h1>
             <p>أكمل ملفك الشخصي لزيادة فرصك بالحصول على المنح المناسبة لك</p>
           </section>
 
-          {/* مؤشر اكتمال الملف */}
+          {/* ---------- نسبة الاكتمال ---------- */}
           <section className="academic__card academic__completion">
             <div className="academic__completion-top">
               <span className="academic__badge">{completion}%</span>
-              <h3> الملف الشخصي</h3>
+              <h2 className="academic__completion-title">الملف الشخصي</h2>
             </div>
-            <div className="academic__progress-track">
+
+            <div
+              className="academic__progress-track"
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={completion}
+              aria-label="نسبة اكتمال الملف"
+            >
               <div
                 className="academic__progress-fill"
                 style={{ width: `${completion}%` }}
               />
             </div>
+
             <p className="academic__completion-hint">
-              <FaLightbulb size={16} className="academic__hint-icon" /> أكمل
-              ملفك لزيادة فرص قبولك بنسبة 40%
+              {completion < 100 ? (
+                <>
+                  <FaLightbulb size={16} className="academic__hint-icon" aria-hidden="true" />
+                  أكمل ملفك لزيادة فرص قبولك
+                </>
+              ) : (
+                <>
+                  <FaCheckCircle size={16} className="academic__hint-icon" aria-hidden="true" />
+                  ملفك مكتمل، بالتوفيق في التقديم
+                </>
+              )}
             </p>
           </section>
 
-          {/* المعلومات الشخصية */}
+          {/* ---------- المعلومات الشخصية ---------- */}
           <section className="academic__card">
-            <div className="academic__card-header academic__card-header--with-action">
+            <div className="academic__card-header">
               <h2>المعلومات الشخصية</h2>
-              <button
-                type="button"
-                className="academic__link-btn"
-                onClick={openPersonalModal}
-              >
-                <FaPencilAlt size={12} />
+
+              <button type="button" className="academic__link-btn" onClick={openPersonalModal}>
+                <FaPencilAlt size={12} aria-hidden="true" />
                 تعديل
               </button>
             </div>
+
             <div className="academic__personal-row">
               <div className="academic__avatar-block">
-                {/* عرض الصورة لو تم اختيارها، أو الشكل الافتراضي لو مفيش */}
                 <div
                   className="academic__avatar"
                   style={
@@ -299,622 +709,613 @@ export default function AcademicProfile() {
                           backgroundSize: "cover",
                           backgroundPosition: "center",
                         }
-                      : {}
+                      : undefined
                   }
-                />
+                >
+                  {!avatarImage && <FaUser size={55} color="#1d4ed8" aria-hidden="true" />}
+                </div>
 
-                {/*input مخفي لرفع الصور*/}
                 <input
+                  ref={avatarInputRef}
                   type="file"
-                  id="avatarInput"
                   accept="image/*"
-                  style={{ display: "none" }}
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      const imageUrl = URL.createObjectURL(file);
-                      setAvatarImage(imageUrl);
-                    }
-                  }}
+                  hidden
+                  onChange={handleAvatarChange}
                 />
 
-                {/* الزر اللي بيضغط عليه المستخدم */}
                 <button
                   type="button"
                   className="academic__btn-outline"
-                  onClick={() => document.getElementById("avatarInput").click()}
+                  onClick={() => avatarInputRef.current?.click()}
                 >
-                  <FaCamera size={16} />
+                  <FaCamera size={16} aria-hidden="true" />
                   تغيير الصورة
                 </button>
               </div>
 
               <div className="academic__personal-grid">
-                {personalFieldsMeta.map(({ key, label }) => (
-                  <div className="academic__field" key={key}>
-                    <span className="academic__field-label">{label}</span>
-                    <div className="academic__field-value">{personal[key]}</div>
-                  </div>
-                ))}
+                {personalFieldsMeta.map(({ key, label, placeholder }) => {
+                  const value =
+                    key === "birthDate" ? formatDate(personal[key]) : personal[key];
+
+                  return (
+                    <div className="academic__field" key={key}>
+                      <span className="academic__field-label">{label}</span>
+                      <div
+                        className={`academic__field-value ${
+                          !value ? "academic__field-value--placeholder" : ""
+                        }`}
+                        dir={key === "email" || key === "phone" ? "ltr" : undefined}
+                      >
+                        {value || placeholder}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
+            {/* الروابط المهنية */}
             <div className="academic__links-block">
-              <h3>روابط مهنية</h3>
-              <div className="academic__links-row">
-                {professionalLinks.map(({ icon: Icon, label }) => (
-                  <a key={label} href="#" className="academic__link-chip">
-                    <Icon size={18} />
-                    <span>{label}</span>
-                  </a>
-                ))}
+              <div className="academic__subheader">
+                <h3>روابط مهنية</h3>
+
+                <button type="button" className="academic__link-btn" onClick={openLinksModal}>
+                  <FaPencilAlt size={12} aria-hidden="true" />
+                  تعديل
+                </button>
               </div>
+
+              {professionalLinks.length === 0 ? (
+                <p className="academic__muted">لم تتم إضافة أي رابط مهني بعد.</p>
+              ) : (
+                <div className="academic__links-row">
+                  {professionalLinks.map((link) => (
+                    <a
+                      key={link.id}
+                      href={isSafeUrl(link.url) ? link.url : undefined}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="academic__link-chip"
+                    >
+                      <LinkIcon type={link.type} />
+                      <span dir="ltr">{link.url}</span>
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           </section>
 
-          {/* المؤهلات التعليمية */}
+          {/* ---------- التعليم ---------- */}
           <section className="academic__card">
-            <div className="academic__card-header academic__card-header--with-action">
-              <h2> التعليم</h2>
-              <button
-                type="button"
-                className="academic__btn-primary"
-                onClick={openAddEducation}
-              >
-                <FaPlus size={14} />
-                إضافة درجة علمية
+            <div className="academic__card-header">
+              <h2>التعليم</h2>
+
+              <button type="button" className="academic__btn-primary" onClick={openAddEducation}>
+                <FaPlus size={14} aria-hidden="true" />
+                إضافة مؤهل
               </button>
             </div>
 
-            <div className="academic__education-list">
-              {education.map((item) => {
-                const Icon = educationIcons[item.type] || FaBookOpen;
-                const gradeLabel =
-                  item.type === "university" ? "المعدل التراكمي" : "المعدل";
+            {sortedEducation.length === 0 ? (
+              <div className="academic__empty-state">
+                <FaBookOpen size={22} aria-hidden="true" />
+                <p>لم يتم إضافة أي مؤهل تعليمي، اضغط على "إضافة مؤهل" لإضافة مؤهلاتك.</p>
+              </div>
+            ) : (
+              <div className="academic__education-list">
+                {sortedEducation.map((item) => {
+                  const meta = educationTypesMeta[item.type] || educationTypesMeta.university;
+                  const Icon = meta.icon;
+                  const gradeLabel = item.type === "university" ? "المعدل التراكمي" : "المعدل";
 
-                return (
-                  <div className="academic__education-card" key={item.id}>
-                    <div className="academic__education-meta">
-                      <button
-                        type="button"
-                        className="academic__icon-btn"
-                        onClick={() => openEditEducation(item)}
-                      >
-                        <FaPencilAlt size={16} />
-                      </button>
+                  return (
+                    <div className="academic__education-card" key={item.id}>
+                      <div className="academic__education-meta">
+                        <button
+                          type="button"
+                          className="academic__icon-btn"
+                          aria-label={`تعديل ${item.title}`}
+                          onClick={() => openEditEducation(item)}
+                        >
+                          <FaPencilAlt size={16} />
+                        </button>
 
-                      {item.grade && (
-                        <div className="academic__edu-stat">
-                          <span className="academic__edu-stat-label">
-                            {gradeLabel}
-                          </span>
-                          <span className="academic__edu-stat-value">
-                            {item.grade}
-                          </span>
-                        </div>
-                      )}
+                        <button
+                          type="button"
+                          className="academic__icon-btn academic__icon-btn--danger"
+                          aria-label={`حذف ${item.title}`}
+                          onClick={() => {
+                            setDeleteTarget(item);
+                            setModal("deleteEducation");
+                          }}
+                        >
+                          <FaTrash size={16} />
+                        </button>
 
-                      {item.year && (
-                        <div className="academic__edu-stat">
-                          <span className="academic__edu-stat-label">
-                            سنة التخرج
-                          </span>
-                          <span className="academic__edu-stat-value">
-                            {item.year}
-                          </span>
-                        </div>
-                      )}
-                    </div>
+                        {item.grade && (
+                          <div className="academic__edu-stat">
+                            <span className="academic__edu-stat-label">{gradeLabel}</span>
+                            <span className="academic__edu-stat-value">{item.grade}</span>
+                          </div>
+                        )}
 
-                    <div className="academic__education-info">
-                      <div className="academic__education-text">
-                        <h4>{item.title}</h4>
-                        <p>{item.subtitle}</p>
+                        {item.year && (
+                          <div className="academic__edu-stat">
+                            <span className="academic__edu-stat-label">سنة التخرج</span>
+                            <span className="academic__edu-stat-value">{item.year}</span>
+                          </div>
+                        )}
                       </div>
-                      <div
-                        className="academic__education-icon"
-                        style={{ background: item.iconBg }}
-                      >
-                        <Icon size={20} color="#0061A4" />
+
+                      <div className="academic__education-info">
+                        <div
+                          className="academic__education-icon"
+                          style={{ background: meta.color }}
+                        >
+                          <Icon size={20} color="#0061A4" aria-hidden="true" />
+                        </div>
+
+                        <div className="academic__education-text">
+                          <h4>{item.title}</h4>
+                          {item.degree && (
+                            <span className="academic__edu-degree">{item.degree}</span>
+                          )}
+                          <p>{item.subtitle}</p>
+                        </div>
                       </div>
-                      <button
-                        type="button"
-                        className="academic__icon-btn academic__icon-btn--ghost"
-                        onClick={() => deleteEducation(item.id)}
-                      >
-                        <FaTrash size={16} />
-                      </button>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </section>
 
-          {/* المهارات واللغات */}
+          {/* ---------- المهارات واللغات ---------- */}
           <section className="academic__card">
-            <div className="academic__card-header academic__card-header--with-action">
-              <h2> المهارات واللغات</h2>
+            <div className="academic__card-header">
+              <h2>المهارات واللغات</h2>
             </div>
 
             <div className="academic__skills-block">
               <div className="academic__subheader">
                 <h3>المهارات التقنية والشخصية</h3>
-                <button
-                  type="button"
-                  className="academic__link-btn"
-                  onClick={openSkillsModal}
-                >
-                  <FaPencilAlt size={12} />
+
+                <button type="button" className="academic__link-btn" onClick={openSkillsModal}>
+                  <FaPencilAlt size={12} aria-hidden="true" />
                   تعديل المهارات
                 </button>
               </div>
-              <div className="academic__tags-row">
-                {skills.map((s) => (
-                  <span className="academic__tag" key={s}>
-                    {s}
-                  </span>
-                ))}
-              </div>
 
-              <div className="academic__ai-box">
-                <FaStar size={20} className="academic__ai-icon" />
-                <div>
-                  <h4> اقتراحات الذكاء الاصطناعي بناءً على تخصصك</h4>
-                  <div className="academic__tags-row">
-                    {suggestedSkills
-                      .filter((s) => !skills.includes(s))
-                      .map((s) => (
-                        <button
-                          type="button"
-                          className="academic__tag academic__tag--suggested"
-                          key={s}
-                          onClick={() => addSuggestedSkill(s)}
-                        >
-                          {s}
-                          <FaPlus size={12} />
-                        </button>
-                      ))}
+              {skills.length === 0 ? (
+                <p className="academic__muted">لم تتم إضافة أي مهارة بعد.</p>
+              ) : (
+                <div className="academic__tags-row">
+                  {skills.map((s) => (
+                    <span className="academic__tag" key={s}>
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {suggestedSkills.some((s) => !skills.includes(s)) && (
+                <div className="academic__ai-box">
+                  <FaStar size={20} className="academic__ai-icon" aria-hidden="true" />
+
+                  <div className="academic__ai-content">
+                    <h4>اقتراحات الذكاء الاصطناعي بناءً على تخصصك</h4>
+
+                    <div className="academic__tags-row">
+                      {suggestedSkills
+                        .filter((s) => !skills.includes(s))
+                        .map((s) => (
+                          <button
+                            type="button"
+                            className="academic__tag academic__tag--suggested"
+                            key={s}
+                            onClick={() => addSuggestedSkill(s)}
+                          >
+                            {s}
+                            <FaPlus size={12} aria-hidden="true" />
+                          </button>
+                        ))}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
 
             <div className="academic__skills-block">
               <div className="academic__subheader">
                 <h3>اللغات</h3>
-                <button
-                  type="button"
-                  className="academic__link-btn"
-                  onClick={openLanguagesModal}
-                >
-                  <FaPencilAlt size={12} />
+
+                <button type="button" className="academic__link-btn" onClick={openLanguagesModal}>
+                  <FaPencilAlt size={12} aria-hidden="true" />
                   إضافة لغة
                 </button>
               </div>
-              <div className="academic__interests-row">
-                {languages.map((lang) => (
-                  <div className="academic__interest-box" key={lang.id}>
-                    <span className="academic__interest-title">
-                      {lang.label}
-                    </span>
-                    <span className="academic__interest-meta">{lang.meta}</span>
-                  </div>
-                ))}
-              </div>
+
+              {languages.length === 0 ? (
+                <p className="academic__muted">لم تتم إضافة أي لغة بعد.</p>
+              ) : (
+                <div className="academic__interests-row">
+                  {languages.map((lang) => (
+                    <div className="academic__interest-box" key={lang.id}>
+                      <span className="academic__interest-title">{lang.label}</span>
+                      <span className="academic__interest-meta">{lang.meta}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </section>
+        </main>
 
-          {/* ============ المودالات ============ */}
+        {/* =================================================
+            Modals
+        ================================================= */}
 
-          {modal === "personal" && (
-            <AcademicprofileModal
-              title="تعديل المعلومات الشخصية"
-              onClose={() => setModal(null)}
-            >
-              <div className="modal-form">
-                {personalFieldsMeta.map(({ key, label }) => (
-                  <label key={key} className="modal-form__field">
-                    <span>{label}</span>
+        {modal === "personal" && (
+          <AcademicprofileModal title="تعديل المعلومات الشخصية" onClose={closeModal}>
+            <div className="modal-form">
+              {personalFieldsMeta.map(({ key, label, placeholder }) => (
+                <label key={key} className="modal-form__field">
+                  <span>{label}</span>
+
+                  {key === "birthDate" ? (
                     <input
-                      type="text"
-                      value={personalDraft[key]}
-                      onChange={(e) =>
-                        setPersonalDraft((prev) => ({
-                          ...prev,
-                          [key]: e.target.value,
-                        }))
-                      }
+                      type="date"
+                      lang="en-CA"
+                      min="1940-01-01"
+                      max={todayISO()}
+                      value={personalDraft.birthDate}
+                      onChange={(e) => handlePersonalChange("birthDate", e.target.value)}
+                      className={`input-ltr ${personalErrors.birthDate ? "input-error" : ""}`}
                     />
+                  ) : key === "phone" ? (
+                    <div
+                      className={`phone-input-wrapper ${
+                        personalErrors.phone ? "input-error" : ""
+                      }`}
+                    >
+                      <PhoneInput
+                        international
+                        defaultCountry="PS"
+                        value={personalDraft.phone}
+                        onChange={(value) => handlePersonalChange("phone", value || "")}
+                      />
+                    </div>
+                  ) : (
+                    <input
+                      type={key === "email" ? "email" : "text"}
+                      dir={key === "email" ? "ltr" : "auto"}
+                      value={personalDraft[key]}
+                      placeholder={placeholder}
+                      onChange={(e) => handlePersonalChange(key, e.target.value)}
+                      className={personalErrors[key] ? "input-error" : ""}
+                    />
+                  )}
+
+                  {personalErrors[key] && (
+                    <span className="modal-form__error" role="alert">
+                      {personalErrors[key]}
+                    </span>
+                  )}
+                </label>
+              ))}
+            </div>
+
+            <ModalFooter onCancel={closeModal} onSave={savePersonal} />
+          </AcademicprofileModal>
+        )}
+
+        {modal === "links" && (
+          <AcademicprofileModal title="تعديل الروابط المهنية" onClose={closeModal}>
+            <div className="modal-form">
+              {linksDraft.map((link) => (
+                <div key={link.id} className="professional-link-edit">
+                  <label className="modal-form__field">
+                    <span>نوع الرابط</span>
+                    <select
+                      value={link.type}
+                      onChange={(e) => handleLinkChange(link.id, "type", e.target.value)}
+                    >
+                      {LINK_TYPES.map((t) => (
+                        <option key={t.value} value={t.value}>
+                          {t.label}
+                        </option>
+                      ))}
+                    </select>
                   </label>
-                ))}
-              </div>
-              <div className="modal-box__footer">
-                <button
-                  type="button"
-                  className="academic__btn-outline"
-                  onClick={() => setModal(null)}
-                >
-                  إلغاء
-                </button>
-                <button
-                  type="button"
-                  className="academic__btn-primary"
-                  onClick={savePersonal}
-                >
-                  حفظ
-                </button>
-              </div>
-            </AcademicprofileModal>
-          )}
 
-          {modal === "education" && (
-            <AcademicprofileModal
-              title={educationDraft.id ? "تعديل المؤهل" : "إضافة مؤهل جديد"}
-              onClose={() => setModal(null)}
-            >
-              <div className="modal-form">
-                <label className="modal-form__field">
-                  <span>النوع</span>
-                  <select
-                    value={educationDraft.type}
-                    onChange={(e) =>
-                      setEducationDraft((prev) => ({
-                        ...prev,
-                        type: e.target.value,
-                      }))
-                    }
+                  <label className="modal-form__field">
+                    <span>الرابط</span>
+                    <input
+                      type="url"
+                      dir="ltr"
+                      placeholder="https://example.com"
+                      value={link.url}
+                      onChange={(e) => handleLinkChange(link.id, "url", e.target.value)}
+                      className={linksErrors[link.id] ? "input-error" : ""}
+                    />
+                    {linksErrors[link.id] && (
+                      <span className="modal-form__error" role="alert">
+                        {linksErrors[link.id]}
+                      </span>
+                    )}
+                  </label>
+
+                  <button
+                    type="button"
+                    className="academic__btn-danger"
+                    onClick={() => removeProfessionalLink(link.id)}
                   >
-                    <option value="university">جامعة</option>
-                    <option value="school">مدرسة</option>
-                  </select>
-                </label>
+                    <FaTrash size={13} aria-hidden="true" />
+                    حذف الرابط
+                  </button>
+                </div>
+              ))}
 
-                <label className="modal-form__field">
-                  <span>المسمى (مثال: بكالوريوس، ثانوية)</span>
-                  <input
-                    type="text"
-                    value={educationDraft.degree}
-                    onChange={(e) =>
-                      setEducationDraft((prev) => ({
-                        ...prev,
-                        degree: e.target.value,
-                      }))
-                    }
-                  />
-                </label>
+              <button type="button" className="academic__btn-outline" onClick={addProfessionalLink}>
+                <FaPlus size={13} aria-hidden="true" />
+                إضافة رابط جديد
+              </button>
+            </div>
 
-                <label className="modal-form__field">
-                  <span>سنة التخرج</span>
-                  <input
-                    type="text"
-                    value={educationDraft.year}
-                    onChange={(e) =>
-                      setEducationDraft((prev) => ({
-                        ...prev,
-                        year: e.target.value,
-                      }))
-                    }
-                  />
-                </label>
+            <ModalFooter onCancel={closeModal} onSave={saveProfessionalLinks} />
+          </AcademicprofileModal>
+        )}
 
-                <label className="modal-form__field">
-                  <span>المعدل</span>
-                  <input
-                    type="text"
-                    placeholder="مثال: 4.8 / 5.0 أو 99%"
-                    value={educationDraft.grade}
-                    onChange={(e) =>
-                      setEducationDraft((prev) => ({
-                        ...prev,
-                        grade: e.target.value,
-                      }))
-                    }
-                  />
-                </label>
-
-                <label className="modal-form__field">
-                  <span>التخصص / العنوان</span>
-                  <input
-                    type="text"
-                    value={educationDraft.title}
-                    onChange={(e) =>
-                      setEducationDraft((prev) => ({
-                        ...prev,
-                        title: e.target.value,
-                      }))
-                    }
-                  />
-                </label>
-
-                <label className="modal-form__field">
-                  <span>اسم المؤسسة</span>
-                  <input
-                    type="text"
-                    value={educationDraft.subtitle}
-                    onChange={(e) =>
-                      setEducationDraft((prev) => ({
-                        ...prev,
-                        subtitle: e.target.value,
-                      }))
-                    }
-                  />
-                </label>
-              </div>
-              <div className="modal-box__footer">
-                <button
-                  type="button"
-                  className="academic__btn-outline"
-                  onClick={() => setModal(null)}
+        {modal === "education" && (
+          <AcademicprofileModal
+            title={educationDraft.id ? "تعديل المؤهل" : "إضافة مؤهل جديد"}
+            onClose={closeModal}
+          >
+            <div className="modal-form">
+              <label className="modal-form__field">
+                <span>النوع</span>
+                <select
+                  value={educationDraft.type}
+                  onChange={(e) => handleEducationChange("type", e.target.value)}
                 >
-                  إلغاء
-                </button>
-                <button
-                  type="button"
-                  className="academic__btn-primary"
-                  onClick={saveEducation}
-                >
-                  حفظ
-                </button>
-              </div>
-            </AcademicprofileModal>
-          )}
+                  {Object.entries(educationTypesMeta).map(([key, meta]) => (
+                    <option key={key} value={key}>
+                      {meta.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
-          {modal === "skills" && (
-            <AcademicprofileModal
-              title="تعديل المهارات"
-              onClose={() => setModal(null)}
-            >
-              <div className="modal-tag-input">
+              <label className="modal-form__field">
+                <span>المسمى (مثال: بكالوريوس، ثانوية، شهادة)</span>
                 <input
                   type="text"
-                  placeholder="أضف مهارة جديدة..."
-                  value={newSkill}
-                  onChange={(e) => setNewSkill(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && addDraftSkill()}
+                  dir="auto"
+                  value={educationDraft.degree}
+                  onChange={(e) => handleEducationChange("degree", e.target.value)}
                 />
+              </label>
+
+              <label className="modal-form__field">
+                <span>سنة التخرج / الإنجاز</span>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={4}
+                  dir="ltr"
+                  placeholder="مثال: 2024"
+                  value={educationDraft.year}
+                  onChange={(e) =>
+                    handleEducationChange("year", e.target.value.replace(/\D/g, ""))
+                  }
+                  className={educationErrors.year ? "input-error" : ""}
+                />
+                {educationErrors.year && (
+                  <span className="modal-form__error" role="alert">
+                    {educationErrors.year}
+                  </span>
+                )}
+              </label>
+
+              <label className="modal-form__field">
+                <span>المعدل (اختياري)</span>
+                <input
+                  type="text"
+                  dir="auto"
+                  placeholder="مثال: 4.8 / 5.0 أو 99%"
+                  value={educationDraft.grade}
+                  onChange={(e) => handleEducationChange("grade", e.target.value)}
+                />
+              </label>
+
+              <label className="modal-form__field">
+                <span>التخصص / العنوان</span>
+                <input
+                  type="text"
+                  dir="auto"
+                  value={educationDraft.title}
+                  onChange={(e) => handleEducationChange("title", e.target.value)}
+                  className={educationErrors.title ? "input-error" : ""}
+                />
+                {educationErrors.title && (
+                  <span className="modal-form__error" role="alert">
+                    {educationErrors.title}
+                  </span>
+                )}
+              </label>
+
+              <label className="modal-form__field">
+                <span>اسم المؤسسة / الجهة المانحة</span>
+                <input
+                  type="text"
+                  dir="auto"
+                  value={educationDraft.subtitle}
+                  onChange={(e) => handleEducationChange("subtitle", e.target.value)}
+                  className={educationErrors.subtitle ? "input-error" : ""}
+                />
+                {educationErrors.subtitle && (
+                  <span className="modal-form__error" role="alert">
+                    {educationErrors.subtitle}
+                  </span>
+                )}
+              </label>
+            </div>
+
+            <ModalFooter onCancel={closeModal} onSave={saveEducation} />
+          </AcademicprofileModal>
+        )}
+
+        {modal === "deleteEducation" && deleteTarget && (
+          <AcademicprofileModal
+            title="حذف المؤهل"
+            onClose={() => {
+              setDeleteTarget(null);
+              closeModal();
+            }}
+          >
+            <p className="modal-confirm-text">
+              هل أنت متأكد من حذف "{deleteTarget.title}"؟ لا يمكن التراجع عن هذا الإجراء.
+            </p>
+
+            <ModalFooter
+              onCancel={() => {
+                setDeleteTarget(null);
+                closeModal();
+              }}
+              onSave={confirmDeleteEducation}
+              saveLabel="حذف"
+              saveClass="academic__btn-danger"
+            />
+          </AcademicprofileModal>
+        )}
+
+        {modal === "skills" && (
+          <AcademicprofileModal title="تعديل المهارات" onClose={closeModal}>
+            <div className="modal-tag-input">
+              <input
+                type="text"
+                dir="auto"
+                placeholder="أضف مهارة جديدة..."
+                value={newSkill}
+                onChange={(e) => setNewSkill(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    addDraftSkill();
+                  }
+                }}
+              />
+              <button type="button" className="academic__btn-primary" onClick={addDraftSkill}>
+                إضافة
+              </button>
+            </div>
+
+            <div className="academic__tags-row modal-tags-list">
+              {skillsDraft.map((s) => (
+                <span className="academic__tag modal-tag--removable" key={s}>
+                  {s}
+                  <button
+                    type="button"
+                    aria-label={`إزالة ${s}`}
+                    onClick={() => removeDraftSkill(s)}
+                  >
+                    <FaTimes size={12} />
+                  </button>
+                </span>
+              ))}
+            </div>
+
+            <ModalFooter onCancel={closeModal} onSave={saveSkills} />
+          </AcademicprofileModal>
+        )}
+
+        {modal === "languages" && (
+          <AcademicprofileModal title="تعديل اللغات" onClose={closeModal}>
+            <div>
+              <p className="modal-hint">اختر لغة وحدد مستواك لإضافتها:</p>
+
+              <div className="lang-list">
+                {availableLanguages.map((lang) => (
+                  <LanguageOption
+                    key={lang.label}
+                    lang={lang}
+                    isAdded={languagesDraft.some((l) => l.label === lang.label)}
+                    onAdd={addLanguageToDraft}
+                  />
+                ))}
+              </div>
+
+              <div className="lang-custom">
+                <input
+                  type="text"
+                  dir="auto"
+                  placeholder="لغة غير موجودة؟ اكتبها هنا..."
+                  value={customLanguage}
+                  onChange={(e) => setCustomLanguage(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addCustomLanguage();
+                    }
+                  }}
+                />
+
+                <select
+                  value={customLevel}
+                  aria-label="مستوى اللغة"
+                  onChange={(e) => setCustomLevel(e.target.value)}
+                >
+                  {LANGUAGE_LEVELS.map((l) => (
+                    <option key={l} value={l}>
+                      {l}
+                    </option>
+                  ))}
+                </select>
+
                 <button
                   type="button"
-                  className="academic__btn-primary"
-                  onClick={addDraftSkill}
+                  className="academic__btn-primary academic__btn-sm"
+                  onClick={addCustomLanguage}
                 >
                   إضافة
                 </button>
               </div>
-              <div className="academic__tags-row modal-tags-list">
-                {skillsDraft.map((s) => (
-                  <span className="academic__tag modal-tag--removable" key={s}>
-                    {s}
-                    <button type="button" onClick={() => removeDraftSkill(s)}>
-                      <FaTimes size={12} />
-                    </button>
-                  </span>
-                ))}
-              </div>
-              <div className="modal-box__footer">
-                <button
-                  type="button"
-                  className="academic__btn-outline"
-                  onClick={() => setModal(null)}
-                >
-                  إلغاء
-                </button>
-                <button
-                  type="button"
-                  className="academic__btn-primary"
-                  onClick={saveSkills}
-                >
-                  حفظ
-                </button>
-              </div>
-            </AcademicprofileModal>
-          )}
+            </div>
 
-          {modal === "languages" && (
-            <AcademicprofileModal
-              title="تعديل اللغات"
-              onClose={() => setModal(null)}
-            >
-              <div style={{ marginBottom: "15px" }}>
-                <p
-                  style={{
-                    fontSize: "14px",
-                    color: "#555",
-                    marginBottom: "8px",
-                  }}
-                >
-                  اختر لغة وحدد مستواك لإضافتها:
-                </p>
+            <hr className="modal-divider" />
 
-                {/* شبكة اللغات المتاحة مع قائمة منسدلة للمستوى */}
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "10px",
-                  }}
-                >
-                  {availableLanguages.map((lang) => {
-                    const isAdded = languagesDraft.some(
-                      (l) => l.label === lang.label,
-                    );
+            <p className="modal-hint">اللغات المضافة في ملفك:</p>
 
-                    return (
-                      <div
-                        key={lang.label}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          padding: "8px 12px",
-                          background: "#f9f9f9",
-                          borderRadius: "8px",
-                          opacity: isAdded ? 0.6 : 1,
-                        }}
-                      >
-                        <span style={{ fontWeight: "500" }}>{lang.label}</span>
-
-                        <div
-                          style={{
-                            display: "flex",
-                            gap: "8px",
-                            alignItems: "center",
-                          }}
-                        >
-                          {/* القائمة المنسدلة لاختيار المستوى */}
-                          <select
-                            disabled={isAdded}
-                            id={`level-${lang.label}`}
-                            defaultValue={lang.meta}
-                            style={{
-                              padding: "4px 8px",
-                              borderRadius: "4px",
-                              border: "1px solid #ccc",
-                            }}
-                          >
-                            <option value="اللغة الأم">اللغة الأم</option>
-                            <option value="مستوى متقدم">مستوى متقدم</option>
-                            <option value="مستوى متوسط">مستوى متوسط</option>
-                            <option value="مستوى مبتدئ">مستوى مبتدئ</option>
-                          </select>
-
-                          {/* زر الإضافة */}
-                          <button
-                            type="button"
-                            className="academic__btn-primary"
-                            style={{ padding: "4px 10px", fontSize: "12px" }}
-                            disabled={isAdded}
-                            onClick={() => {
-                              const selectElement = document.getElementById(
-                                `level-${lang.label}`,
-                              );
-                              const selectedMeta = selectElement.value;
-
-                              if (!isAdded) {
-                                setLanguagesDraft((prev) => [
-                                  ...prev,
-                                  {
-                                    id: Date.now(),
-                                    label: lang.label,
-                                    meta: selectedMeta,
-                                  },
-                                ]);
-                              }
-                            }}
-                          >
-                            {isAdded ? "تمت الإضافة" : "إضافة"}
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* 🆕 لو اللغة يلي بدها المستخدمة مش موجودة بالقائمة أعلاه */}
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "8px",
-                    alignItems: "center",
-                    marginTop: "12px",
-                    padding: "8px 12px",
-                    background: "#eef6ff",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <input
-                    type="text"
-                    placeholder="لغة غير موجودة؟ اكتبيها هون..."
-                    value={customLanguage}
-                    onChange={(e) => setCustomLanguage(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && addCustomLanguage()}
-                    style={{
-                      flex: 1,
-                      padding: "6px 10px",
-                      borderRadius: "4px",
-                      border: "1px solid #ccc",
-                    }}
-                  />
-
-                  <select
-                    value={customLevel}
-                    onChange={(e) => setCustomLevel(e.target.value)}
-                    style={{
-                      padding: "4px 8px",
-                      borderRadius: "4px",
-                      border: "1px solid #ccc",
-                    }}
-                  >
-                    <option value="اللغة الأم">اللغة الأم</option>
-                    <option value="مستوى متقدم">مستوى متقدم</option>
-                    <option value="مستوى متوسط">مستوى متوسط</option>
-                    <option value="مستوى مبتدئ">مستوى مبتدئ</option>
-                  </select>
-
+            <div className="academic__tags-row modal-tags-list">
+              {languagesDraft.map((lang) => (
+                <span className="academic__tag modal-tag--removable" key={lang.id}>
+                  {lang.label} ({lang.meta})
                   <button
                     type="button"
-                    className="academic__btn-primary"
-                    style={{ padding: "4px 10px", fontSize: "12px" }}
-                    onClick={addCustomLanguage}
+                    aria-label={`إزالة ${lang.label}`}
+                    onClick={() => removeDraftLanguage(lang.id)}
                   >
-                    إضافة
+                    <FaTimes size={12} />
                   </button>
-                </div>
-              </div>
+                </span>
+              ))}
+            </div>
 
-              <hr
-                style={{
-                  border: "0",
-                  borderTop: "1px solid #eee",
-                  margin: "15px 0",
-                }}
-              />
+            <ModalFooter onCancel={closeModal} onSave={saveLanguages} />
+          </AcademicprofileModal>
+        )}
 
-              <p
-                style={{ fontSize: "14px", color: "#555", marginBottom: "8px" }}
-              >
-                اللغات المضافة في ملفك:
-              </p>
-              <div className="academic__tags-row modal-tags-list">
-                {languagesDraft.map((lang) => (
-                  <span
-                    className="academic__tag modal-tag--removable"
-                    key={lang.id}
-                  >
-                    {lang.label} ({lang.meta})
-                    <button
-                      type="button"
-                      onClick={() => removeDraftLanguage(lang.id)}
-                    >
-                      <FaTimes size={12} />
-                    </button>
-                  </span>
-                ))}
-              </div>
-
-              <div className="modal-box__footer" style={{ marginTop: "20px" }}>
-                <button
-                  type="button"
-                  className="academic__btn-outline"
-                  onClick={() => setModal(null)}
-                >
-                  إلغاء
-                </button>
-                <button
-                  type="button"
-                  className="academic__btn-primary"
-                  onClick={saveLanguages}
-                >
-                  حفظ
-                </button>
-              </div>
-            </AcademicprofileModal>
-          )}
-        </div>
+        {toast && (
+          <div className="toast" role="status" aria-live="polite">
+            {toast}
+          </div>
+        )}
       </div>
-      {/* القائمة الجانبية */}
+
       <div className="academic-sidebar-container">
-        <SideNavBar />
+        <SideNavBar completion={completion} />
       </div>
     </div>
   );

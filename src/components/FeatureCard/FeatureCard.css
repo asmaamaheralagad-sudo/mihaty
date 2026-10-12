@@ -1,98 +1,60 @@
-.feature-card-wrapper {
-  box-sizing: border-box;
-  width: 242px;
-  height: 241px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+/* ================= Feature Cards ================= */
 
-/* الخلفية الملونة تحت الكرت الأبيض */
-.feature-card-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 16px;
-  z-index: 1;
-}
-
-/* الكرت الأبيض الداخلي */
-.feature-card {
-  box-sizing: border-box;
-  background-color: var(--surface_color, #ffffff);
-  border-radius: 12px;
-  padding: 20px 16px;
-  text-align: center;
-  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.08));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
+.features-container {
   position: relative;
   z-index: 2;
-  transition: transform 0.2s ease-in-out;
+  display: grid;
+  grid-template-columns: repeat(4, 400px);
+  gap: 8px;
+  justify-content: center;
 }
 
-/* إزاحة الكرت للأعلى واليسار (للعمود الأيسر) */
-.feature-card-wrapper.left .feature-card {
-  transform: translate(-2px, -2px);
-  
-}
-.feature-card-wrapper.left{
- padding: 7px 15px 7px 0px;}
-
-/* إزاحة الكرت للأعلى واليمين (للعمود الأيمن) */
-.feature-card-wrapper.right .feature-card {
-  transform: translate(8px, -2px);
-}
-.feature-card-wrapper.right { 
-  padding: 7px  7px 7px;}
-
-/* تفاعل الهوفر عند مرور الماوس */
-.feature-card-wrapper.left:hover .feature-card {
-  transform: translate(-12px, -12px);
+.feature-card {
+  min-height: 150px;
+  padding: 14px 12px;
+  background: #edf6ff;
+  border-radius: 4px;
+  text-align: right;
+  transition: 0.3s;
 }
 
-.feature-card-wrapper.right:hover .feature-card {
-  transform: translate(12px, -12px);
+.feature-card:hover {
+  transform: translateY(-3px);
+
+  box-shadow: 0 6px 15px rgba(18, 38, 105, 0.08);
 }
 
-.icon-wrapper {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
+/* Icon */
+
+.feature-icon {
+  width: 35px;
+  height: 35px;
+  margin-bottom: 7px;
+  background: white;
+  border-radius: 4px;
+  color: #122669;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 12px;
-  color: var(--main_color);
-  font-size: 32px;
-  background-color: #fafbfc;
+  font-size: 18px;
 }
 
 .feature-card h3 {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--main_color);
-  margin-bottom: 6px;
+  margin: 0 0 5px;
+
+  color: #122669;
+
+  font-size: 18px;
+
+  font-weight: 800;
 }
 
 .feature-card p {
-  font-size: 18px;
-  color: var(--secondary_color);
-  line-height: 1.5;
   margin: 0;
-}
 
-@media (max-width: 600px) {
-  .feature-card-wrapper {
-    width: 100%;
-    height: auto;
-    min-height: 200px;
-  }
+  color: #666;
+
+  font-size: 17px;
+
+  line-height: 1.8;
 }

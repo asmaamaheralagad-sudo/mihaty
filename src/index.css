@@ -248,3 +248,9 @@ input {
 }
 }
 
+@media (max-width: 900px) {
+  .app-layout {
+    flex-direction: column;
+    padding-top: 65px !important; 
+  }
+}

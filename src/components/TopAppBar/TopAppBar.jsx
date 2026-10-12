@@ -9,7 +9,7 @@ export default function TopAppBar({
   onSearchClick = () => {},
   onNotificationClick = () => {},
   onHelpClick = () => {},
-  onProfileClick = () => {},
+  onProfileClick = () => {},ىحة 
 }) {
   return (
     <header className="top-app-bar" dir="rtl">

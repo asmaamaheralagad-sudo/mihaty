@@ -14,15 +14,14 @@ import { loginWithEmail, loginWithGoogle } from './loginService';
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMsg('');
+    setErrorMsg("");
     setLoading(true);
 
     const result = await loginWithEmail(email, password);
@@ -37,7 +36,7 @@ function Login() {
   };
 
   const handleGoogleSignIn = async () => {
-    setErrorMsg('');
+    setErrorMsg("");
     setLoading(true);
 
     const result = await loginWithGoogle();
@@ -69,7 +68,6 @@ function Login() {
       {/* نموذج تسجيل الدخول */}
       <div className="login-form-section auth-form-section">
         <div className="login-box">
-
           <div className="login-header">
             <div
               className="logo-img">
@@ -80,7 +78,14 @@ function Login() {
           </div>
 
           {errorMsg && (
-            <div style={{ color: 'red', textAlign: 'center', marginBottom: '15px', fontSize: '14px' }}>
+            <div
+              style={{
+                color: "red",
+                textAlign: "center",
+                marginBottom: "15px",
+                fontSize: "14px",
+              }}
+            >
               {errorMsg}
             </div>
           )}
@@ -157,10 +162,8 @@ function Login() {
           <p className="signup-redirect">
             ليس لديك حساب؟ <Link to="/signup">إنشاء حساب جديد</Link>
           </p>
-
         </div>
       </div>
-
     </div>
   );
 }

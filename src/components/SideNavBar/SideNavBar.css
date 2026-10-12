@@ -6,7 +6,7 @@
   padding: 16px;
 
   width: 256px !important;
-  min-width: 256px !important; /* لضمان عدم انكماشها أبداً */
+  min-width: 256px !important;
   height: 100vh !important;
   position: sticky !important;
   top: 0 !important;
@@ -16,10 +16,29 @@
   border-right: 1px solid #bfc7d4;
   font-family: "Tajawal", sans-serif;
   z-index: 100;
+  transition: transform 0.3s ease;
+}
+
+.side-nav__toggle-btn {
+  display: none;
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1001;
+  background: #122669;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.side-nav__overlay {
+  display: none;
 }
 
 /* ===== Header ===== */
-
 .side-nav__header-wrapper {
   display: flex;
   flex-direction: column;
@@ -66,7 +85,6 @@
   width: 100%;
   margin: 0;
   font-family: "Tajawal", sans-serif;
-  font-style: normal;
   font-weight: 700;
   font-size: 24px;
   line-height: 32px;
@@ -78,7 +96,6 @@
   width: 100%;
   margin: 0;
   font-family: "Tajawal", sans-serif;
-  font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
@@ -100,19 +117,15 @@
   align-items: center;
   padding: 8px 0;
   width: 223px;
-
   background: #122669;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-
   font-family: "Tajawal", sans-serif;
-  font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
   color: #ffffff;
-
   transition: background 0.15s ease;
 }
 
@@ -121,7 +134,6 @@
 }
 
 /* ===== Nav tabs ===== */
-
 .side-nav__tabs-wrapper {
   display: flex;
   flex-direction: column;
@@ -157,20 +169,16 @@
   gap: 8px;
   padding: 8px 12px;
   width: 223px;
-
   background: transparent;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-
   font-family: "Tajawal", sans-serif;
-  font-style: normal;
   font-weight: 500;
   font-size: 16px;
   line-height: 19px;
   text-align: right;
   color: #191c1e;
-
   transition: background 0.15s ease;
 }
 
@@ -204,7 +212,6 @@
 }
 
 /* ===== Footer ===== */
-
 .side-nav__footer-wrapper {
   display: flex;
   flex-direction: column;
@@ -222,4 +229,42 @@
   padding-top: 16px;
   width: 223px;
   border-top: 1px solid #bfc7d4;
+}
+
+/* ===== استجابة للشاشات الصغيرة ===== */
+@media (max-width: 900px) {
+  .side-nav {
+    position: static !important;
+    width: 72px !important;
+    min-width: 72px !important;
+    height: 100vh !important;
+    padding: 12px 8px;
+  }
+
+  .side-nav__header-wrapper,
+  .side-nav__name,
+  .side-nav__completion,
+  .side-nav__button-wrapper,
+  .side-nav__link-label,
+  .side-nav__link--footer .side-nav__link-label {
+    display: none;
+  }
+
+  .side-nav__link {
+    justify-content: center;
+    padding: 10px;
+    width: auto;
+  }
+
+  .side-nav__toggle-btn,
+  .side-nav__overlay {
+    display: none !important;
+  }
+}
+
+.sidebar-toggle-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1100;
 }
