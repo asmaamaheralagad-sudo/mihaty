@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import SideNavBar from "../../components/Sidenavbar/Sidenavbar";
 import logo from "../../image/logo.png";
 import {
@@ -50,25 +51,26 @@ const suggestedGrants = [
   },
 ];
 
-const profileChecklist = [
-  { key: "personal", label: "المعلومات الشخصية", done: true },
-  { key: "education", label: "التعلم", done: true },
-  { key: "major", label: "التخصص", done: true },
-  { key: "interests", label: "الاهتمامات", done: false },
-];
-
-const personalInfo = [
+const fallbackPersonalInfo = [
   { label: "الاسم الكامل", value: "إيهام شعبان" },
   { label: "البريد الإلكتروني", value: "eman@example.com" },
   { label: "البلد", value: "فلسطين" },
   { label: "المدينة", value: "غزة" },
 ];
 
-const academicInfo = [
+const fallbackAcademicInfo = [
   { label: "الدرجة", value: "بكالوريوس" },
   { label: "التخصص", value: "هندسة برمجيات" },
   { label: "الجامعة", value: "جامعة فلسطين" },
   { label: "سنة التخرج", value: "2027" },
+];
+
+const fallbackSkillsAndInterests = [
+  "Problem Solving",
+  "Software Engineering",
+  "User Research",
+  "Figma",
+  "UI/UX Design",
 ];
 
 const upcomingDeadlines = [
@@ -109,7 +111,7 @@ const skillsAndInterests = [
 
 function GrantSuggestionCard({ grant }) {
   return (
-    <div className="grant-suggestion-card">
+    <Link to={`/GrantDetails/${grant.id}`} className="grant-suggestion-card">
       <img src={grant.image} alt="" className="grant-suggestion-logo" />
       <div className="grant-suggestion-body">
         <h4 className="grant-suggestion-title">{grant.title}</h4>
@@ -119,7 +121,7 @@ function GrantSuggestionCard({ grant }) {
           <span className="grant-suggestion-match">مطابقة {grant.match}%</span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -174,7 +176,127 @@ function DocumentItem({ doc }) {
 // ===== الصفحة الرئيسية =====
 
 export default function DashboardPage() {
-  const completion = 80;
+  const [profile, setProfile] = React.useState(() => {
+    try {
+      const saved = localStorage.getItem("userProfile");
+      return saved ? JSON.parse(saved) : null;
+    } catch (error) {
+      console.error("Unable to read saved profile", error);
+      return null;
+    }
+  });
+
+  // إعادة قراءة البيانات عند الرجوع للـ Dashboard بعد الحفظ في AcademicProfile
+  React.useEffect(() => {
+    const loadProfile = () => {
+      try {
+        const saved = localStorage.getItem("userProfile");
+        setProfile(saved ? JSON.parse(saved) : null);
+      } catch (error) {
+        console.error("Unable to read saved profile", error);
+      }
+    };
+
+    loadProfile();
+    window.addEventListener("storage", loadProfile);
+    window.addEventListener("focus", loadProfile);
+
+    return () => {
+      window.removeEventListener("storage", loadProfile);
+      window.removeEventListener("focus", loadProfile);
+    };
+  }, []);
+
+  const personalInfo = profile?.personal
+    ? [
+        {
+          label: "الاسم الكامل",
+          value: profile.personal.fullName || "غير مضاف",
+        },
+        {
+          label: "البريد الإلكتروني",
+          value: profile.personal.email || "غير مضاف",
+        },
+        { label: "البلد", value: profile.personal.nationality || "غير مضاف" },
+        { label: "المدينة", value: profile.personal.city || "غير مضاف" },
+      ]
+    : fallbackPersonalInfo;
+
+  const mainEducation =
+    profile?.education?.find((item) => item.type === "university") ||
+    profile?.education?.[0];
+
+  const academicInfo = mainEducation
+    ? [
+        { label: "الدرجة", value: mainEducation.degree || "غير مضاف" },
+        { label: "التخصص", value: mainEducation.title || "غير مضاف" },
+        { label: "الجامعة", value: mainEducation.subtitle || "غير مضاف" },
+        { label: "سنة التخرج", value: mainEducation.year || "غير مضاف" },
+      ]
+    : fallbackAcademicInfo;
+
+  const gpa = mainEducation?.grade || "3.5 / 4.0";
+
+  const skillsAndInterests =
+    profile?.skills?.length > 0 ? profile.skills : fallbackSkillsAndInterests;
+
+  const completionItems = profile
+    ? [
+        profile.personal?.fullName,
+        profile.personal?.email,
+        profile.personal?.phone,
+        profile.personal?.birthDate,
+        profile.personal?.nationality,
+        profile.personal?.city,
+        mainEducation?.degree,
+        mainEducation?.year,
+        mainEducation?.grade,
+        mainEducation?.title,
+        mainEducation?.subtitle,
+        profile.skills?.length > 0,
+        profile.languages?.length > 0,
+      ]
+    : [];
+
+  const completion = profile
+    ? Math.round(
+        (completionItems.filter(Boolean).length / completionItems.length) * 100,
+      )
+    : 80;
+
+  const profileChecklist = profile
+    ? [
+        {
+          key: "personal",
+          label: "المعلومات الشخصية",
+          done: Boolean(profile.personal?.fullName && profile.personal?.email),
+        },
+        {
+          key: "education",
+          label: "التعليم",
+          done: Boolean(mainEducation),
+        },
+        {
+          key: "major",
+          label: "التخصص",
+          done: Boolean(mainEducation?.title),
+        },
+        {
+          key: "interests",
+          label: "المهارات واللغات",
+          done: Boolean(
+            profile.skills?.length > 0 || profile.languages?.length > 0,
+          ),
+        },
+      ]
+    : [
+        { key: "personal", label: "المعلومات الشخصية", done: true },
+        { key: "education", label: "التعلم", done: true },
+        { key: "major", label: "التخصص", done: true },
+        { key: "interests", label: "الاهتمامات", done: false },
+      ];
+
+  const displayName = profile?.personal?.fullName || "أحمد";
 
   return (
     <div className="dashboard-page" dir="rtl">
@@ -208,7 +330,7 @@ export default function DashboardPage() {
 
         <main className="dashboard-main">
           <section className="dashboard-welcome">
-            <h1>مرحباً، أحمد 👋</h1>
+            <h1>مرحباً، {displayName} 👋</h1>
             <p>طالب هندسة برمجيات، فلسطين. جاهز لاكتشاف فرص جديدة؟</p>
           </section>
 
@@ -242,16 +364,16 @@ export default function DashboardPage() {
                 ))}
               </ul>
 
-              <button type="button" className="complete-profile-btn">
+              <Link to="/AcademicProfile" className="complete-profile-btn">
                 إكمال الملف
-              </button>
+              </Link>
             </div>
             <div className="suggested-grants-card">
               <div className="suggested-grants-header">
                 <h3>منح مقترحة لك</h3>
-                <button type="button" className="see-all-link">
+                <Link to="/DiscoverScholarships" className="see-all-link">
                   عرض الكل
-                </button>
+                </Link>
               </div>
               <div className="suggested-grants-list">
                 {suggestedGrants.map((grant) => (
@@ -268,7 +390,7 @@ export default function DashboardPage() {
               rows={academicInfo}
               action={
                 <div className="gpa-badge">
-                  <span className="gpa-value">3.5 / 4.0</span>
+                  <span className="gpa-value">{gpa}</span>
                   <span className="gpa-label">المعدل التراكمي</span>
                 </div>
               }
@@ -318,9 +440,12 @@ export default function DashboardPage() {
                     {skill}
                   </span>
                 ))}
-                <button type="button" className="skill-tag skill-tag--add">
+                <Link
+                  to="/AcademicProfile"
+                  className="skill-tag skill-tag--add"
+                >
                   <FiPlus /> إضافة مهارة
-                </button>
+                </Link>
               </div>
               <div></div>
             </section>

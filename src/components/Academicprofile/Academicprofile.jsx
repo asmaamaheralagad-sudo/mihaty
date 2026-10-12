@@ -38,6 +38,8 @@ import "./Academicprofile.css";
    ثوابت وبيانات مبدئية
 ========================================================= */
 
+const PROFILE_STORAGE_KEY = "userProfile";
+
 const todayISO = () => new Date().toISOString().split("T")[0];
 const currentYear = new Date().getFullYear();
 
@@ -135,6 +137,17 @@ const formatDate = (dateStr) => {
     month: "long",
     year: "numeric",
   });
+};
+
+// قراءة البيانات المحفوظة (يقرأها كمان الـ Dashboard)
+const loadSavedProfile = () => {
+  try {
+    const saved = localStorage.getItem(PROFILE_STORAGE_KEY);
+    return saved ? JSON.parse(saved) : null;
+  } catch (error) {
+    console.error("Unable to read saved profile", error);
+    return null;
+  }
 };
 
 const LinkIcon = ({ type }) => {
@@ -246,30 +259,35 @@ function LanguageOption({ lang, isAdded, onAdd }) {
 ========================================================= */
 
 export default function AcademicProfile() {
+  // نقرأ البيانات المحفوظة مرة وحدة بس عند أول تحميل
+  const [savedProfile] = useState(loadSavedProfile);
+
   /* ---------- المعلومات الشخصية ---------- */
-  const [personal, setPersonal] = useState(initialPersonal);
+  const [personal, setPersonal] = useState(savedProfile?.personal || initialPersonal);
   const [personalDraft, setPersonalDraft] = useState(initialPersonal);
   const [personalErrors, setPersonalErrors] = useState({});
 
   /* ---------- التعليم ---------- */
-  const [education, setEducation] = useState([]);
+  const [education, setEducation] = useState(savedProfile?.education || []);
   const [educationDraft, setEducationDraft] = useState(emptyEducationDraft);
   const [educationErrors, setEducationErrors] = useState({});
   const [deleteTarget, setDeleteTarget] = useState(null);
 
   /* ---------- المهارات ---------- */
-  const [skills, setSkills] = useState([]);
+  const [skills, setSkills] = useState(savedProfile?.skills || []);
   const [skillsDraft, setSkillsDraft] = useState([]);
   const [newSkill, setNewSkill] = useState("");
 
   /* ---------- اللغات ---------- */
-  const [languages, setLanguages] = useState([]);
+  const [languages, setLanguages] = useState(savedProfile?.languages || []);
   const [languagesDraft, setLanguagesDraft] = useState([]);
   const [customLanguage, setCustomLanguage] = useState("");
   const [customLevel, setCustomLevel] = useState("مستوى متوسط");
 
   /* ---------- الروابط ---------- */
-  const [professionalLinks, setProfessionalLinks] = useState([]);
+  const [professionalLinks, setProfessionalLinks] = useState(
+    savedProfile?.professionalLinks || []
+  );
   const [linksDraft, setLinksDraft] = useState([]);
   const [linksErrors, setLinksErrors] = useState({});
 
@@ -298,6 +316,24 @@ export default function AcademicProfile() {
     ];
     return Math.round((checks.filter(Boolean).length / checks.length) * 100);
   }, [personal, avatarImage, professionalLinks, education, skills, languages]);
+
+  /* ---------- حفظ البيانات في localStorage (عشان الـ Dashboard يقرأها) ---------- */
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        PROFILE_STORAGE_KEY,
+        JSON.stringify({
+          personal,
+          education,
+          skills,
+          languages,
+          professionalLinks,
+        })
+      );
+    } catch (error) {
+      console.error("Unable to save profile", error);
+    }
+  }, [personal, education, skills, languages, professionalLinks]);
 
   /* ---------- تنظيف رابط الصورة (منع تسريب الذاكرة) ---------- */
   useEffect(() => {

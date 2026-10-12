@@ -14,7 +14,12 @@ import {
 import "./SideNavBar.css";
 
 const navLinks = [
-  { key: "overview", label: "نظرة عامة", icon: FiGrid, path: "/" },
+  {
+    key: "dashboard",
+    label: "لوحة التحكم",
+    icon: FiGrid,
+    path: "/DashboardPage",
+  },
   {
     key: "academic",
     label: "الملف الأكاديمي",

@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FiBell, FiBookmark, FiChevronDown, FiLogOut } from "react-icons/fi";
+
+import {
+  FiBell,
+  FiBookmark,
+  FiChevronDown,
+  FiLogOut,
+  FiUser,
+  FiHome,
+  FiSettings,
+} from "react-icons/fi";
+
+import AcademicProfile from "../../components/Academicprofile/Academicprofile";
+import DashboardPage from "../DashboradPage/DashboardPage";
+import DiscoverScholarships from "../DiscoverScholarships/DiscoverScholarships";
 import {
   FaGraduationCap,
   FaWallet,
@@ -164,7 +177,7 @@ function Profile() {
             <Link to="/Profile" className="nav-link">
               الرئيسية
             </Link>
-            <Link to="/scholarships" className="nav-link">
+            <Link to="/DiscoverScholarships" className="nav-link">
               اكتشف المنح
             </Link>
             <Link to="/ai-tools" className="nav-link">
@@ -204,40 +217,75 @@ function Profile() {
                 <span className="user-name">{userName}</span>
                 <FiChevronDown className="arrow-icon" />
               </div>
-
               {showDropdown && (
-                <div
-                  className="profile-dropdown-menu"
-                  style={{
-                    position: "absolute",
-                    top: "100%",
-                    left: 0,
-                    backgroundColor: "#ffffff",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                    borderRadius: "8px",
-                    padding: "8px",
-                    zIndex: 100,
-                    marginTop: "8px",
-                    minWidth: "150px",
-                  }}
-                >
+                <div className="profile-dropdown-menu">
+                  {/* معلومات المستخدم */}
+                  <div className="dropdown-user-info">
+                    <img
+                      src={userPhoto}
+                      alt={userName}
+                      className="dropdown-avatar"
+                    />
+
+                    <div>
+                      <h4>{userName}</h4>
+                      <span>حسابي في منحتي</span>
+                    </div>
+                  </div>
+
+                  <div className="dropdown-divider"></div>
+
+                  {/* الرئيسية */}
+                  <Link
+                    to="/dashboard"
+                    className="dropdown-item"
+                    onClick={() => setShowDropdown(false)}
+                  >
+                    <span className="dropdown-icon">
+                      <FiHome />
+                    </span>
+                    <span>الرئيسية</span>
+                  </Link>
+
+                  {/* الملف الأكاديمي */}
+
+                  <Link
+                    to="/AcademicProfile"
+                    className="dropdown-item"
+                    onClick={() => setShowDropdown(false)}
+                  >
+                    <span className="dropdown-icon">
+                      <FiUser />
+                    </span>
+                    <span>الملف الأكاديمي</span>
+                  </Link>
+
+                  {/* الإعدادات */}
+                  <Link
+                    to="/settings"
+                    className="dropdown-item"
+                    onClick={() => setShowDropdown(false)}
+                  >
+                    <span className="dropdown-icon">
+                      <FiSettings />
+                    </span>
+                    <span>الإعدادات</span>
+                  </Link>
+
+                  <div className="dropdown-divider"></div>
+
+                  {/* تسجيل الخروج */}
                   <button
-                    onClick={handleLogout}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      background: "none",
-                      border: "none",
-                      color: "#d9534f",
-                      cursor: "pointer",
-                      fontSize: "14px",
-                      width: "100%",
-                      padding: "8px 12px",
-                      borderRadius: "4px",
+                    className="dropdown-item logout-item"
+                    onClick={() => {
+                      setShowDropdown(false);
+                      handleLogout();
                     }}
                   >
-                    <FiLogOut /> تسجيل الخروج
+                    <span className="dropdown-icon">
+                      <FiLogOut />
+                    </span>
+                    <span>تسجيل الخروج</span>
                   </button>
                 </div>
               )}
