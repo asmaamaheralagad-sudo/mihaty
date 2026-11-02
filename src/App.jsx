@@ -15,7 +15,7 @@ import GrantDetails from "./components/GrantDetails/GrantDetails";
 import Profile from "./pages/Profile/Profile";
 import DiscoverScholarships from "./pages/DiscoverScholarships/DiscoverScholarships";
 import DashboardPage from "./pages/DashboradPage/DashboardPage";
-import AcademicProfile from "./components/Academicprofile/AcademicProfile";
+import AcademicProfile from "./components/Academicprofile/Academicprofile";
 import SavedGrants from "./pages/SavedGrants/SavedGrants";
 import DocumentsPage from "./pages/DocumentsPage/DocumentsPage";
 import SettingsPage from "./pages/Settingspage/Settingspage";
@@ -54,6 +54,7 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/reset-success" element={<ResetSuccess />} />
           <Route path="/GrantDetails" element={<GrantDetails />} />
+          <Route path="/Personal" element={<AcademicProfile />} />
           <Route path="/scholarships" element={<DiscoverScholarships />} />
           <Route path="/DashboardPage" element={<DashboardPage />} />
           <Route path="/Personal" element={<CvBuilderStep1 />} />
